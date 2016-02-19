@@ -1,0 +1,567 @@
+<!doctype html>
+<html class="no-js fuelux view-developer" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Magnet</title>
+    <meta name="description" content="Magnet Messenger Installer">
+    <meta name="keywords" content="Mobile app development, Mobile platform, Mobile REST API, Mobile messaging">
+    <link rel="stylesheet" href="https://developer.magnet.com/css/bootstrap.min.css" />
+    <link href='//fonts.googleapis.com/css?family=Roboto:400,500,700,900,300,100' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+
+<h3>Initialization</h3>
+<div class="row-fluid">
+    <div class="col-sm-6">
+<pre>Max.onReady(function() {
+    // app logic
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <h5>User</h5>
+        <pre id="user-info"></pre>
+        <h5>Device</h5>
+        <pre id="device-info"></pre>
+        <h5>App</h5>
+        <pre id="app-info"></pre>
+        <h5>Anonymous Token</h5>
+        <pre id="auth-info"></pre>
+    </div>
+</div>
+
+
+<h3>Registration</h3>
+<div class="row-fluid">
+    <div class="col-sm-6">
+<pre>var userObj = {
+    username: 'jack.doe',
+    firstName: 'Jack',
+    password: 'magnet'
+};
+
+Max.User.register(userObj, function() {
+
+});</pre>
+    </div>
+    <div class="col-sm-6">
+<pre id="register-info"></pre>
+    </div>
+</div>
+
+
+<h3>Login</h3>
+<div class="row-fluid">
+    <div class="col-sm-6">
+<pre>var userObj = {
+    username: 'jack.doe',
+    password: 'magnet'
+};
+
+Max.User.login(userObj, function() {
+
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <h5>Login</h5>
+        <pre id="login-info"></pre>
+        <h5>Device Register</h5>
+        <pre id="deviceregister-info"></pre>
+    </div>
+</div>
+
+
+<h3>getUsersByUserNames</h3>
+<div class="row-fluid">
+    <div class="col-sm-6">
+<pre>Max.User.getUsersByUserNames([user.username], function(e, data) {
+
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <pre id="getUsersByUserNames-info"></pre>
+    </div>
+</div>
+
+
+<h3>User search List</h3>
+<div class="row-fluid">
+    <div class="col-sm-6">
+<pre>Max.User.search({
+    query: 'userName:*',
+    limit: 10,
+    offset: 0,
+    orderby: ''
+}, function(e, data) {
+
+});</pre>
+    </div>
+    <div class="col-sm-6">
+<pre id="usersearch-info"></pre>
+    </div>
+</div>
+
+
+<h3>Messages</h3>
+<div class="row-fluid">
+    <div class="col-sm-6">
+<pre>
+Max.start();
+
+var listener = new Max.MMX.EventListener('myListener');
+
+listener.handler = function(msg) {
+    ...
+    return true;
+};
+
+Max.registerListener(listener);
+</pre>
+    </div>
+    <div class="col-sm-6">
+        <pre id="xmpp-log"></pre>
+    </div>
+</div>
+
+
+<script src="jquery.js"></script>
+<script src="bootstrap.min.js"></script>
+<script src="xml2json.js"></script>
+<script src="stanzaio.bundle.js"></script>
+<script>
+(function(MagnetJS) {
+
+    MagnetJS.Info = {
+        sdkName: 'Magnet SDK JavaScript',
+        sdkVersion: '1.0.0-SNAPSHOT',
+        initialized: false
+    };
+
+    MagnetJS.Config = {
+        clientId: null,
+        clientSecret: null,
+        appId: null,
+        appAPIKey: null,
+        gcmSenderId: null,
+        securityPolicy: null,
+        mmxDomain: null,
+        mmxPort: null,
+        mmxHost: null,
+        mmxRESTPort: 6060
+    };
+
+    MagnetJS.Credentials = {
+        token: null
+    };
+
+    MagnetJS._currentDevice = null;
+    MagnetJS._currentUser = null;
+    var xmppClient = null;
+    var xmppStore = null;
+
+    MagnetJS.Application = {
+        checkInWithDevice: function() {
+            if (MagnetJS.Info.initialized) return;
+
+            MagnetJS.Device.collectDeviceInfo(function(e, deviceInfo) {
+                if (e) throw (e);
+
+                $.ajax({
+                    method: 'POST',
+                    url: 'http://localhost:7777/api/com.magnet.server/applications/session-device',
+                    data: JSON.stringify(deviceInfo),
+                    contentType: 'application/json',
+                    beforeSend: function(xhr) {
+                       xhr.setRequestHeader('Authorization', 'Basic ' + window.btoa(MagnetJS.Config.clientId+':'+MagnetJS.Config.clientSecret));
+                    }
+                }).done(function(data) {
+
+                    MagnetJS.Credentials.token = data.applicationToken;
+                    MagnetJS.Config.appId = data.applicationToken.mmx_app_id;
+                    MagnetJS.Config.mmxHost = data.config['mmx-host'];
+                    MagnetJS.Config.securityPolicy = data.config['security-policy'];
+                    MagnetJS.Config.mmxDomain = data.config['mmx-domain'];
+                    MagnetJS.Config.mmxPort = data.config['mmx-port'];
+
+                    MagnetJS._currentDevice = data.device;
+                    MagnetJS._currentUser = {userId: data.device.userId};
+
+                    MagnetJS.Info.initialized = true;
+
+                }).fail(function() {
+
+                    console.log('collectDeviceInfo failed!');
+
+                });
+
+            });
+        }
+    };
+
+    MagnetJS.User = {
+        register: function(user, cb) {
+
+            user.userName = user.username;
+
+            $.ajax({
+                method: 'POST',
+                url: 'http://localhost:7777/api/com.magnet.server/user/enrollment',
+                data: JSON.stringify(user),
+                contentType: 'application/json',
+                beforeSend: function(xhr) {
+                   xhr.setRequestHeader('Authorization', 'Bearer ' + MagnetJS.Credentials.token.access_token);
+                }
+            }).done(function(data) {
+
+                cb(null, data);
+
+            }).fail(function(err) {
+
+                cb(err);
+
+            });
+
+        },
+        login: function(userObj, cb) {
+
+            userObj = userObj || {};
+
+            userObj.grant_type = 'password';
+            userObj.client_id = MagnetJS.Config.clientId;
+            userObj.remember_me = false;
+
+            $.ajax({
+                method: 'POST',
+                url: 'http://localhost:1337/localhost:7777/api/com.magnet.server/user/session',
+                data: userObj,
+                contentType: 'application/x-www-form-urlencoded',
+                beforeSend: function(xhr) {
+                   xhr.setRequestHeader('Authorization', 'Basic ' + window.btoa(userObj.username+':'+userObj.password));
+                   xhr.setRequestHeader('MMS-DEVICE-ID', '1111-2222-3333-4444');
+                }
+            }).done(function(data) {
+
+                MagnetJS.Credentials.token = data;
+                MagnetJS._currentUser = data.user;
+
+                MagnetJS.Device.register(function() {
+
+                    cb(null, data);
+
+                });
+
+            }).fail(function(err) {
+
+                cb(err);
+
+            });
+
+        },
+        getCurrentUser: function() {
+            return MagnetJS._currentUser || null;
+        },
+        getUsersByUserNames: function(usernames, cb) {
+            $.ajax({
+                method: 'GET',
+                url: 'http://localhost:7777/api/com.magnet.server/user/users?userNames='+((usernames && usernames.length) ? usernames : ''),
+                beforeSend: function(xhr) {
+                   xhr.setRequestHeader('Authorization', 'Bearer ' + MagnetJS.Credentials.token.access_token);
+                }
+            }).done(function(data) {
+                cb(null, data);
+            }).fail(function(err) {
+                cb(err);
+            });
+        },
+        search: function(queryObj, cb) {
+            var qs = '';
+
+            var keyMap = {
+                query: 'q',
+                limit: 'take',
+                offset: 'skip',
+                orderby: 'sort'
+            };
+
+            for(var key in queryObj){
+                qs += '&'+keyMap[key]+'='+queryObj[key];
+            }
+            qs = qs != '' ? qs.replace('&', '?') : qs;
+
+            $.ajax({
+                method: 'GET',
+                url: 'http://localhost:7777/api/com.magnet.server/user/query'+qs,
+                beforeSend: function(xhr) {
+                   xhr.setRequestHeader('Authorization', 'Bearer ' + MagnetJS.Credentials.token.access_token);
+                }
+            }).done(function(data) {
+                cb(null, data);
+            }).fail(function(err) {
+                cb(err);
+            });
+        },
+        logout: function(cb) {
+            MagnetJS._currentUser = null;
+            MagnetJS._currentDevice = null;
+            MagnetJS.Credentials = null;
+
+            $.ajax({
+                method: 'DELETE',
+                url: 'http://localhost:7777/api/com.magnet.server/user/session'
+            }).done(function(data) {
+                (cb || function() {})();
+            }).fail(function(err) {
+                (cb || function() {})();
+            });
+        }
+    };
+
+    MagnetJS.Device = {
+        register: function(cb) {
+
+            $.ajax({
+                method: 'POST',
+                url: 'http://localhost:7777/api/com.magnet.server/devices',
+                data: JSON.stringify(MagnetJS._currentDevice),
+                contentType: 'application/json',
+                beforeSend: function(xhr) {
+                   xhr.setRequestHeader('Authorization', 'Bearer ' + MagnetJS.Credentials.token.access_token);
+                }
+            }).done(function(data) {
+
+                $('#deviceregister-info').html(JSON.stringify(data, false, 4));
+
+                cb(null, data);
+
+            }).fail(function(err) {
+
+                cb(err);
+
+            });
+
+        },
+        collectDeviceInfo: function(cb) {
+            var e = null;
+            var deviceInfo = {
+                deviceId: 'aaaaaaaaa-b317-4851-89dc-46ae8504e2b9',
+                deviceStatus: 'ACTIVE',
+                label: 'unknown SECONDARY - Google Nexus 4 - 5.0.0 - API 21 - 768x1280_1',
+                os: 'ANDROID',
+                osVersion: '5.0',
+                pushAuthority: 'GCM'
+            };
+            return (cb || function() {})(e, deviceInfo);
+        }
+    };
+
+    MagnetJS.init = function(cfg) {
+        if (this._currentSDK == null) {
+            console.log('initialized sdk: '+ this.Info.sdkName + ' version: ' + this.Info.sdkVersion);
+            MagnetJS.Config.clientId = cfg.clientId;
+            MagnetJS.Config.clientSecret = cfg.clientSecret;
+            MagnetJS.Config.baseUrl = cfg.baseUrl;
+            MagnetJS.Application.checkInWithDevice();
+        } else {
+            console.log('MMX has already been initialized.  Ignoring this call.');
+        }
+    };
+
+    MagnetJS.onReady = function(cb) {
+        if (MagnetJS.Info.initialized === true) return cb();
+
+        var readyCheck = setInterval(function() {
+            if (MagnetJS.Info.initialized === true) {
+                clearInterval(readyCheck);
+                (cb || function() {})();
+            }
+        }, 100);
+    };
+
+    MagnetJS.MMXClient = {
+        suspendDelivery: function() {
+
+        },
+        resumeDelivery: function() {
+
+        }
+    };
+
+    MagnetJS.start = function() {
+
+        var addr = 'http://' + ('localhost' || MagnetJS.Config.mmxHost) + ':7070/http-bind/'; // + MagnetJS.Config.mmxPort;
+        var jid = MagnetJS._currentUser.userIdentifier + "%" + MagnetJS.Config.appId + '@' + MagnetJS.Config.mmxDomain + '/' + MagnetJS._currentDevice.deviceId;
+
+        xmppClient = XMPP.createClient({
+          jid: jid,
+          password: 'magnet',
+//          wsURL: wsURL,
+          boshURL: addr,
+          transports: ['bosh']
+        });
+
+        var log = function(name, data) {
+
+            console.log(name, data);
+//          var container = document.getElementById('xmpp-log');
+//          var logEntry = document.createElement('div'),
+//              header = document.createElement('h5'),
+//              entry = document.createElement('p'),
+//              altEntry = document.createElement('p');
+//
+//          header.textContent = name;
+//          logEntry.appendChild(header);
+//
+//          var code = document.createElement('code');
+//          var codeData = document.createElement('pre');
+//
+//          if (typeof data === 'string') {
+//              codeData.textContent = data;
+//          } else {
+//              if (name === 'connected' || name === 'disconnected') {
+//                  codeData.textContent = 'Client instance: ' + JSON.stringify(data.config, null, '  ');
+//              } else {
+//                  codeData.textContent = JSON.stringify(data, null, '  ');
+//              }
+//          }
+//
+//          code.appendChild(codeData);
+//          entry.appendChild(code);
+//          logEntry.appendChild(entry);
+//
+//          container.appendChild(logEntry);
+//          window.scrollTo(0, document.body.scrollHeight);
+      };
+
+        xmppClient.on('*', log);
+
+        xmppClient.on('session:started', function () {
+          xmppClient.enableCarbons(function (err) {
+              if (err) {
+                  console.log('Server does not support carbons');
+              }
+          });
+
+          xmppClient.getRoster(function (err, resp) {
+            xmppClient.updateCaps();
+            xmppClient.sendPresence({
+                caps: xmppClient.disco.caps
+            });
+          });
+        });
+
+        xmppClient.on('stanza', function (stanza) {
+            console.log('stanza', stanza);
+        });
+
+        xmppClient.connect();
+
+        console.log('jid', jid, 'pwd', MagnetJS._currentUser.password);
+
+    };
+
+    MagnetJS.stop = function() {
+        xmppClient.disconnect();
+    };
+
+    MagnetJS.registerListener = function(listener) {
+//        xmppClient.on('message', listener.handler);
+    };
+
+    MagnetJS.unregisterListener = function(id) {
+//        xmppClient.off('chat', id);
+    };
+
+    MagnetJS.MMX = {};
+
+    MagnetJS.MMX.EventListener = function(id) {
+        this.id = id || 'a1s2d3f4'; // TODO: use specified id or generate time-based UUID v4
+    };
+
+
+
+})(typeof exports === 'undefined' ? this['Max'] || (this['Max']={}) : exports);
+</script>
+<script>
+
+    Max.init({
+        clientId: '3ae2fca1-64d7-40b9-82c0-e43287bfa598',
+        clientSecret: 'bALLfBASHcKwhkYNs8Z6Okczpe_NwsWYZyz0MeaThfE',
+        baseUrl: 'https://sandy.magnet.com/mobile/api'
+    });
+
+    $(document).ready(function() {
+
+        Max.onReady(function() {
+
+            $('#user-info').html(JSON.stringify(Max._currentUser, false, 4));
+            $('#device-info').html(JSON.stringify(Max._currentDevice, false, 4));
+            $('#app-info').html(JSON.stringify(Max.Config, false, 4));
+            $('#auth-info').html(JSON.stringify(Max.Credentials, false, 4));
+
+            var user = {
+                username: 'jack.doe',
+                firstName: 'Jack',
+                password: 'magnet'
+            };
+
+            Max.User.register(user, function(details) {
+
+                $('#register-info').html(JSON.stringify(details, false, 4));
+
+                Max.User.login(user, function(err, details) {
+
+                    $('#login-info').html(JSON.stringify(err || details, false, 4));
+
+                    Max.User.getUsersByUserNames([user.username], function(e, data) {
+
+                        $('#getUsersByUserNames-info').html(JSON.stringify(data, false, 4));
+
+                    });
+
+                    Max.User.search({
+                        limit: 10,
+                        offset: 0,
+//                        orderby: '',
+                        query: 'userName:*'
+                    }, function(e, data) {
+
+                        $('#usersearch-info').html(JSON.stringify(data, false, 4));
+
+                    });
+
+                    Max.start();
+
+                    var listener = new Max.MMX.EventListener('myListener');
+
+                    listener.handler = function(msg) {
+
+                        console.log('MESSSAGE', msg);
+
+                        $('#xmpp-log').append(msg);
+
+//
+
+//
+//                            var reply = $msg({to: from, from: to, type: 'chat'})
+//                                    .cnode(Strophe.copyElement(body));
+//                            connection.send(reply.tree());
+//
+//                            console.log('ECHOBOT: I sent ' + from + ': ' + Strophe.getText(body));
+
+                    };
+
+                    Max.registerListener(listener);
+
+                });
+
+            });
+
+        });
+
+    });
+</script>
+
+</body>
+</html>
