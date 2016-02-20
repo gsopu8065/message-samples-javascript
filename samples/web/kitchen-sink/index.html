@@ -331,7 +331,7 @@ mmxChannel.publish(channelMsg, function(e, details) {
             $('#user-info').html(JSON.stringify(Max.getCurrentUser(), false, 4));
             $('#device-info').html(JSON.stringify(Max.Device.getCurrentDevice(), false, 4));
             $('#app-info').html(JSON.stringify(Max.Config, false, 4));
-            $('#auth-info').html(JSON.stringify(Max.Credentials, false, 4));
+            $('#auth-info').html(JSON.stringify(Max.App.credentials, false, 4));
 
             var user = {
                 username: 'jack.doe',
@@ -343,9 +343,10 @@ mmxChannel.publish(channelMsg, function(e, details) {
 
                 $('#register-info').html(JSON.stringify(res, false, 4));
 
-                Max.User.login(user).success(function() {
+                Max.User.login(user).success(function(loginUser, loginDevice) {
 
-                    $('#login-info').html(JSON.stringify(res, false, 4));
+                    $('#login-info').html(JSON.stringify(loginUser, false, 4));
+                    $('#deviceregister-info').html(JSON.stringify(loginDevice, false, 4));
 
                     Max.User.getUsersByUserNames([user.username, 'jane.doe@magnet.com']).success(function(res) {
 
@@ -377,8 +378,8 @@ mmxChannel.publish(channelMsg, function(e, details) {
                         description: 'my restrictive description',
                         private: true,
                         publishPermission: 'subscribers'
-                    }, function(e, mmxPrivateChannel) {
-                        $('#createchannel-info').append('<pre>'+JSON.stringify(e || mmxPrivateChannel, false, 4)+'</pre>');
+                    }).success(function(mmxPrivateChannel) {
+                        $('#createchannel-info').append('<pre>'+JSON.stringify(mmxPrivateChannel, false, 4)+'</pre>');
 
                         if (mmxPrivateChannel) {
 
@@ -387,35 +388,35 @@ mmxChannel.publish(channelMsg, function(e, details) {
                                 offset: 0,
         //                        orderby: '',
                                 query: 'userName:*'
-                            }, function(e, users) {
+                            }).success(function(users) {
                                 $('#usersearch-info').html(JSON.stringify(users, false, 4));
 
-                                mmxPrivateChannel.addSubscribers(users, function(e, details) {
-                                    $('#channeladdsubscriber-info').append('<pre>'+JSON.stringify(e || details, false, 4)+'</pre>');
+                                mmxPrivateChannel.addSubscribers(users).success(function(res) {
+                                    $('#channeladdsubscriber-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
 
-                                    Max.Channel.getAllSubscriptions(function(e, payload) {
-                                        $('#mysubscriptions-info').append('<pre>'+JSON.stringify(payload, false, 4)+'</pre>');
+                                    Max.Channel.getAllSubscriptions().success(function(channels) {
+                                        $('#mysubscriptions-info').append('<pre>'+JSON.stringify(channels, false, 4)+'</pre>');
 
-                                        mmxPrivateChannel.getAllSubscribers(function(e, subscribers) {
+                                        mmxPrivateChannel.getAllSubscribers().success(function(subscribers) {
                                             $('#channelsubscribers-info').append('<pre>'+JSON.stringify(subscribers, false, 4)+'</pre>');
 
-                                            Max.Channel.findChannelsBySubscribers([Max.getCurrentUser()], function(e, channels) {
-                                                $('#findChannelsBySubscribers-info').append('<pre>'+JSON.stringify(e || channels, false, 4)+'</pre>');
+                                            Max.Channel.findChannelsBySubscribers([Max.getCurrentUser()]).success(function(channels) {
+                                                $('#findChannelsBySubscribers-info').append('<pre>'+JSON.stringify(channels, false, 4)+'</pre>');
 
                                                 var channelMsg = new Max.Message({
                                                     message: 'private message to channel'
                                                 });
-                                                mmxPrivateChannel.publish(channelMsg, function(e, details) {
-                                                    $('#channelpublish-info').append('<pre>'+JSON.stringify(e || details, false, 4)+'</pre>');
+                                                mmxPrivateChannel.publish(channelMsg).success(function(res) {
+                                                    $('#channelpublish-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
 
-                                                    Max.Channel.getChannelSummary([mmxPrivateChannel], 10, 10, function(e, channelSummaries) {
-                                                        $('#channelSummaries-info').append('<pre>'+JSON.stringify(e || channelSummaries, false, 4)+'</pre>');
+                                                    Max.Channel.getChannelSummary([mmxPrivateChannel], 10, 10).success(function(channelSummaries) {
+                                                        $('#channelSummaries-info').append('<pre>'+JSON.stringify(channelSummaries, false, 4)+'</pre>');
 
-                                                        mmxPrivateChannel.removeSubscribers(users, function(e, details) {
-                                                            $('#channelremovesubscriber-info').append('<pre>'+JSON.stringify(e || details, false, 4)+'</pre>');
+                                                        mmxPrivateChannel.removeSubscribers(users).success(function(res) {
+                                                            $('#channelremovesubscriber-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
 
-                                                            mmxPrivateChannel.delete(function(e, details) {
-                                                                $('#deletechannel-info').append('<pre>'+JSON.stringify(e || details, false, 4)+'</pre>');
+                                                            mmxPrivateChannel.delete().success(function(res) {
+                                                                $('#deletechannel-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
                                                             });
                                                         });
                                                     });
@@ -435,23 +436,23 @@ mmxChannel.publish(channelMsg, function(e, details) {
                             name: 'myNewPublicChannel',
                             description: 'my public description',
                             subscribe: false
-                        }, function(e, mmxPublicChannel) {
-                            $('#createchannel-info').append('<pre>'+JSON.stringify(e || mmxPublicChannel, false, 4)+'</pre>');
+                        }).always(function(res) {
+                            $('#createchannel-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
 
-                            Max.Channel.findPublicChannelsByName(null, function(e, channels) {
+                            Max.Channel.findPublicChannelsByName().success(function(channels) {
                                 $('#getpublicchannels-info').append('<pre>'+JSON.stringify(channels, false, 4)+'</pre>');
 
                                 if (channels.length) {
                                     var mmxChannel = channels[0];
-                                    mmxChannel.getAllSubscribers(function(e, subscribers) {
+                                    mmxChannel.getAllSubscribers().success(function(subscribers) {
                                         $('#channelsubscribers-info').append('<pre>'+JSON.stringify(subscribers, false, 4)+'</pre>');
 
                                         var inChannel = false;
                                         for (var i=0;i<subscribers.length;++i) {
                                             if (subscribers[i].userId == Max.getCurrentUser().userIdentifier) {
                                                 inChannel = true;
-                                                mmxChannel.unsubscribe(function(e, details) {
-                                                    $('#channelunsubscribe-info').append('<pre>'+JSON.stringify(e || details, false, 4)+'</pre>');
+                                                mmxChannel.unsubscribe().success(function(res) {
+                                                    $('#channelunsubscribe-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
                                                     continueChannel(mmxChannel);
                                                 });
                                                 break;
@@ -465,15 +466,15 @@ mmxChannel.publish(channelMsg, function(e, details) {
                             });
 
                             function continueChannel(mmxChannel) {
-                                mmxChannel.subscribe(function(e, details) {
-                                    $('#channelsubscribe-info').append('<pre>'+JSON.stringify(e || details, false, 4)+'</pre>');
+                                mmxChannel.subscribe().success(function(res) {
+                                    $('#channelsubscribe-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
                                 });
                             }
 
                         });
 
 
-                        Max.Channel.findPublicChannelsByName(null, function(e, channels) {
+                        Max.Channel.findPublicChannelsByName().success(function(channels) {
 
                             var getStartedChannel;
 
@@ -492,21 +493,21 @@ mmxChannel.publish(channelMsg, function(e, details) {
                                     name: 'GetStarted',
                                     description: 'my public description',
                                     subscribe: false
-                                }, function (e, mmxPublicChannel) {
+                                }).success(function(mmxPublicChannel) {
                                     subscribeAndPublish(mmxPublicChannel);
                                 });
                             }
                         });
 
                         function subscribeAndPublish(mmxChannel) {
-                            mmxChannel.subscribe(function(e, details) {
-                                $('#channelsubscribe-info').append('<pre>'+JSON.stringify(e || details, false, 4)+'</pre>');
+                            mmxChannel.subscribe().success(function(res) {
+                                $('#channelsubscribe-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
 
                                 var channelMsg = new Max.Message({
                                     message: 'message to channel'
                                 });
-                                mmxChannel.publish(channelMsg, function(e, details) {
-                                    $('#channelpublish-info').append('<pre>'+JSON.stringify(e || details, false, 4)+'</pre>');
+                                mmxChannel.publish(channelMsg).success(function(res) {
+                                    $('#channelpublish-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
                                 });
                             });
                         }
