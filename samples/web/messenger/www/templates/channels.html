@@ -1,0 +1,15 @@
+<ion-view view-title="Channels">
+  <ion-content>
+    <a href="#/app/developer-week" ng-if="data.developerWeekChannel"><img src="img/bg_img_1.png" style="width:100%;height:130px" /></a>
+    <p ng-if="!data.channelSummaries.length">You have no chat rooms!</p>
+    <ion-list>
+      <ion-item ng-repeat="channel in data.channelSummaries"
+                href="#/app/channels/{{channel.channelName}}/{{channel.ownerId}}"
+                ng-if="channel.channelName != 'DeveloperWeek'">
+        <i class="icon ion-chatboxes"></i>
+        <b>{{channel.subscriberNames}}</b> <br />
+        {{channel.latestMessage || 'no messages yet!'}}
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

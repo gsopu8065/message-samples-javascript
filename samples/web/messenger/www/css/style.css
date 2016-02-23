@@ -1,0 +1,9 @@
+.general-icon-container{height: 33px;
+    background: #666;
+    border-radius: 15px;
+    padding: 4px;
+    margin: 0px;
+    cursor:pointer;
+}
+.bar-footer{height:67px}
+ion-footer-bar .list, ion-footer-bar input{width:100%}

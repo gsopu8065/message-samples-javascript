@@ -1,0 +1,11 @@
+<ion-view view-title="Users">
+  <ion-content>
+    <p ng-if="!users.length">No users to chat with!</p>
+    <ion-list>
+      <ion-item ng-repeat="user in users" ng-class="{'active':user.uiActive}" ng-click="toggleSelection(user)" ng-if="user.userName != authService.currentUser.userName">
+         <i class="icon ion-ios-person"></i>
+        {{user.firstName}} {{user.lastName}} ({{user.userName}})
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
