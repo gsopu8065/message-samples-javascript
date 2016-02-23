@@ -43,7 +43,7 @@
     password: 'magnet'
 };
 
-Max.User.register(userObj, function() {
+Max.User.register(userObj).success(function() {
     // do something
 });</pre>
     </div>
@@ -61,7 +61,7 @@ Max.User.register(userObj, function() {
     password: 'magnet'
 };
 
-Max.User.login(userObj, function() {
+Max.User.login(userObj).success(function() {
     // do something
 });</pre>
     </div>
@@ -77,7 +77,7 @@ Max.User.login(userObj, function() {
 <h3>getUsersByUserNames</h3>
 <div class="row-fluid clearfix">
     <div class="col-sm-6">
-<pre>Max.User.getUsersByUserNames(['jane.doe@magnet.com', 'jack.doe'], function(e, users) {
+<pre>Max.User.getUsersByUserNames(['jane.doe@magnet.com', 'jack.doe']).success(function(users) {
     // do something
 });</pre>
     </div>
@@ -95,7 +95,7 @@ Max.User.login(userObj, function() {
     limit: 10,
     offset: 0,
     orderby: ''
-}, function(e, users) {
+}).success(function(users) {
     // do something
 });</pre>
     </div>
@@ -155,7 +155,7 @@ Max.registerListener(listener);
     private: true,
     subscribe: false,
     publishPermission: 'subscribers'
-}, function(e, data) {
+}).success(function(newChannel) {
     // do something
 });</pre>
     </div>
@@ -168,7 +168,7 @@ Max.registerListener(listener);
 <h3>Delete Channel</h3>
 <div class="row-fluid clearfix">
     <div class="col-sm-6">
-<pre>Max.Channel.delete(function(e, data) {
+<pre>Max.Channel.delete().success(function() {
     // do something
 });</pre>
     </div>
@@ -181,7 +181,7 @@ Max.registerListener(listener);
 <h3>Get My Subscriptions</h3>
 <div class="row-fluid clearfix">
     <div class="col-sm-6">
-<pre>Max.Channel.getAllSubscriptions(function(e, subscriptions) {
+<pre>Max.Channel.getAllSubscriptions().success(function(subscriptions) {
     // do something
 });</pre>
     </div>
@@ -194,7 +194,7 @@ Max.registerListener(listener);
 <h3>Get Public Channels</h3>
 <div class="row-fluid clearfix">
     <div class="col-sm-6">
-<pre>Max.Channel.findPublicChannelsByName(null, function(channels) {
+<pre>Max.Channel.findPublicChannelsByName('GetStarted').success(function(channels) {
     // do something
 });</pre>
     </div>
@@ -207,7 +207,7 @@ Max.registerListener(listener);
 <h3>Get Channel Subscribers</h3>
 <div class="row-fluid clearfix">
     <div class="col-sm-6">
-<pre>mmxChannel.getAllSubscribers(function(e, subscribers) {
+<pre>mmxChannel.getAllSubscribers().success(function(subscribers) {
     // do something
 });</pre>
     </div>
@@ -220,7 +220,7 @@ Max.registerListener(listener);
 <h3>Subscribe to Channel</h3>
 <div class="row-fluid clearfix">
     <div class="col-sm-6">
-<pre>mmxChannel.subscribe(function(e, details) {
+<pre>mmxChannel.subscribe().success(function() {
     // do something
 });</pre>
     </div>
@@ -233,7 +233,7 @@ Max.registerListener(listener);
 <h3>Unsubscribe from Channel</h3>
 <div class="row-fluid clearfix">
     <div class="col-sm-6">
-<pre>mmxChannel.unsubscribe(function(e, details) {
+<pre>mmxChannel.unsubscribe().success(function() {
     // do something
 });</pre>
     </div>
@@ -246,7 +246,7 @@ Max.registerListener(listener);
 <h3>Add Subscriber to Channel</h3>
 <div class="row-fluid clearfix">
     <div class="col-sm-6">
-<pre>mmxChannel.subscribe(users, function(e, details) {
+<pre>mmxChannel.addSubscribers(users).success(function() {
     // do something
 });</pre>
     </div>
@@ -259,7 +259,7 @@ Max.registerListener(listener);
 <h3>Remove Subscriber from Channel</h3>
 <div class="row-fluid clearfix">
     <div class="col-sm-6">
-<pre>mmxChannel.unsubscribe(users, function(e, details) {
+<pre>mmxChannel.removeSubscribers(users).success(function() {
     // do something
 });</pre>
     </div>
@@ -273,7 +273,7 @@ Max.registerListener(listener);
 <div class="row-fluid clearfix">
     <div class="col-sm-6">
 <pre>var user = Max.getCurrentUser();
-Max.Channel.findChannelsBySubscribers([user], function(e, channels) {
+Max.Channel.findChannelsBySubscribers([user]).success(function(channels) {
     // do something
 });</pre>
     </div>
@@ -286,7 +286,7 @@ Max.Channel.findChannelsBySubscribers([user], function(e, channels) {
 <h3>getChannelSummary</h3>
 <div class="row-fluid clearfix">
     <div class="col-sm-6">
-<pre>Max.Channel.getChannelSummary([channel], 10, 10, function(e, channelSummaries) {
+<pre>Max.Channel.getChannelSummary([channel], 10, 10).success(function(channelSummaries) {
     // do something
 });</pre>
     </div>
@@ -302,7 +302,7 @@ Max.Channel.findChannelsBySubscribers([user], function(e, channels) {
 <pre>var channelMsg = new Max.Message({
     my: 'message to channel'
 });
-mmxChannel.publish(channelMsg, function(e, details) {
+mmxChannel.publish(channelMsg).success(function() {
     // do something
 });</pre>
     </div>
@@ -439,7 +439,7 @@ mmxChannel.publish(channelMsg, function(e, details) {
                         }).always(function(res) {
                             $('#createchannel-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
 
-                            Max.Channel.findPublicChannelsByName().success(function(channels) {
+                            Max.Channel.findPublicChannelsByName('myNewPublicChannel').success(function(channels) {
                                 $('#getpublicchannels-info').append('<pre>'+JSON.stringify(channels, false, 4)+'</pre>');
 
                                 if (channels.length) {

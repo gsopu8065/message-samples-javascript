@@ -201,3 +201,37 @@ a.autolinker {
 .loader .ion-loading-c {
   font-size: 64px;
 }
+
+.custom-item-input {
+  background:#f4f4f4 !important;
+  padding:6px 0 5px 16px;
+}
+
+.pull-left {
+  float:left
+}
+
+.info-paragraph {
+  text-align:center;
+  color: #eee;
+  font-size: 30px;
+  margin: 30px 0;
+  font-weight: 500;
+}
+
+#channels-list .list {
+  margin-top: -5px
+}
+#channels-list .ion-chatboxes {
+  font-size: 33px;
+  float: left;
+  margin: 3px 13px 3px 3px;
+}
+#channels-list span {
+  color: #777;
+  font-style: italic;
+}
+
+form[name="sendMessageForm"] textarea {
+  width: 100%
+}

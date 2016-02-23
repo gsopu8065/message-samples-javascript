@@ -19,13 +19,15 @@ angular.module('starter.controllers', [])
 })
 
 .controller('RegisterCtrl', function($scope, $state, navService) {
-  navService.currentPage = 'register';
-  navService.$currentScope = $scope;
-
   $scope.registerData = {
     username : '',
     password : ''
   };
+
+  $scope.$on('$ionicView.enter', function() {
+    navService.currentPage = 'register';
+    navService.$currentScope = $scope;
+  });
 
   $scope.doRegister = function() {
     // register user by supplying credentials
@@ -46,13 +48,15 @@ angular.module('starter.controllers', [])
 })
 
 .controller('LoginCtrl', function($scope, $state, navService) {
-  navService.currentPage = 'login';
-  navService.$currentScope = $scope;
-
   $scope.loginData = {
     username : '',
     password : ''
   };
+
+  $scope.$on('$ionicView.enter', function() {
+    navService.currentPage = 'login';
+    navService.$currentScope = $scope;
+  });
 
   $scope.doLogin = function() {
 
@@ -66,21 +70,52 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('ChannelsCtrl', function($scope, $state, navService) {
-  navService.currentPage = 'channels';
-  navService.$currentScope = $scope;
-
+.controller('ChannelsCtrl', function($scope, $state, navService, authService) {
   $scope.data = {};
   $scope.data.developerWeekChannel = null;
   $scope.data.channelSummaries = null;
+  var listener;
 
-  Max.onReady(function() {
+  $scope.$on('$ionicView.enter', function() {
+    if (!authService.isAuthenticated) return $state.go('app.login');
+
+    navService.currentPage = 'channels';
+    navService.$currentScope = $scope;
+
+    Max.onReady(function() {
+      listener = new Max.MessageListener('receivedMessageListener', function(mmxMessage) {
+        //var isSubscribed = false;
+        //if (mmxMessage.channel && mmxMessage.channel.name) {
+        //  for (var i=0;i<$scope.data.channelSummaries.length;++i) {
+        //    if ($scope.data.channelSummaries[i].channelName == mmxMessage.channel.name) {
+        //      isSubscribed = true;
+        //    }
+        //  }
+        //  if (!isSubscribed) {
+        //    console.log('this is a new channel, subscribe to the new channel!');
+        //    mmxMessage.channel.subscribe().success(function() {
+        //      refreshChannelList();
+        //    });
+        //  }
+        //} else {
+        //  refreshChannelList();
+        //}
+        refreshChannelList();
+
+      });
+      Max.registerListener(listener);
+
+      refreshChannelList();
+    });
+  });
+
+  function refreshChannelList() {
 
     // find a public channel by name
-    Max.Channel.findPublicChannelsByName('developerweek').success(function(channels) {
+    Max.Channel.findPublicChannelsByName('developerweek').success(function (channels) {
       if (!channels.length) return;
 
-      $scope.$apply(function () {
+      $scope.$apply(function() {
         $scope.data.developerWeekChannel = channels[0];
 
         // subscribe to the channel
@@ -98,31 +133,34 @@ angular.module('starter.controllers', [])
       // retrieve detailed channel information, including subscribers and past messages
       Max.Channel.getChannelSummary(channels, 3, 1).success(function(channelSummaries) {
 
-        for (var i=0;i<channelSummaries.length;++i) {
+        for (var i = 0; i < channelSummaries.length; ++i) {
           var subscriberNames = [];
-          for (var j=0;j<channelSummaries[i].subscribers.length;++j) {
-            subscriberNames.push(channelSummaries[i].subscribers[j].displayName);
+          for (var j = 0; j < channelSummaries[i].subscribers.length; ++j) {
+            subscriberNames.push(channelSummaries[i].subscribers[j].userName);
           }
           channelSummaries[i].subscriberNames = subscriberNames.join(', ');
-          channelSummaries[i].ownerId = channelSummaries[i].owner.userId.split('%')[0];
+          channelSummaries[i].ownerId = channelSummaries[i].owner.userIdentifier;
           if (channelSummaries[i].messages && channelSummaries[i].messages[0] && channelSummaries[i].messages[0].messageContent)
             channelSummaries[i].latestMessage = channelSummaries[i].messages[0].messageContent.message;
         }
-        $scope.$apply(function () {
+        $scope.$apply(function() {
           $scope.data.channelSummaries = channelSummaries;
         });
       });
     });
+  }
+
+  $scope.$on('$ionicView.leave', function() {
+    // IMPORTANT: always make sure to unregister the listener when you leave the page
+    Max.unregisterListener(listener);
   });
 
 })
 
 .controller('ChannelCtrl', ['$scope', '$rootScope', '$state', '$stateParams', '$ionicActionSheet',
-  '$ionicPopup', '$ionicScrollDelegate', '$timeout', '$interval', 'navService',
+  '$ionicPopup', '$ionicScrollDelegate', '$timeout', '$interval', 'navService', 'authService',
   function($scope, $rootScope, $state, $stateParams, $ionicActionSheet,
-    $ionicPopup, $ionicScrollDelegate, $timeout, $interval, navService) {
-  navService.currentPage = 'channel';
-  navService.$currentScope = $scope;
+    $ionicPopup, $ionicScrollDelegate, $timeout, $interval, navService, authService) {
 
   var viewScroll = $ionicScrollDelegate.$getByHandle('userMessageScroll');
   var footerBar;
@@ -141,14 +179,21 @@ angular.module('starter.controllers', [])
   };
 
   $scope.$on('$ionicView.enter', function() {
+    if (!authService.isAuthenticated) return $state.go('app.login');
+
+    navService.currentPage = 'channel';
+    navService.$currentScope = $scope;
+
     var i;
+    $scope.data.messages = [];
+    $scope.data.message = '';
+    $scope.data.subscribers = {};
 
     $scope.data.channelTitle = $stateParams.channelName == 'developerweek' ? $stateParams.channelName : 'Private Chat';
 
     // get current user information
     $scope.data.currentUser = Max.getCurrentUser();
 
-      // TODO: improve the apis for obtaining private channel details
     // create an instance of channel given channel name and userId (if exists)
     channel = new Max.Channel({
       name: $stateParams.channelName,
@@ -169,9 +214,9 @@ angular.module('starter.controllers', [])
       // populate message history
       $scope.data.messages = channelSummaries[0].messages;
 
-      // main a list of subscribers
+      // maintain a list of subscribers
       for (i=0;i<channelSummaries[0].subscribers.length;++i) {
-        $scope.data.subscribers[channelSummaries[0].subscribers[i].userId] = channelSummaries[0].subscribers[i].displayName;
+        $scope.data.subscribers[channelSummaries[0].subscribers[i].userIdentifier] = channelSummaries[0].subscribers[i].userName;
       }
 
       $timeout(function() {
@@ -187,8 +232,8 @@ angular.module('starter.controllers', [])
       $scope.data.messages.push(mmxMessage);
 
       // this tells us to add the sender to the list of subscribers
-      if (!$scope.data.subscribers[mmxMessage.sender.userId]) {
-        $scope.data.subscribers[mmxMessage.sender.userId] = mmxMessage.sender.displayName;
+      if (!$scope.data.subscribers[mmxMessage.sender.userIdentifier]) {
+        $scope.data.subscribers[mmxMessage.sender.userIdentifier] = mmxMessage.sender.userName;
       }
 
       $timeout(function() {
@@ -286,19 +331,28 @@ angular.module('starter.controllers', [])
 }])
 
 .controller('UsersCtrl', function($scope, authService, navService, $state) {
-  navService.currentPage = 'userlist';
-  navService.$currentScope = $scope;
-
-  $scope.users = null;
+  $scope.data = {
+    users: []
+  };
   $scope.authService = authService;
 
-  // retrieve a list of users
-  Max.User.search({
+  $scope.$on('$ionicView.enter', function() {
+    if (!authService.isAuthenticated) return $state.go('app.login');
+
+    navService.currentPage = 'userlist';
+    navService.$currentScope = $scope;
+
+    // retrieve a list of users
+    Max.User.search({
       limit: 100,
       offset: 0,
       query: 'userName:*'
-  }).success(function(users) {
-    $scope.users = users;
+    }).success(function (users) {
+
+      $scope.$apply(function () {
+        $scope.data.users = users;
+      });
+    });
   });
 
   $scope.toggleSelection = function(user) {
@@ -307,9 +361,9 @@ angular.module('starter.controllers', [])
 
   $scope.startConversation = function() {
     var uids = [];
-    for (var key in $scope.users) {
-      if ($scope.users[key].uiActive) {
-        uids.push($scope.users[key].userIdentifier);
+    for (var key in $scope.data.users) {
+      if ($scope.data.users[key].uiActive) {
+        uids.push($scope.data.users[key].userIdentifier);
       }
     }
 
