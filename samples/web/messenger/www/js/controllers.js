@@ -77,16 +77,14 @@ angular.module('starter.controllers', [])
   Max.onReady(function() {
 
     // find a public channel by name
-    Max.Channel.findPublicChannelsByName('DeveloperWeek').success(function(channels) {
+    Max.Channel.findPublicChannelsByName('developerweek').success(function(channels) {
       if (!channels.length) return;
 
       $scope.$apply(function () {
         $scope.data.developerWeekChannel = channels[0];
 
         // subscribe to the channel
-        $scope.data.developerWeekChannel.subscribe().success(function() {
-          console.log('subscribed to developerweek');
-        });
+        $scope.data.developerWeekChannel.subscribe();
 
       });
     });
@@ -107,8 +105,8 @@ angular.module('starter.controllers', [])
           }
           channelSummaries[i].subscriberNames = subscriberNames.join(', ');
           channelSummaries[i].ownerId = channelSummaries[i].owner.userId.split('%')[0];
-          if (channelSummaries[i].messages && channelSummaries[i].messages[0] && channelSummaries[i].messages[0].content)
-            channelSummaries[i].latestMessage = channelSummaries[i].messages[0].content.message;
+          if (channelSummaries[i].messages && channelSummaries[i].messages[0] && channelSummaries[i].messages[0].messageContent)
+            channelSummaries[i].latestMessage = channelSummaries[i].messages[0].messageContent.message;
         }
         $scope.$apply(function () {
           $scope.data.channelSummaries = channelSummaries;
@@ -119,37 +117,173 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('ChannelCtrl', function($scope, $stateParams, $state, navService) {
+.controller('ChannelCtrl', ['$scope', '$rootScope', '$state', '$stateParams', '$ionicActionSheet',
+  '$ionicPopup', '$ionicScrollDelegate', '$timeout', '$interval', 'navService',
+  function($scope, $rootScope, $state, $stateParams, $ionicActionSheet,
+    $ionicPopup, $ionicScrollDelegate, $timeout, $interval, navService) {
   navService.currentPage = 'channel';
   navService.$currentScope = $scope;
 
+  var viewScroll = $ionicScrollDelegate.$getByHandle('userMessageScroll');
+  var footerBar;
+  var scroller;
+  var txtInput;
+
+  var channel;
+  var listener;
+
   $scope.data = {
-    messageContent: ''
+    channelTitle: null,
+    messages: [],
+    currentUser: null,
+    message: '',
+    subscribers: {}
   };
-  // TODO: improve the apis for obtaining private channel details
-  var channel = new Max.Channel({
-    name: $stateParams.channelName,
-    userId: $stateParams.userId
+
+  $scope.$on('$ionicView.enter', function() {
+    var i;
+
+    $scope.data.channelTitle = $stateParams.channelName == 'developerweek' ? $stateParams.channelName : 'Private Chat';
+
+    // get current user information
+    $scope.data.currentUser = Max.getCurrentUser();
+
+      // TODO: improve the apis for obtaining private channel details
+    // create an instance of channel given channel name and userId (if exists)
+    channel = new Max.Channel({
+      name: $stateParams.channelName,
+      userId: $stateParams.channelName == 'developerweek' ? null : $stateParams.userId
+    });
+
+    // you only need to fetch chat history when you enter the page.
+    // messages sent and received later will be added in real-time with the listener.
+    Max.Channel.getChannelSummary([channel], 100, 30).success(function(channelSummaries) {
+      $scope.doneLoading = true;
+
+      if (!channelSummaries.length || !channelSummaries[0].messages.length) return;
+
+      for (i=0;i<channelSummaries[0].messages.length;++i) {
+        // TODO: these can be replaced with real profile pics
+        channelSummaries[0].messages[i].messageContent.pic = 'img/messenger-icon.png';
+      }
+      // populate message history
+      $scope.data.messages = channelSummaries[0].messages;
+
+      // main a list of subscribers
+      for (i=0;i<channelSummaries[0].subscribers.length;++i) {
+        $scope.data.subscribers[channelSummaries[0].subscribers[i].userId] = channelSummaries[0].subscribers[i].displayName;
+      }
+
+      $timeout(function() {
+        viewScroll.scrollBottom();
+      }, 0);
+
+    });
+
+    // register a listener to listen for messages and populate the chat UI
+    listener = new Max.MessageListener('channelMessageListener', function(mmxMessage) {
+      // TODO: this can be replaced with a real profile pic
+      mmxMessage.messageContent.pic = 'img/messenger-icon.png';
+      $scope.data.messages.push(mmxMessage);
+
+      // this tells us to add the sender to the list of subscribers
+      if (!$scope.data.subscribers[mmxMessage.sender.userId]) {
+        $scope.data.subscribers[mmxMessage.sender.userId] = mmxMessage.sender.displayName;
+      }
+
+      $timeout(function() {
+        viewScroll.scrollBottom();
+      }, 0);
+    });
+    Max.onReady(function() {
+      Max.registerListener(listener);
+    });
+
+    $timeout(function() {
+      footerBar = document.body.querySelector('#userMessagesView .bar-footer');
+      scroller = document.body.querySelector('#userMessagesView .scroll-content');
+      txtInput = angular.element(footerBar.querySelector('textarea'));
+    }, 0);
+
   });
 
-  // retrieve detailed channel information, including subscribers and past messages
-  Max.Channel.getChannelSummary([channel], 1, 30).success(function(channelSummaries) {
-    if (!channelSummaries.length) return;
-
-    $scope.data.channelSummary = channelSummaries[0];
+  $scope.$on('$ionicView.leave', function() {
+    // IMPORTANT: always make sure to unregister the listener when you leave the page
+    Max.unregisterListener(listener);
   });
 
   $scope.sendMessage = function() {
+    keepKeyboardOpen();
 
     // publish message to the channel
     var msg = new Max.Message({
-        message: $scope.data.messageContent
+        message: $scope.data.message
     });
-    channel.publish(msg);
+    channel.publish(msg).success(function() {
+      $scope.data.message = '';
+    });
+
+  };
+
+  // this keeps the keyboard open on a device only after sending a message, it is non obtrusive
+  function keepKeyboardOpen() {
+    txtInput.one('blur', function() {
+      txtInput[0].focus();
+    });
   }
 
-})
+  // TODO: implement actions when a message is long-pressed
+  $scope.onMessageHold = function(e, itemIndex, message) {
+    $ionicActionSheet.show({
+      buttons: [{
+        text: 'Copy Text'
+      }, {
+        text: 'Delete Message'
+      }],
+      buttonClicked: function(index) {
+        switch (index) {
+          case 0: // Copy Text
+            //cordova.plugins.clipboard.copy(message.text);
+            break;
+          case 1: // Delete
+            // TODO: need to implement on server
+            $scope.messages.splice(itemIndex, 1);
+            $timeout(function() {
+              viewScroll.resize();
+            }, 0);
 
+            break;
+        }
+
+        return true;
+      }
+    });
+  };
+
+  // TODO: implement user profile
+  $scope.viewProfile = function(msg) {
+    if (msg.userId === $scope.user._id) {
+      // go to your profile
+    } else {
+      // go to other users profile
+    }
+  };
+
+  $scope.$on('taResize', function(e, ta) {
+    if (!ta) return;
+
+    var taHeight = ta[0].offsetHeight;
+
+    if (!footerBar) return;
+
+    var newFooterHeight = taHeight + 10;
+    newFooterHeight = (newFooterHeight > 44) ? newFooterHeight : 44;
+
+    footerBar.style.height = newFooterHeight + 'px';
+    scroller.style.bottom = newFooterHeight + 'px';
+  });
+
+}])
 
 .controller('UsersCtrl', function($scope, authService, navService, $state) {
   navService.currentPage = 'userlist';
