@@ -83,25 +83,24 @@ angular.module('starter.controllers', [])
     navService.$currentScope = $scope;
 
     Max.onReady(function() {
-      listener = new Max.MessageListener('receivedMessageListener', function(mmxMessage) {
-        //var isSubscribed = false;
-        //if (mmxMessage.channel && mmxMessage.channel.name) {
-        //  for (var i=0;i<$scope.data.channelSummaries.length;++i) {
-        //    if ($scope.data.channelSummaries[i].channelName == mmxMessage.channel.name) {
-        //      isSubscribed = true;
-        //    }
-        //  }
-        //  if (!isSubscribed) {
-        //    console.log('this is a new channel, subscribe to the new channel!');
-        //    mmxMessage.channel.subscribe().success(function() {
-        //      refreshChannelList();
-        //    });
-        //  }
-        //} else {
-        //  refreshChannelList();
-        //}
-        refreshChannelList();
 
+      // register a listener to listen for messages and update the channel summaries
+      listener = new Max.MessageListener('receivedMessageListener', function(mmxMessage) {
+        var isExistingChannel = false;
+        if (mmxMessage.channel && mmxMessage.channel.name) {
+          for (var i=0;i<$scope.data.channelSummaries.length;++i) {
+            if ($scope.data.channelSummaries[i].channelName == mmxMessage.channel.name) {
+              isExistingChannel = true;
+              $scope.$apply(function() {
+                $scope.data.channelSummaries[i].latestMessage = mmxMessage.messageContent.message;
+                $scope.data.channelSummaries[i].isUnread = true;
+              });
+            }
+          }
+          if (!isExistingChannel) {
+            refreshChannelList();
+          }
+        }
       });
       Max.registerListener(listener);
 
@@ -209,7 +208,8 @@ angular.module('starter.controllers', [])
 
       for (i=0;i<channelSummaries[0].messages.length;++i) {
         // TODO: these can be replaced with real profile pics
-        channelSummaries[0].messages[i].messageContent.pic = 'img/messenger-icon.png';
+        if (channelSummaries[0].messages[i].messageContent)
+          channelSummaries[0].messages[i].messageContent.pic = 'img/messenger-icon.png';
       }
       // populate message history
       $scope.data.messages = channelSummaries[0].messages;
@@ -268,6 +268,35 @@ angular.module('starter.controllers', [])
       $scope.data.message = '';
     });
 
+  };
+
+  $scope.onFileSelect = function(el) {
+    if (!(window.FileReader && window.Blob)) {
+      return alert('uploading not supported');
+    }
+    $scope.$apply(function(scope) {
+
+      var reader = new FileReader();
+
+      reader.addEventListener('load', function() {
+
+         var file = {
+           mimeType: el.files[0].type,
+           val: reader.result
+         };
+        // upload file to the channel
+        var msg = new Max.Message({
+          type: 'photo'
+        });
+        channel.publish(msg, file).success(function() {
+
+        });
+      }, false);
+
+      if (el.files[0]) {
+        reader.readAsDataURL(el.files[0]);
+      }
+    });
   };
 
   // this keeps the keyboard open on a device only after sending a message, it is non obtrusive

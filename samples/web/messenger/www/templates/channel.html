@@ -60,6 +60,12 @@
 
   <form name="sendMessageForm" ng-submit="sendMessage(sendMessageForm)" novalidate>
       <ion-footer-bar class="bar-stable item-input-inset message-footer" keyboard-attach>
+          <div>
+              <label class="upload-label">
+                  <input type="file" required onchange="angular.element(this).scope().onFileSelect(this)" />
+                  <span><i class="ion-ios-cloud-upload"></i></span>
+              </label>
+          </div>
           <label class="item-input-wrapper">
               <textarea ng-model="data.message" value="" placeholder="Send a message..." required
                         minlength="1" maxlength="1500" msd-elastic></textarea>
