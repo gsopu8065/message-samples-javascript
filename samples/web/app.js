@@ -5,7 +5,6 @@ var express = require('express')
 app.set('port', 3001);
 
 app.configure(function(){
-
     app.use(express.static(__dirname + '/../web'));
 });
 

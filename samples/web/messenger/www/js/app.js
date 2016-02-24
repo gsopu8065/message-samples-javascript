@@ -41,7 +41,7 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', '
 
 })
 
-.config(function($stateProvider) {
+.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
     .state('app', {
@@ -100,5 +100,7 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', '
       }
     }
   });
+
+  $urlRouterProvider.otherwise('app/login');
 
 });
