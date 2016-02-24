@@ -92,7 +92,7 @@ angular.module('starter.controllers', [])
             if ($scope.data.channelSummaries[i].channelName == mmxMessage.channel.name) {
               isExistingChannel = true;
               $scope.$apply(function() {
-                $scope.data.channelSummaries[i].latestMessage = mmxMessage.messageContent.message;
+                $scope.data.channelSummaries[i].latestMessage = getLatestMessage(mmxMessage);
                 $scope.data.channelSummaries[i].isUnread = true;
               });
             }
@@ -140,13 +140,18 @@ angular.module('starter.controllers', [])
           channelSummaries[i].subscriberNames = subscriberNames.join(', ');
           channelSummaries[i].ownerId = channelSummaries[i].owner.userIdentifier;
           if (channelSummaries[i].messages && channelSummaries[i].messages[0] && channelSummaries[i].messages[0].messageContent)
-            channelSummaries[i].latestMessage = channelSummaries[i].messages[0].messageContent.message;
+            channelSummaries[i].latestMessage = getLatestMessage(channelSummaries[i].messages[0]);
         }
         $scope.$apply(function() {
           $scope.data.channelSummaries = channelSummaries;
         });
       });
     });
+  }
+
+  function getLatestMessage(mmxMessage) {
+    var hasAttachments = mmxMessage.attachments && mmxMessage.attachments.length;
+    return hasAttachments ? 'a file was uploaded' : ('"'+mmxMessage.messageContent.message+'"');
   }
 
   $scope.$on('$ionicView.leave', function() {
@@ -208,8 +213,7 @@ angular.module('starter.controllers', [])
 
       for (i=0;i<channelSummaries[0].messages.length;++i) {
         // TODO: these can be replaced with real profile pics
-        if (channelSummaries[0].messages[i].messageContent)
-          channelSummaries[0].messages[i].messageContent.pic = 'img/messenger-icon.png';
+          channelSummaries[0].messages[i].pic = 'img/messenger-icon.png';
       }
       // populate message history
       $scope.data.messages = channelSummaries[0].messages;
@@ -228,7 +232,7 @@ angular.module('starter.controllers', [])
     // register a listener to listen for messages and populate the chat UI
     listener = new Max.MessageListener('channelMessageListener', function(mmxMessage) {
       // TODO: this can be replaced with a real profile pic
-      mmxMessage.messageContent.pic = 'img/messenger-icon.png';
+      mmxMessage.pic = 'img/messenger-icon.png';
       $scope.data.messages.push(mmxMessage);
 
       // this tells us to add the sender to the list of subscribers
@@ -262,7 +266,8 @@ angular.module('starter.controllers', [])
 
     // publish message to the channel
     var msg = new Max.Message({
-        message: $scope.data.message
+        message: $scope.data.message,
+        type: 'text'
     });
     channel.publish(msg).success(function() {
       $scope.data.message = '';
@@ -288,7 +293,7 @@ angular.module('starter.controllers', [])
         var msg = new Max.Message({
           type: 'photo'
         });
-        channel.publish(msg, file).success(function() {
+        channel.publish(msg, el.files[0]).success(function() {
 
         });
       }, false);

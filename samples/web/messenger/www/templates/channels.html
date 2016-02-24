@@ -8,7 +8,7 @@
                 ng-if="channel.channelName != 'developerweek'">
         <i class="icon ion-chatboxes" ng-class="{'is-unread': channel.isUnread}"></i>
         <b>{{channel.subscriberNames}}</b> <br />
-        <span>"{{channel.latestMessage || 'no messages yet!'}}"</span>
+        <span>{{channel.latestMessage || 'no messages yet!'}}</span>
       </ion-item>
     </ion-list>
   </ion-content>

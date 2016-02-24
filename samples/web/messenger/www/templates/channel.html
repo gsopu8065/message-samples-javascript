@@ -17,11 +17,17 @@
           <div ng-if="data.currentUser.userIdentifier !== message.sender.userId">
 
             <img ng-click="viewProfile(message)" class="profile-pic left"
-                  ng-src="{{message.messageContent.pic}}" onerror="onProfilePicError(this)" />
+                  ng-src="{{message.pic}}" onerror="onProfilePicError(this)" />
 
               <div class="chat-bubble left">
 
-                  <div class="message" ng-bind-html="message.messageContent.message | nl2br" autolinker>
+                  <div class="message"
+                       ng-if="message.messageContent && message.messageContent.message"
+                       ng-bind-html="message.messageContent.message | nl2br" autolinker>
+                  </div>
+
+                  <div ng-repeat="attachment in message.attachments">
+                    <a target="_blank" href="{{attachment.downloadUrl}}" style="color:#fff">Download</a>
                   </div>
 
                   <div class="message-detail">
@@ -36,11 +42,17 @@
           <div ng-if="data.currentUser.userIdentifier === message.sender.userId">
 
                <img ng-click="viewProfile(message)" class="profile-pic right"
-                  ng-src="{{message.messageContent.pic}}" onerror="onProfilePicError(this)" />
+                  ng-src="{{message.pic}}" onerror="onProfilePicError(this)" />
 
               <div class="chat-bubble right">
 
-                  <div class="message" ng-bind-html="message.messageContent.message | nl2br" autolinker>
+                  <div class="message"
+                       ng-if="message.messageContent && message.messageContent.message"
+                       ng-bind-html="message.messageContent.message | nl2br" autolinker>
+                  </div>
+
+                  <div ng-repeat="attachment in message.attachments">
+                    <a target="_blank" href="{{attachment.downloadUrl}}" style="color:#fff">Download</a>
                   </div>
 
                   <div class="message-detail">
