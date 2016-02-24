@@ -4,8 +4,8 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', '
 
   // initialize the MessageSDK by setting client information
   Max.init({
-      clientId: 'c8638779-df94-41ac-94de-e2f499bc0131',
-      clientSecret: '8zLsWjqhT1AzdNgGV9ebk0XZqTuY84iZkqVBh4JYjn4',
+      clientId: '76b4e8f6-1066-49e0-a537-160d436ce78c',
+      clientSecret: 'xAq8auJL_VK5ZEWxXGNgm55WxZi67XeaFVBqxFYUCDI',
       baseUrl: 'http://localhost:7777/api'
   });
 
