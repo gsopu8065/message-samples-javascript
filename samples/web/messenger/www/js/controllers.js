@@ -37,7 +37,7 @@ angular.module('starter.controllers', [])
       Max.User.login($scope.registerData).success(function() {
         $state.go('app.channels');
       }).error(function(err) {
-        alert(JSON.stringify(err));
+        alert(err);
       });
 
     }).error(function(err) {
@@ -47,7 +47,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('LoginCtrl', function($scope, $state, navService) {
+.controller('LoginCtrl', function($scope, $state, navService, $ionicSideMenuDelegate) {
   $scope.loginData = {
     username : '',
     password : ''
@@ -56,6 +56,8 @@ angular.module('starter.controllers', [])
   $scope.$on('$ionicView.enter', function() {
     navService.currentPage = 'login';
     navService.$currentScope = $scope;
+
+    $ionicSideMenuDelegate.toggleLeft(false);
   });
 
   $scope.doLogin = function() {

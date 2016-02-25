@@ -234,7 +234,7 @@ a.autolinker {
 
 form[name="sendMessageForm"] textarea {
   width: 100%;
-  min-height: 36px;
+  height: 36px;
 }
 
 .is-unread {
@@ -251,4 +251,11 @@ label.upload-label input[type="file"] {
 }
 .upload-label .ion-ios-cloud-upload {
     font-size: 30px;
+}
+
+.backdrop, .loading-container .loading {
+  background: #eee;
+}
+.loading img {
+  margin-bottom: 20px;
 }

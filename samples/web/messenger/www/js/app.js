@@ -1,6 +1,10 @@
 angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', 'monospaced.elastic', 'angularMoment'])
 
-.run(function($ionicPlatform, $rootScope, authService, $state) {
+.run(function($ionicPlatform, $rootScope, authService, $state, $ionicLoading) {
+
+  $ionicLoading.show({
+    template: '<p><img src="img/messenger-icon.png" /> <br /><ion-spinner></ion-spinner>'
+  });
 
   // initialize the MessageSDK by setting client information
   Max.init({
@@ -23,20 +27,22 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', '
     $state.go('app.channels');
   });
 
+  $ionicPlatform.ready(function() {
+    if (window.cordova && window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      cordova.plugins.Keyboard.disableScroll(true);
+
+    }
+    if (window.StatusBar) {
+      StatusBar.styleDefault();
+    }
+  });
+
   // make sure Message SDK is ready by having application logic execute after the onReady call
   Max.onReady(function() {
-
-    $ionicPlatform.ready(function() {
-      if (window.cordova && window.cordova.plugins.Keyboard) {
-        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-        cordova.plugins.Keyboard.disableScroll(true);
-
-      }
-      if (window.StatusBar) {
-        StatusBar.styleDefault();
-      }
-    });
-
+    setTimeout(function() {
+      $ionicLoading.hide();
+    }, 500);
   });
 
 })
