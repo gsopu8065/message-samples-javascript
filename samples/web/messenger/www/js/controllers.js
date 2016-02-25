@@ -73,7 +73,7 @@ angular.module('starter.controllers', [])
 .controller('ChannelsCtrl', function($scope, $state, navService, authService) {
   $scope.data = {};
   $scope.data.developerWeekChannel = null;
-  $scope.data.channelSummaries = null;
+  $scope.data.channelSummaries = [];
   var listener;
 
   $scope.$on('$ionicView.enter', function() {
