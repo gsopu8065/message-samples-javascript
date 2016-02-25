@@ -157,8 +157,10 @@ angular.module('starter.controllers', [])
   }
 
   function getLatestMessage(mmxMessage) {
-    var hasAttachments = mmxMessage.attachments && mmxMessage.attachments.length;
-    return hasAttachments ? 'a file was uploaded' : ('"'+mmxMessage.messageContent.message+'"');
+    var msg = ('"'+mmxMessage.messageContent.message+'"');
+    if (mmxMessage.attachments && mmxMessage.attachments.length) msg = 'a file was uploaded';
+    if (mmxMessage.messageContent.type == 'location') msg = 'a location was posted';
+    return msg
   }
 
   $scope.$on('$ionicView.leave', function() {
@@ -193,9 +195,9 @@ angular.module('starter.controllers', [])
 })
 
 .controller('ChannelCtrl', ['$scope', '$rootScope', '$state', '$stateParams', '$ionicActionSheet',
-  '$ionicPopup', '$ionicScrollDelegate', '$timeout', '$interval', 'navService', 'authService',
+  '$ionicPopup', '$ionicScrollDelegate', '$timeout', '$interval', 'navService', 'authService', '$ionicLoading',
   function($scope, $rootScope, $state, $stateParams, $ionicActionSheet,
-    $ionicPopup, $ionicScrollDelegate, $timeout, $interval, navService, authService) {
+    $ionicPopup, $ionicScrollDelegate, $timeout, $interval, navService, authService, $ionicLoading) {
 
   var viewScroll = $ionicScrollDelegate.$getByHandle('userMessageScroll');
   var footerBar;
@@ -312,32 +314,46 @@ angular.module('starter.controllers', [])
   };
 
   $scope.onFileSelect = function(el) {
-    if (!(window.FileReader && window.Blob)) {
-      return alert('uploading not supported');
-    }
-    $scope.$apply(function(scope) {
-
-      var reader = new FileReader();
-
-      reader.addEventListener('load', function() {
-
-         var file = {
-           mimeType: el.files[0].type,
-           val: reader.result
-         };
-        // upload file to the channel
-        var msg = new Max.Message({
-          type: 'photo'
-        });
-        channel.publish(msg, el.files[0]).success(function() {
-          Audio.onSend();
-        });
-      }, false);
-
-      if (el.files[0]) {
-        reader.readAsDataURL(el.files[0]);
-      }
+    $ionicLoading.show({
+      template: 'loading'
     });
+
+    // upload file to the channel
+    var msg = new Max.Message({
+      type: 'photo'
+    });
+    channel.publish(msg, el.files[0]).success(function() {
+      Audio.onSend();
+    }).always(function() {
+      $ionicLoading.hide();
+    });
+  };
+
+  $scope.onLocationSend = function() {
+    var err = 'unable to obtain your location.';
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(pos) {
+          $ionicLoading.show({
+            template: 'loading'
+          });
+
+          // send location to the channel
+          var msg = new Max.Message({
+            type: 'location',
+            latitude: pos.coords.latitude.toString(),
+            longitude: pos.coords.longitude.toString()
+          });
+          channel.publish(msg).success(function() {
+            Audio.onSend();
+          }).always(function() {
+            $ionicLoading.hide();
+          });
+        }, function() {
+          alert(err);
+        });
+    } else {
+      alert(err);
+    }
   };
 
   // this keeps the keyboard open on a device only after sending a message, it is non obtrusive
@@ -510,7 +526,6 @@ angular.module('starter.controllers', [])
     }
 
     if (!uids.length) return alert('no users selected');
-
     if (channel) return subscribeUsers(channel, uids);
 
     // create a new private channel

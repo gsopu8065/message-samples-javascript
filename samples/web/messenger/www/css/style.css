@@ -241,16 +241,17 @@ form[name="sendMessageForm"] textarea {
   color: #1b95e0
 }
 
-label.upload-label input[type="file"] {
+label.action-icon-label input[type="file"] {
     position: fixed;
     top: -1000px;
 }
-.upload-label {
+.action-icon-label {
     display: inline-block;
     cursor: pointer;
 }
-.upload-label .ion-ios-cloud-upload {
+.action-icon-label i {
     font-size: 30px;
+    margin: 0 3px;
 }
 
 .backdrop, .loading-container .loading {
