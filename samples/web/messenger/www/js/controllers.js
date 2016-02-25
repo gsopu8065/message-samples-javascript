@@ -234,6 +234,9 @@ angular.module('starter.controllers', [])
 
     // register a listener to listen for messages and populate the chat UI
     listener = new Max.MessageListener('channelMessageListener', function(mmxMessage) {
+      // dont take action on messages not sent to the current channel
+      if (!mmxMessage.channel || mmxMessage.channel.name != channel.name) return;
+
       Audio.onReceive();
       // TODO: this can be replaced with a real profile pic
       mmxMessage.pic = 'img/messenger-icon.png';
