@@ -5,7 +5,7 @@
     <ion-list id="channels-list">
       <ion-item ng-repeat="channel in data.channelSummaries"
                 href="#/app/channels/{{channel.channelName}}/{{channel.ownerId}}"
-                ng-if="channel.channelName != 'developerweek'">
+                ng-if="channel.channelName != 'DeveloperWeek'">
         <i class="icon ion-chatboxes" ng-class="{'is-unread': channel.isUnread}"></i>
         <b>{{channel.subscriberNames}}</b> <br />
         <span>{{channel.latestMessage || 'no messages yet!'}}</span>

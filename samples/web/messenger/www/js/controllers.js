@@ -130,10 +130,9 @@ angular.module('starter.controllers', [])
       $scope.data.channels = channels;
 
       // retrieve detailed channel information, including subscribers and past messages
-      Max.Channel.getChannelSummary(channels, 3, 1).success(function(channelSummaries) {
+      Max.Channel.getChannelSummary(channels, 5, 1).success(function(channelSummaries) {
 
         for (var i = 0; i < channelSummaries.length; ++i) {
-          if (channelSummaries[i].channelName == 'DeveloperWeek') continue;
           var subscriberNames = [];
           for (var j = 0; j < channelSummaries[i].subscribers.length; ++j) {
             subscriberNames.push(channelSummaries[i].subscribers[j].userName);
