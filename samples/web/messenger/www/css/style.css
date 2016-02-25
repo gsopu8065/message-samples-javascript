@@ -233,7 +233,8 @@ a.autolinker {
 }
 
 form[name="sendMessageForm"] textarea {
-  width: 100%
+  width: 100%;
+  min-height: 36px;
 }
 
 .is-unread {
