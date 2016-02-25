@@ -10,10 +10,17 @@
       </ion-nav-buttons>
 
       <ion-nav-buttons side="right">
-        <a ng-if="authService.isAuthenticated && navService.currentPage == 'channels'" menu-toggle="right" href="#/app/users">
+        <a ng-if="authService.isAuthenticated && navService.currentPage == 'channels'"
+           menu-toggle="right" href="#/app/users">
           <img src="img/ic_add_message_tabbar.png" />
         </a>
-        <a ng-if="authService.isAuthenticated && navService.currentPage == 'userlist'" ng-click="startConversation()" menu-toggle="right">
+        <a ng-if="authService.isAuthenticated && navService.currentPage == 'channel'"
+           menu-toggle="right" ng-click="gotoConversationDetails()">
+          <p class="para-spacing">Details</p>
+          <!--<img class="general-icon-container" src="img/add_user_icon.png" />-->
+        </a>
+        <a ng-if="authService.isAuthenticated && navService.currentPage == 'userlist'"
+           menu-toggle="right" ng-click="startConversation()">
           <img class="general-icon-container" src="img/check_user_icon.png" />
         </a>
       </ion-nav-buttons>

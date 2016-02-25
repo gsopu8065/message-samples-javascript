@@ -16,6 +16,10 @@ angular.module('starter.controllers', [])
       $scope.navService.$currentScope.startConversation();
     };
 
+    $scope.gotoConversationDetails = function() {
+      $scope.navService.$currentScope.gotoConversationDetails();
+    }
+
 })
 
 .controller('RegisterCtrl', function($scope, $state, navService) {
@@ -72,7 +76,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('ChannelsCtrl', function($scope, $state, navService, authService) {
+.controller('ChannelsCtrl', function($scope, $state, navService, authService, $ionicPopup) {
   $scope.data = {};
   $scope.data.developerWeekChannel = null;
   $scope.data.channelSummaries = [];
@@ -161,6 +165,30 @@ angular.module('starter.controllers', [])
     // IMPORTANT: always make sure to unregister the listener when you leave the page
     Max.unregisterListener(listener);
   });
+
+  $scope.confirmLeave = function(channelSummary) {
+    var channel = channelSummary.channel;
+
+    $ionicPopup.confirm({
+      title: 'Leave this channel?',
+      template: 'Are you sure you wish to leave this chat room?'
+    }).then(function(yes) {
+      if (yes) {
+        // leave the channel by unsubscribing, then refresh the view
+        channel.unsubscribe().success(function() {
+
+          for (var i=0;i<$scope.data.channelSummaries.length;++i) {
+            if ($scope.data.channelSummaries[i].channelName == channel.name) {
+              $scope.$apply(function() {
+                $scope.data.channelSummaries.splice(i, 1);
+              });
+              break;
+            }
+          }
+        })
+      }
+    });
+  };
 
 })
 
@@ -347,6 +375,13 @@ angular.module('starter.controllers', [])
     });
   };
 
+  $scope.gotoConversationDetails = function() {
+    $state.go('app.details', {
+      channelName: channel.name,
+      userId: channel.userId
+    });
+  };
+
   // TODO: implement user profile
   $scope.viewProfile = function(msg) {
     if (msg.userId === $scope.user._id) {
@@ -372,17 +407,67 @@ angular.module('starter.controllers', [])
 
 }])
 
-.controller('UsersCtrl', function($scope, authService, navService, $state) {
+.controller('ChannelDetailsCtrl', function($scope, authService, navService, $state, $stateParams) {
+  var channel;
+  $scope.authService = authService;
   $scope.data = {
     users: []
   };
+
+  $scope.$on('$ionicView.enter', function() {
+    if (!authService.isAuthenticated) return $state.go('app.login');
+
+    navService.currentPage = 'channeldetails';
+    navService.$currentScope = $scope;
+
+    // get current user information
+    $scope.data.currentUser = Max.getCurrentUser();
+
+    // create an instance of channel given channel name and userId (if exists)
+    channel = new Max.Channel({
+      name: $stateParams.channelName,
+      userId: $stateParams.channelName == 'developerweek' ? null : $stateParams.userId
+    });
+
+    // get all the users subscribed to the channel
+    channel.getAllSubscribers().success(function(subscribers) {
+      $scope.$apply(function() {
+        $scope.data.users = subscribers;
+        $scope.data.isOwner = channel.isOwner();
+      });
+    });
+
+  });
+
+  $scope.addContacts = function() {
+    $state.go('app.channelUsers', {
+      channelName: channel.name,
+      userId: channel.userId
+    });
+  }
+
+})
+
+.controller('UsersCtrl', function($scope, authService, navService, $state, $stateParams) {
+  var channel;
   $scope.authService = authService;
 
   $scope.$on('$ionicView.enter', function() {
     if (!authService.isAuthenticated) return $state.go('app.login');
 
+    $scope.data = {
+      users: []
+    };
     navService.currentPage = 'userlist';
     navService.$currentScope = $scope;
+
+    if ($stateParams.channelName) {
+      // create an instance of channel given channel name and userId (if exists)
+      channel = new Max.Channel({
+        name: $stateParams.channelName,
+        userId: $stateParams.userId
+      });
+    }
 
     // retrieve a list of users
     Max.User.search({
@@ -391,9 +476,24 @@ angular.module('starter.controllers', [])
       query: 'userName:*'
     }).success(function (users) {
 
-      $scope.$apply(function () {
-        $scope.data.users = users;
-      });
+      if (channel) {
+        // get all the users subscribed to the channel
+        channel.getAllSubscribers().success(function(subscribers) {
+          var uids = getUIDs(subscribers);
+
+          $scope.$apply(function() {
+            for (var i=0;i<users.length;++i) {
+              if (uids.indexOf(users[i].userIdentifier) == -1) {
+                $scope.data.users.push(users[i]);
+              }
+            }
+          });
+        });
+      } else {
+        $scope.$apply(function () {
+          $scope.data.users = users;
+        });
+      }
     });
   });
 
@@ -411,6 +511,8 @@ angular.module('starter.controllers', [])
 
     if (!uids.length) return alert('no users selected');
 
+    if (channel) return subscribeUsers(channel, uids);
+
     // create a new private channel
     var channelName = new Date().getTime();
     Max.Channel.create({
@@ -419,18 +521,27 @@ angular.module('starter.controllers', [])
       private: true,
       publishPermission: 'subscribers'
     }).success(function(mmxPrivateChannel) {
-
-      // invite the selected users to the private channel
-      mmxPrivateChannel.addSubscribers(uids).success(function() {
-
-        $state.go('app.single', {
-          channelName: channelName,
-          userId: authService.currentUser.userIdentifier
-        });
-      });
-
+      subscribeUsers(mmxPrivateChannel, uids);
     });
 
+  };
+
+  function subscribeUsers(channel, uids) {
+    // subscribe the selected users to the private channel
+    channel.addSubscribers(uids).success(function() {
+      $state.go('app.single', {
+        channelName: channel.name,
+        userId: channel.userId
+      });
+    });
+  }
+
+  function getUIDs(users) {
+    var uids = [];
+    for (var i=0;i<users.length;++i) {
+      uids.push(users[i].userIdentifier);
+    }
+    return uids;
   }
 
 });

@@ -259,3 +259,11 @@ label.upload-label input[type="file"] {
 .loading img {
   margin-bottom: 20px;
 }
+
+.para-spacing {
+  margin: 6px 10px;
+}
+
+.card .item {
+  background: #eee
+}

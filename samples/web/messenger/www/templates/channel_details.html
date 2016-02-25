@@ -1,14 +1,17 @@
-<ion-view view-title="Select Users">
+<ion-view view-title="Chat Room Details">
   <ion-content>
-    <p ng-if="!data.users.length && 1 == 2">No users to select!</p>
     <ion-list>
       <ion-item ng-repeat="user in data.users"
-                ng-class="{'active':user.uiActive}"
-                ng-click="toggleSelection(user)"
                 ng-if="user.userName != authService.currentUser.userName">
          <i class="icon ion-ios-person"></i>
         {{user.firstName}} {{user.lastName}} ({{user.userName}})
       </ion-item>
     </ion-list>
+    <div class="card" ng-if="data.isOwner" ng-click="addContacts()">
+      <a href="#" class="item item-icon-left">
+        <i class="icon ion-plus-round"></i>
+        Add Contacts
+      </a>
+    </div>
   </ion-content>
 </ion-view>

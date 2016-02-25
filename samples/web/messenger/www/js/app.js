@@ -31,7 +31,6 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', '
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
-
     }
     if (window.StatusBar) {
       StatusBar.styleDefault();
@@ -97,6 +96,25 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', '
     }
   })
 
+  .state('app.details', {
+    url: '/channels/:channelName/:userId/details',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/channel_details.html',
+        controller: 'ChannelDetailsCtrl'
+      }
+    }
+  })
+
+  .state('app.channelUsers', {
+    url: '/channels/:channelName/:userId/users',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/users.html',
+        controller: 'UsersCtrl'
+      }
+    }
+  })
   .state('app.users', {
     url: '/users',
     views: {
