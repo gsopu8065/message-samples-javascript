@@ -415,7 +415,7 @@ angular.module('starter.controllers', [])
       // invite the selected users to the private channel
       mmxPrivateChannel.addSubscribers(uids).success(function() {
 
-        $state.go('app.channels', {
+        $state.go('app.single', {
           channelName: channelName,
           userId: authService.currentUser.userIdentifier
         });
