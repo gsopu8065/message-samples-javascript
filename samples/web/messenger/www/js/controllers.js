@@ -86,6 +86,7 @@ angular.module('starter.controllers', [])
 
       // register a listener to listen for messages and update the channel summaries
       listener = new Max.MessageListener('receivedMessageListener', function(mmxMessage) {
+        Audio.onReceive();
         var isExistingChannel = false;
         if (mmxMessage.channel && mmxMessage.channel.name) {
           for (var i=0;i<$scope.data.channelSummaries.length;++i) {
@@ -231,6 +232,7 @@ angular.module('starter.controllers', [])
 
     // register a listener to listen for messages and populate the chat UI
     listener = new Max.MessageListener('channelMessageListener', function(mmxMessage) {
+      Audio.onReceive();
       // TODO: this can be replaced with a real profile pic
       mmxMessage.pic = 'img/messenger-icon.png';
       $scope.data.messages.push(mmxMessage);
@@ -271,6 +273,7 @@ angular.module('starter.controllers', [])
     });
     channel.publish(msg).success(function() {
       $scope.data.message = '';
+      Audio.onSend();
     });
 
   };
@@ -294,7 +297,7 @@ angular.module('starter.controllers', [])
           type: 'photo'
         });
         channel.publish(msg, el.files[0]).success(function() {
-
+          Audio.onSend();
         });
       }, false);
 
@@ -426,3 +429,18 @@ angular.module('starter.controllers', [])
   }
 
 });
+
+var Audio = {
+  receive: new Howl({
+    urls: ['sounds/whistle.mp3', 'sounds/whistle.ogg']
+  }),
+  send: new Howl({
+    urls: ['sounds/click.mp3', 'sounds/click.ogg']
+  }),
+  onReceive: function() {
+    this.receive.play();
+  },
+  onSend: function() {
+    this.send.play();
+  }
+};
