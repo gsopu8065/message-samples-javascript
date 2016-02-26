@@ -118,7 +118,7 @@ angular.module('starter.controllers', [])
   function refreshChannelList() {
 
     // find a public channel by name
-    Max.Channel.findPublicChannelsByName('developerweek').success(function (channels) {
+    Max.Channel.findPublicChannelsByName('DeveloperWeek').success(function (channels) {
       if (!channels.length) return;
 
       $scope.$apply(function() {
@@ -227,7 +227,7 @@ angular.module('starter.controllers', [])
     $scope.data.message = '';
     $scope.data.subscribers = {};
 
-    $scope.data.channelTitle = $stateParams.channelName == 'developerweek' ? $stateParams.channelName : 'Private Chat';
+    $scope.data.channelTitle = $stateParams.channelName == 'DeveloperWeek' ? $stateParams.channelName : 'Private Chat';
 
     // get current user information
     $scope.data.currentUser = Max.getCurrentUser();
@@ -235,7 +235,7 @@ angular.module('starter.controllers', [])
     // create an instance of channel given channel name and userId (if exists)
     channel = new Max.Channel({
       name: $stateParams.channelName,
-      userId: $stateParams.channelName == 'developerweek' ? null : $stateParams.userId
+      userId: $stateParams.channelName == 'DeveloperWeek' ? null : $stateParams.userId
     });
 
     // you only need to fetch chat history when you enter the page.
@@ -275,7 +275,18 @@ angular.module('starter.controllers', [])
 
       // this tells us to add the sender to the list of subscribers
       if (!$scope.data.subscribers[mmxMessage.sender.userIdentifier]) {
-        $scope.data.subscribers[mmxMessage.sender.userIdentifier] = mmxMessage.sender.userName;
+        Max.User.search({
+          limit: 1,
+          offset: 0,
+          query: 'userIdentifier:' + mmxMessage.sender.userIdentifier
+        }).success(function (users) {
+          if (users.length) {
+            var user = users[0];
+            $scope.safeApply(function() {
+              $scope.data.subscribers[user.userIdentifier] = user.userName;
+            });
+          }
+        });
       }
 
       $timeout(function() {
@@ -462,7 +473,7 @@ angular.module('starter.controllers', [])
     // create an instance of channel given channel name and userId (if exists)
     channel = new Max.Channel({
       name: $stateParams.channelName,
-      userId: $stateParams.channelName == 'developerweek' ? null : $stateParams.userId
+      userId: $stateParams.channelName == 'DeveloperWeek' ? null : $stateParams.userId
     });
 
     // get all the users subscribed to the channel

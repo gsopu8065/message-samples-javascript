@@ -1,13 +1,13 @@
 <ion-view view-title="Chat Rooms">
   <ion-content>
-    <a href="#/app/channels/developerweek/go" ng-if="data.developerWeekChannel">
+    <a href="#/app/channels/DeveloperWeek/go" ng-if="data.developerWeekChannel">
       <img src="img/bg_img_1.png" style="width:100%;height:90px" />
     </a>
     <p class="info-paragraph" ng-if="!data.channelSummaries.length">You have no chat rooms</p>
     <ion-list id="channels-list">
       <ion-item ng-repeat="channelSummary in data.channelSummaries"
                 href="#/app/channels/{{channelSummary.channelName}}/{{channelSummary.ownerId}}"
-                ng-if="channelSummary.channelName != 'developerweek'"
+                ng-if="channelSummary.channelName != 'DeveloperWeek'"
                 on-hold="confirmLeave(channelSummary)">
         <i class="icon ion-chatboxes" ng-class="{'is-unread': channelSummary.isUnread}"></i>
         <b>{{channelSummary.subscriberNames}}</b> <br />
