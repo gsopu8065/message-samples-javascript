@@ -1,21 +1,21 @@
 <ion-view view-title="Register">
   <ion-content>
-      <div class="list">
+      <div class="list auth-inputs">
         <div class="item item-input">
           <span class="input-label">First Name</span>
-          <input type="text" ng-model="registerData.firstName">
+          <input type="text" placeholder="first name" ng-model="registerData.firstName">
         </div>
         <div class="item item-input">
           <span class="input-label">Last Name</span>
-          <input type="text" ng-model="registerData.lastName">
+          <input type="text" placeholder="last name" ng-model="registerData.lastName">
         </div>
         <div class="item item-input">
           <span class="input-label">Username</span>
-          <input type="text" ng-model="registerData.username">
+          <input placeholder="username" type="text" ng-model="registerData.username">
         </div>
         <div class="item item-input">
           <span class="input-label">Password</span>
-          <input type="password" ng-model="registerData.password">
+          <input placeholder="password" type="password" ng-model="registerData.password">
         </div>
         <div class="item">
           <button class="button button-positive" ng-click="doRegister()">Register</button>
