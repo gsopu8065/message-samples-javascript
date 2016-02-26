@@ -195,9 +195,9 @@ angular.module('starter.controllers', [])
 })
 
 .controller('ChannelCtrl', ['$scope', '$rootScope', '$state', '$stateParams', '$ionicActionSheet',
-  '$ionicPopup', '$ionicScrollDelegate', '$timeout', '$interval', 'navService', 'authService', '$ionicLoading',
+  '$ionicPopup', '$ionicScrollDelegate', '$timeout', '$interval', 'navService', 'authService',
   function($scope, $rootScope, $state, $stateParams, $ionicActionSheet,
-    $ionicPopup, $ionicScrollDelegate, $timeout, $interval, navService, authService, $ionicLoading) {
+    $ionicPopup, $ionicScrollDelegate, $timeout, $interval, navService, authService) {
 
   var viewScroll = $ionicScrollDelegate.$getByHandle('userMessageScroll');
   var footerBar;
@@ -212,7 +212,8 @@ angular.module('starter.controllers', [])
     messages: [],
     currentUser: null,
     message: '',
-    subscribers: {}
+    subscribers: {},
+    isLoading: false
   };
 
   $scope.$on('$ionicView.enter', function() {
@@ -300,6 +301,7 @@ angular.module('starter.controllers', [])
 
   $scope.sendMessage = function() {
     keepKeyboardOpen();
+    showLoading();
 
     // publish message to the channel
     var msg = new Max.Message({
@@ -309,23 +311,23 @@ angular.module('starter.controllers', [])
     channel.publish(msg).success(function() {
       $scope.data.message = '';
       Audio.onSend();
+    }).always(function() {
+      hideLoading();
     });
 
   };
 
-  $scope.onFileSelect = function(el) {
-    $ionicLoading.show({
-      template: 'loading'
-    });
+  $scope.onFileSelect = function(el, type) {
+    showLoading();
 
     // upload file to the channel
     var msg = new Max.Message({
-      type: 'photo'
+      type: type
     });
     channel.publish(msg, el.files[0]).success(function() {
       Audio.onSend();
     }).always(function() {
-      $ionicLoading.hide();
+      hideLoading();
     });
   };
 
@@ -333,9 +335,7 @@ angular.module('starter.controllers', [])
     var err = 'unable to obtain your location.';
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(pos) {
-          $ionicLoading.show({
-            template: 'loading'
-          });
+          showLoading();
 
           // send location to the channel
           var msg = new Max.Message({
@@ -346,7 +346,7 @@ angular.module('starter.controllers', [])
           channel.publish(msg).success(function() {
             Audio.onSend();
           }).always(function() {
-            $ionicLoading.hide();
+            hideLoading();
           });
         }, function() {
           alert(err);
@@ -360,6 +360,18 @@ angular.module('starter.controllers', [])
   function keepKeyboardOpen() {
     txtInput.one('blur', function() {
       txtInput[0].focus();
+    });
+  }
+
+  function showLoading() {
+    $scope.$apply(function() {
+      $scope.data.isLoading = true;
+    });
+  }
+
+  function hideLoading() {
+    $scope.$apply(function() {
+      $scope.data.isLoading = false;
     });
   }
 
