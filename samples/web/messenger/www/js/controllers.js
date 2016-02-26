@@ -364,7 +364,7 @@ angular.module('starter.controllers', [])
   }
 
   function showLoading() {
-    $scope.$apply(function() {
+    $scope.safeApply(function() {
       $scope.data.isLoading = true;
     });
   }
@@ -374,6 +374,17 @@ angular.module('starter.controllers', [])
       $scope.data.isLoading = false;
     });
   }
+
+  $scope.safeApply = function(fn) {
+    var phase = this.$root.$$phase;
+    if(phase == '$apply' || phase == '$digest') {
+      if(fn && (typeof(fn) === 'function')) {
+        fn();
+      }
+    } else {
+      this.$apply(fn);
+    }
+  };
 
   // TODO: implement actions when a message is long-pressed
   $scope.onMessageHold = function(e, itemIndex, message) {
