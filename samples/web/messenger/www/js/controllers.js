@@ -88,31 +88,28 @@ angular.module('starter.controllers', [])
     navService.currentPage = 'channels';
     navService.$currentScope = $scope;
 
-    Max.onReady(function() {
-
-      // register a listener to listen for messages and update the channel summaries
-      listener = new Max.MessageListener('receivedMessageListener', function(mmxMessage) {
-        Audio.onReceive();
-        var isExistingChannel = false;
-        if (mmxMessage.channel && mmxMessage.channel.name) {
-          for (var i=0;i<$scope.data.channelSummaries.length;++i) {
-            if ($scope.data.channelSummaries[i].channelName == mmxMessage.channel.name) {
-              isExistingChannel = true;
-              $scope.$apply(function() {
-                $scope.data.channelSummaries[i].latestMessage = getLatestMessage(mmxMessage);
-                $scope.data.channelSummaries[i].isUnread = true;
-              });
-            }
-          }
-          if (!isExistingChannel) {
-            refreshChannelList();
+    // register a listener to listen for messages and update the channel summaries
+    listener = new Max.MessageListener('receivedMessageListener', function(mmxMessage) {
+      Audio.onReceive();
+      var isExistingChannel = false;
+      if (mmxMessage.channel && mmxMessage.channel.name) {
+        for (var i=0;i<$scope.data.channelSummaries.length;++i) {
+          if ($scope.data.channelSummaries[i].channelName == mmxMessage.channel.name) {
+            isExistingChannel = true;
+            $scope.$apply(function() {
+              $scope.data.channelSummaries[i].latestMessage = getLatestMessage(mmxMessage);
+              $scope.data.channelSummaries[i].isUnread = true;
+            });
           }
         }
-      });
-      Max.registerListener(listener);
-
-      refreshChannelList();
+        if (!isExistingChannel) {
+          refreshChannelList();
+        }
+      }
     });
+    Max.registerListener(listener);
+
+    refreshChannelList();
   });
 
   function refreshChannelList() {
@@ -263,7 +260,7 @@ angular.module('starter.controllers', [])
 
     });
 
-    // register a listener to listen for messages and populate the chat UI
+    // create a listener to listen for messages and populate the chat UI. make sure to register the listener!
     listener = new Max.MessageListener('channelMessageListener', function(mmxMessage) {
       // dont take action on messages not sent to the current channel
       if (!mmxMessage.channel || mmxMessage.channel.name != channel.name) return;
@@ -293,9 +290,9 @@ angular.module('starter.controllers', [])
         viewScroll.scrollBottom();
       }, 0);
     });
-    Max.onReady(function() {
-      Max.registerListener(listener);
-    });
+
+    // register the listener
+    Max.registerListener(listener);
 
     $timeout(function() {
       footerBar = document.body.querySelector('#userMessagesView .bar-footer');
