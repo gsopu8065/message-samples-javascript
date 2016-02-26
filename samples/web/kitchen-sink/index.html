@@ -319,23 +319,22 @@ mmxChannel.publish(channelMsg).success(function() {
 <script>
 
     Max.init({
-        clientId: 'a75eb8b5-08a2-4027-b1ca-e0d60e48cd90',
-        clientSecret: '_pgPhBdY1NkyEcxIKp5yZQ40zV5HnOlOc51hxwCvD3U',
-        baseUrl: 'http://localhost:7777/api'
+        clientId: '2cf16878-4831-45e2-8b8e-e6b11ed386a3',
+        clientSecret: 'rfZTp-CyJUJ6nNUHge57_DXuRkhRYS6Zjg22GEolKz8',
+        baseUrl: 'http://192.168.58.1:7777/api'
     });
 
     $(document).ready(function() {
 
         Max.onReady(function() {
 
-            $('#user-info').html(JSON.stringify(Max.getCurrentUser(), false, 4));
             $('#device-info').html(JSON.stringify(Max.Device.getCurrentDevice(), false, 4));
             $('#app-info').html(JSON.stringify(Max.Config, false, 4));
-            $('#auth-info').html(JSON.stringify(Max.App.credentials, false, 4));
 
             var user = {
-                username: 'jack.doe',
+                username: new Date().getTime(), // 'jack.doe',
                 firstName: 'Jack',
+                lastName: 'Doe',
                 password: 'magnet'
             };
 
@@ -345,6 +344,7 @@ mmxChannel.publish(channelMsg).success(function() {
 
                 Max.User.login(user).success(function(loginUser, loginDevice) {
 
+                    $('#user-info').html(JSON.stringify(Max.getCurrentUser(), false, 4));
                     $('#login-info').html(JSON.stringify(loginUser, false, 4));
                     $('#deviceregister-info').html(JSON.stringify(loginDevice, false, 4));
 

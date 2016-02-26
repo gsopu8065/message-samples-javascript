@@ -301,7 +301,6 @@ angular.module('starter.controllers', [])
 
   $scope.sendMessage = function() {
     keepKeyboardOpen();
-    showLoading();
 
     // publish message to the channel
     var msg = new Max.Message({
@@ -311,8 +310,6 @@ angular.module('starter.controllers', [])
     channel.publish(msg).success(function() {
       $scope.data.message = '';
       Audio.onSend();
-    }).always(function() {
-      hideLoading();
     });
 
   };
