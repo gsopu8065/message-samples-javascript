@@ -43,21 +43,29 @@
                     // 5. start listening for messages
                     Max.start();
 
-                    // 6. add a listener to listen for incoming messages
-                    var listener = new Max.MessageListener('myListener', function(mmxMessage) {
-                        messageContainer.innerHTML = messageContainer.innerHTML + mmxMessage.messageContent.message + '\n';
-                    });
-                    Max.registerListener(listener);
+                    // 6. create a channel
+                    Max.Channel.create({
+                        name: 'GetStarted',
+                        description: 'my get started tutorial channel'
+                    }).always(function() {
 
-                    // 7. find a public channel with the name 'Get Started'
-                    Max.Channel.findPublicChannelsByName('GetStarted').success(function(channels) {
-                        if (!channels.length) return;
+                        // 7. add a listener to listen for incoming messages
+                        var listener = new Max.MessageListener('myListener', function(mmxMessage) {
+                            messageContainer.innerHTML = messageContainer.innerHTML + mmxMessage.messageContent.message + '\n';
+                        });
+                        Max.registerListener(listener);
 
-                        // 8. subscribe to the channel
-                        getStartedChannel = channels[0];
-                        getStartedChannel.subscribe().success(function() {
+                        // 8. find a public channel with the name 'Get Started'
+                        Max.Channel.findPublicChannelsByName('GetStarted').success(function(channels) {
+                            if (!channels.length) return;
 
-                            sendMessage('hello world!')
+                            // 9. subscribe to the channel
+                            getStartedChannel = channels[0];
+                            getStartedChannel.subscribe().success(function() {
+
+                                sendMessage('hello world!')
+
+                            });
 
                         });
 
@@ -78,7 +86,7 @@
     function sendMessage(msg) {
         if (!getStartedChannel) return;
 
-        // 9. publish a message to the channel
+        // 10. publish a message to the channel
         var message = new Max.Message({
             message: msg
         });
