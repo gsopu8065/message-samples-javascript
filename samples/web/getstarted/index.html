@@ -32,38 +32,41 @@
             password: 'magnet'
         };
 
-        // 3. register user by supplying credentials
-        Max.User.register(user).always(function() {
+        Max.User.logout().always(function() {
 
-            // 4. login with your newly registered user
-            Max.User.login(user).success(function() {
+            // 3. register user by supplying credentials
+            Max.User.register(user).always(function() {
 
-                // 5. start listening for messages
-                Max.start();
+                // 4. login with your newly registered user
+                Max.User.login(user).success(function() {
 
-                // 6. add a listener to listen for incoming messages
-                var listener = new Max.MessageListener('myListener', function(mmxMessage) {
-                    messageContainer.innerHTML = messageContainer.innerHTML + mmxMessage.messageContent.message + '\n';
-                });
-                Max.registerListener(listener);
+                    // 5. start listening for messages
+                    Max.start();
 
-                // 7. find a public channel with the name 'Get Started'
-                Max.Channel.findPublicChannelsByName('GetStarted').success(function(channels) {
-                    if (!channels.length) return;
+                    // 6. add a listener to listen for incoming messages
+                    var listener = new Max.MessageListener('myListener', function(mmxMessage) {
+                        messageContainer.innerHTML = messageContainer.innerHTML + mmxMessage.messageContent.message + '\n';
+                    });
+                    Max.registerListener(listener);
 
-                    // 8. subscribe to the channel
-                    getStartedChannel = channels[0];
-                    console.log(getStartedChannel);
-                    getStartedChannel.subscribe().success(function() {
+                    // 7. find a public channel with the name 'Get Started'
+                    Max.Channel.findPublicChannelsByName('GetStarted').success(function(channels) {
+                        if (!channels.length) return;
 
-                        sendMessage('hello world!')
+                        // 8. subscribe to the channel
+                        getStartedChannel = channels[0];
+                        getStartedChannel.subscribe().success(function() {
+
+                            sendMessage('hello world!')
+
+                        });
 
                     });
 
+                }).error(function(err) {
+                    alert(JSON.stringify(err));
                 });
 
-            }).error(function(err) {
-                alert(JSON.stringify(err));
             });
 
         });
