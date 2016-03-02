@@ -8,9 +8,9 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', '
 
   // initialize the MessageSDK by setting client information
   Max.init({
-      clientId: '76b4e8f6-1066-49e0-a537-160d436ce78c',
-      clientSecret: 'xAq8auJL_VK5ZEWxXGNgm55WxZi67XeaFVBqxFYUCDI',
-      baseUrl: 'http://192.168.58.1:7777/api'
+      clientId: '<your client id>',
+      clientSecret: '<your client secret>',
+      baseUrl: 'https://sandbox.magnet.com/mobile/api'
   });
 
   // handle not authorized and session expiry errors by redirecting to login page
