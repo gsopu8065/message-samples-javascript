@@ -318,6 +318,8 @@ angular.module('starter.controllers', [])
     channel.publish(msg).success(function() {
       $scope.data.message = '';
       Audio.onSend();
+    }).error(function(err) {
+      alert(err);
     });
 
   };
@@ -331,6 +333,8 @@ angular.module('starter.controllers', [])
     });
     channel.publish(msg, el.files[0]).success(function() {
       Audio.onSend();
+    }).error(function(err) {
+      alert(err);
     }).always(function() {
       hideLoading();
     });
@@ -350,6 +354,8 @@ angular.module('starter.controllers', [])
           });
           channel.publish(msg).success(function() {
             Audio.onSend();
+          }).error(function(err) {
+            alert(err);
           }).always(function() {
             hideLoading();
           });
