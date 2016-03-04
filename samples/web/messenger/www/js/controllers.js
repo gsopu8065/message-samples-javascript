@@ -566,9 +566,9 @@ angular.module('starter.controllers', [])
     var channelName = new Date().getTime();
     Max.Channel.create({
       name: channelName,
-      description: authService.currentUser.userName,
-      private: true,
-      publishPermission: 'subscribers'
+      summary: authService.currentUser.userName,
+      isPublic: false,
+      publishPermissions: 'subscribers'
     }).success(function(mmxPrivateChannel) {
       subscribeUsers(mmxPrivateChannel, uids);
     });
