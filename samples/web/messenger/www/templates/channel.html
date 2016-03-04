@@ -142,7 +142,8 @@
           </div>
           <label class="item-input-wrapper">
               <textarea ng-model="data.message" value="" placeholder="Send a message..." required
-                        minlength="1" maxlength="1500" msd-elastic></textarea>
+                 ng-keyup="$event.keyCode == 13 && !$event.shiftKey && sendMessage(sendMessageForm)"
+                  minlength="1" maxlength="1500" msd-elastic></textarea>
           </label>
           <div class="footer-btn-wrap">
             <button class="button button-icon icon ion-android-send footer-btn" type="submit"

@@ -315,8 +315,10 @@ angular.module('starter.controllers', [])
         message: $scope.data.message,
         type: 'text'
     });
-    channel.publish(msg).success(function() {
+    setTimeout(function() {
       $scope.data.message = '';
+    }, 10);
+    channel.publish(msg).success(function() {
       Audio.onSend();
     }).error(function(err) {
       alert(err);
