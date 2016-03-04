@@ -12,10 +12,15 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', '
   //    clientSecret: '<your client secret>',
   //    baseUrl: 'https://sandbox.magnet.com/mobile/api'
   //});
+//Max.init({
+//  clientId: '0f7f9f4c-d7fb-43f8-b1c9-818decca4de0',
+//  clientSecret: 'uBAW0jgfHqj1R10cCcQFPztgNTRb54VoB4vhA7WWaRU',
+//  baseUrl: 'https://sandy.magnet.com/mobile/api'
+//});
 Max.init({
-  clientId: '0f7f9f4c-d7fb-43f8-b1c9-818decca4de0',
-  clientSecret: 'uBAW0jgfHqj1R10cCcQFPztgNTRb54VoB4vhA7WWaRU',
-  baseUrl: 'https://sandy.magnet.com/mobile/api'
+  clientId: 'b5925354-828e-4a8c-8ef8-4836e015d7bb',
+  clientSecret: 'sVGCDxBpS5hDFdxa_5OoEsgm5NKtSV20BTt2mORfCp4',
+  baseUrl: 'https://dandy.magnet.com/mobile/api'
 });
 
   // handle not authorized and session expiry errors by redirecting to login page

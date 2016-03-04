@@ -24,7 +24,7 @@ angular.module('starter.controllers', [])
 
 .controller('RegisterCtrl', function($scope, $state, navService) {
   $scope.registerData = {
-    username : '',
+    userName : '',
     password : ''
   };
 
@@ -53,7 +53,7 @@ angular.module('starter.controllers', [])
 
 .controller('LoginCtrl', function($scope, $state, navService, $ionicSideMenuDelegate) {
   $scope.loginData = {
-    username : '',
+    userName : '',
     password : ''
   };
 
