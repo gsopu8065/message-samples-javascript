@@ -91,10 +91,9 @@ Max.User.login(userObj).success(function() {
 <div class="row-fluid clearfix">
     <div class="col-sm-6">
 <pre>Max.User.search({
-    query: 'userName:*',
+    query: {userName: '*'},
     limit: 10,
-    offset: 0,
-    orderby: ''
+    offset: 0
 }).success(function(users) {
     // do something
 });</pre>
@@ -397,8 +396,7 @@ mmxChannel.publish(channelMsg).success(function() {
                             Max.User.search({
                                 limit: 10,
                                 offset: 0,
-        //                        orderby: '',
-                                query: 'userName:*'
+                                query: {userName: '*'}
                             }).success(function(users) {
                                 $('#usersearch-info').html(JSON.stringify(users, false, 4));
 
@@ -457,7 +455,7 @@ mmxChannel.publish(channelMsg).success(function() {
 
                                         var inChannel = false;
                                         for (var i=0;i<subscribers.length;++i) {
-                                            if (subscribers[i].userId == Max.getCurrentUser().userIdentifier) {
+                                            if (subscribers[i].userId == Max.getCurrentUser().userId) {
                                                 inChannel = true;
                                                 mmxChannel.unsubscribe().success(function(res) {
                                                     $('#channelunsubscribe-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');

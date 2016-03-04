@@ -14,7 +14,7 @@
       <div ng-repeat="message in data.messages" class="message-wrapper"
           on-hold="onMessageHold($event, $index, message)">
 
-          <div ng-if="data.currentUser.userIdentifier !== message.sender.userId">
+          <div ng-if="data.currentUser.userId !== message.sender.userId">
 
             <img ng-click="viewProfile(message)" class="profile-pic left"
                   ng-src="{{message.pic}}" onerror="onProfilePicError(this)" />
@@ -47,7 +47,7 @@
 
                   <div class="message-detail">
                       <span ng-click="viewProfile(message)"
-                          class="bold">{{data.subscribers[message.sender.userIdentifier]}}</span>,
+                          class="bold">{{data.subscribers[message.sender.userId]}}</span>,
                       <span am-time-ago="message.timestamp"></span>
                   </div>
 
@@ -78,7 +78,7 @@
               </div>
           </div>
 
-          <div ng-if="data.currentUser.userIdentifier === message.sender.userId">
+          <div ng-if="data.currentUser.userId === message.sender.userId">
 
                <img ng-click="viewProfile(message)" class="profile-pic right"
                   ng-src="{{message.pic}}" onerror="onProfilePicError(this)" />
@@ -111,7 +111,7 @@
 
                   <div class="message-detail">
                       <span ng-click="viewProfile(message)"
-                          class="bold">{{data.subscribers[message.sender.userIdentifier]}}</span>,
+                          class="bold">{{data.subscribers[message.sender.userId]}}</span>,
                       <span am-time-ago="message.timestamp"></span>
                   </div>
 

@@ -142,7 +142,7 @@ angular.module('starter.controllers', [])
             subscriberNames.push(channelSummaries[i].subscribers[j].userName);
           }
           channelSummaries[i].subscriberNames = subscriberNames.join(', ');
-          channelSummaries[i].ownerId = channelSummaries[i].owner.userIdentifier;
+          channelSummaries[i].ownerId = channelSummaries[i].owner.userId;
           if (channelSummaries[i].messages && channelSummaries[i].messages[0] && channelSummaries[i].messages[0].messageContent)
             channelSummaries[i].latestMessage = getLatestMessage(channelSummaries[i].messages[0]);
         }
@@ -251,7 +251,7 @@ angular.module('starter.controllers', [])
 
       // maintain a list of subscribers
       for (i=0;i<channelSummaries[0].subscribers.length;++i) {
-        $scope.data.subscribers[channelSummaries[0].subscribers[i].userIdentifier] = channelSummaries[0].subscribers[i].userName;
+        $scope.data.subscribers[channelSummaries[0].subscribers[i].userId] = channelSummaries[0].subscribers[i].userName;
       }
 
       $timeout(function() {
@@ -271,16 +271,18 @@ angular.module('starter.controllers', [])
       $scope.data.messages.push(mmxMessage);
 
       // this tells us to add the sender to the list of subscribers
-      if (!$scope.data.subscribers[mmxMessage.sender.userIdentifier]) {
+      if (!$scope.data.subscribers[mmxMessage.sender.userId]) {
         Max.User.search({
           limit: 1,
           offset: 0,
-          query: 'userIdentifier:' + mmxMessage.sender.userIdentifier
+          query: {
+            userId: mmxMessage.sender.userId
+          }
         }).success(function (users) {
           if (users.length) {
             var user = users[0];
             $scope.safeApply(function() {
-              $scope.data.subscribers[user.userIdentifier] = user.userName;
+              $scope.data.subscribers[user.userId] = user.userName;
             });
           }
         });
@@ -525,7 +527,7 @@ angular.module('starter.controllers', [])
     Max.User.search({
       limit: 100,
       offset: 0,
-      query: 'userName:*'
+      query: {userName: '*'}
     }).success(function (users) {
 
       if (channel) {
@@ -535,7 +537,7 @@ angular.module('starter.controllers', [])
 
           $scope.$apply(function() {
             for (var i=0;i<users.length;++i) {
-              if (uids.indexOf(users[i].userIdentifier) == -1) {
+              if (uids.indexOf(users[i].userId) == -1) {
                 $scope.data.users.push(users[i]);
               }
             }
@@ -557,7 +559,7 @@ angular.module('starter.controllers', [])
     var uids = [];
     for (var key in $scope.data.users) {
       if ($scope.data.users[key].uiActive) {
-        uids.push($scope.data.users[key].userIdentifier);
+        uids.push($scope.data.users[key].userId);
       }
     }
 
@@ -590,7 +592,7 @@ angular.module('starter.controllers', [])
   function getUIDs(users) {
     var uids = [];
     for (var i=0;i<users.length;++i) {
-      uids.push(users[i].userIdentifier);
+      uids.push(users[i].userId);
     }
     return uids;
   }
