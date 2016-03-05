@@ -328,9 +328,9 @@ mmxChannel.publish(channelMsg).success(function() {
 <script>
 
   Max.init({
-      clientId: '76b4e8f6-1066-49e0-a537-160d436ce78c', // '<your client id>',
-      clientSecret: 'xAq8auJL_VK5ZEWxXGNgm55WxZi67XeaFVBqxFYUCDI', // '<your client secret>',
-      baseUrl: 'http://192.168.58.1:8443/api' // 'https://sandbox.magnet.com/mobile/api'
+      clientId: '<your client id>',
+      clientSecret: '<your client secret>',
+      baseUrl: 'https://sandbox.magnet.com/mobile/api'
   });
 
     $(document).ready(function() {
@@ -455,7 +455,7 @@ mmxChannel.publish(channelMsg).success(function() {
 
                                         var inChannel = false;
                                         for (var i=0;i<subscribers.length;++i) {
-                                            if (subscribers[i].userId == Max.getCurrentUser().userId) {
+                                            if (subscribers[i].userId == Max.getCurrentUser().userIdentifier) {
                                                 inChannel = true;
                                                 mmxChannel.unsubscribe().success(function(res) {
                                                     $('#channelunsubscribe-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
