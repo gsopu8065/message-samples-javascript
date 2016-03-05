@@ -189,10 +189,13 @@ Max.registerListener(listener);
 </div>
 
 
-<h3>Get Public Channels</h3>
+<h3>Find Public Channels</h3>
 <div class="row-fluid clearfix">
     <div class="col-sm-6">
-<pre>Max.Channel.findPublicChannelsByName('GetStarted').success(function(channels) {
+<pre>Max.Channel.findPublicChannels('GetStarted').success(function(channels) {
+    // do something
+});</pre>
+<pre>Max.Channel.findPrivateChannels(['private1', 'private']).success(function(channels) {
     // do something
 });</pre>
     </div>
@@ -201,10 +204,13 @@ Max.registerListener(listener);
     </div>
 </div>
 
-<h3>Get Private Channels</h3>
+<h3>Get Private Channel</h3>
 <div class="row-fluid clearfix">
     <div class="col-sm-6">
 <pre>Max.Channel.getPrivateChannel('myprivatechannel').success(function(channel) {
+    // do something
+});</pre>
+<pre>Max.Channel.getPublicChannel('mypublicchannel').success(function(channel) {
     // do something
 });</pre>
     </div>
@@ -304,6 +310,17 @@ Max.Channel.findChannelsBySubscribers([user]).success(function(channels) {
     </div>
 </div>
 
+<h3>getMessages</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>Max.Channel.getMessages(new Date(), new Date(), 10, 0, true).success(function(messages) {
+    // do something
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <div id="getMessages-info"></div>
+    </div>
+</div>
 
 <h3>publish to channel</h3>
 <div class="row-fluid clearfix">
@@ -327,11 +344,11 @@ mmxChannel.publish(channelMsg).success(function() {
 <script src="magnet-max-sdk.js"></script>
 <script>
 
-  Max.init({
-      clientId: '<your client id>',
-      clientSecret: '<your client secret>',
-      baseUrl: 'https://sandbox.magnet.com/mobile/api'
-  });
+    Max.init({
+        clientId: '<your client id>',
+        clientSecret: '<your client secret>',
+        baseUrl: 'https://sandbox.magnet.com/mobile/api'
+    });
 
     $(document).ready(function() {
 
@@ -394,7 +411,7 @@ mmxChannel.publish(channelMsg).success(function() {
                         if (mmxPrivateChannel) {
 
                             Max.User.search({
-                                limit: 10,
+                                limit: 3,
                                 offset: 0,
                                 query: {userName: '*'}
                             }).success(function(users) {
@@ -403,7 +420,7 @@ mmxChannel.publish(channelMsg).success(function() {
                                 mmxPrivateChannel.addSubscribers(users).success(function(res) {
                                     $('#channeladdsubscriber-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
 
-                                    mmxPrivateChannel.getAllSubscribers().success(function(subscribers) {
+                                    mmxPrivateChannel.getAllSubscribers(3).success(function(subscribers) {
                                         $('#channelsubscribers-info').append('<pre>'+JSON.stringify(subscribers, false, 4)+'</pre>');
 
                                         var channelMsg = new Max.Message({
@@ -445,12 +462,12 @@ mmxChannel.publish(channelMsg).success(function() {
                         }).always(function(res) {
                             $('#createchannel-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
 
-                            Max.Channel.findPublicChannelsByName('myNewPublicChannel').success(function(channels) {
+                            Max.Channel.findPublicChannels('myNewPublicChannel').success(function(channels) {
                                 $('#getpublicchannels-info').append('<pre>'+JSON.stringify(channels, false, 4)+'</pre>');
 
                                 if (channels.length) {
                                     var mmxChannel = channels[0];
-                                    mmxChannel.getAllSubscribers().success(function(subscribers) {
+                                    mmxChannel.getAllSubscribers(3).success(function(subscribers) {
                                         $('#channelsubscribers-info').append('<pre>'+JSON.stringify(subscribers, false, 4)+'</pre>');
 
                                         var inChannel = false;
@@ -480,7 +497,7 @@ mmxChannel.publish(channelMsg).success(function() {
                         });
 
 
-                        Max.Channel.findPublicChannelsByName().success(function(channels) {
+                        Max.Channel.findPublicChannels().success(function(channels) {
 
                             var getStartedChannel;
 
@@ -520,9 +537,15 @@ mmxChannel.publish(channelMsg).success(function() {
                                         mmxChannel.publish(channelMsg).success(function (res) {
                                             $('#channelpublish-info').append('<pre>' + JSON.stringify(res, false, 4) + '</pre>');
 
-                                            mmxChannel.unsubscribe().success(function(res) {
-                                                $('#channelunsubscribe-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
+                                            mmxChannel.getMessages(new Date(), null, 2, 0, false).success(function(messages, total) {
+                                                $('#getMessages-info').append('number of messages: ' + total +
+                                                    '<pre>' + JSON.stringify(messages, false, 4) + '</pre>');
+
+                                                mmxChannel.unsubscribe().success(function(res) {
+                                                    $('#channelunsubscribe-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
+                                                });
                                             });
+
                                         });
                                     });
 

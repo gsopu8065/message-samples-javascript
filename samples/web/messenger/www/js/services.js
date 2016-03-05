@@ -23,6 +23,18 @@ angular.module('starter.services', [])
 ])
 
 // directives
+.directive('imageonload', ['$ionicScrollDelegate', function($ionicScrollDelegate) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        element.bind('load', function() {
+          var view = $ionicScrollDelegate.$getByHandle('userMessageScroll');
+          if (view) view.scrollBottom();
+        });
+      }
+    };
+}])
+
 .directive('autolinker', ['$timeout',
   function($timeout) {
     return {

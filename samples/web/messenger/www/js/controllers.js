@@ -116,7 +116,7 @@ angular.module('starter.controllers', [])
   function refreshChannelList() {
 
     // find a public channel by name
-    Max.Channel.findPublicChannelsByName('DeveloperWeek').success(function (channels) {
+    Max.Channel.findPublicChannels('DeveloperWeek').success(function (channels) {
       if (!channels.length) return;
 
       $scope.$apply(function() {
@@ -314,6 +314,7 @@ angular.module('starter.controllers', [])
 
   $scope.sendMessage = function() {
     keepKeyboardOpen();
+    if (!$scope.data.message.length) return $scope.data.message = '';
 
     // publish message to the channel
     var msg = new Max.Message({
@@ -343,6 +344,7 @@ angular.module('starter.controllers', [])
     }).error(function(err) {
       alert(err);
     }).always(function() {
+      clearFileInput(el);
       hideLoading();
     });
   };
@@ -384,6 +386,7 @@ angular.module('starter.controllers', [])
   function showLoading() {
     $scope.safeApply(function() {
       $scope.data.isLoading = true;
+      viewScroll.scrollBottom();
     });
   }
 
@@ -391,6 +394,15 @@ angular.module('starter.controllers', [])
     $scope.$apply(function() {
       $scope.data.isLoading = false;
     });
+  }
+
+  function clearFileInput(ctrl) {
+    try {
+      ctrl.value = null;
+    } catch(ex) { }
+    if (ctrl.value) {
+      ctrl.parentNode.replaceChild(ctrl.cloneNode(true), ctrl);
+    }
   }
 
   $scope.safeApply = function(fn) {
@@ -487,7 +499,7 @@ angular.module('starter.controllers', [])
     });
 
     // get all the users subscribed to the channel
-    channel.getAllSubscribers().success(function(subscribers) {
+    channel.getAllSubscribers(100).success(function(subscribers) {
       $scope.$apply(function() {
         $scope.data.users = subscribers;
         $scope.data.isOwner = channel.isOwner();
@@ -535,7 +547,7 @@ angular.module('starter.controllers', [])
 
       if (channel) {
         // get all the users subscribed to the channel
-        channel.getAllSubscribers().success(function(subscribers) {
+        channel.getAllSubscribers(100).success(function(subscribers) {
           var uids = getUIDs(subscribers);
 
           $scope.$apply(function() {

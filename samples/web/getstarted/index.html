@@ -57,7 +57,7 @@
                         Max.registerListener(listener);
 
                         // 8. find a public channel with the name 'Get Started'
-                        Max.Channel.findPublicChannelsByName('GetStarted').success(function(channels) {
+                        Max.Channel.findPublicChannels('GetStarted').success(function(channels) {
                             if (!channels.length) return;
 
                             // 9. subscribe to the channel
