@@ -91,6 +91,7 @@ angular.module('starter.controllers', [])
     // register a listener to listen for messages and update the channel summaries
     listener = new Max.MessageListener('receivedMessageListener', function(mmxMessage) {
       Audio.onReceive();
+
       var isExistingChannel = false;
       if (mmxMessage.channel && mmxMessage.channel.name) {
         for (var i=0;i<$scope.data.channelSummaries.length;++i) {
@@ -219,6 +220,8 @@ angular.module('starter.controllers', [])
     navService.currentPage = 'channel';
     navService.$currentScope = $scope;
 
+    Max.unregisterListener(listener);
+
     var i;
     $scope.data.messages = [];
     $scope.data.message = '';
@@ -263,7 +266,7 @@ angular.module('starter.controllers', [])
     // create a listener to listen for messages and populate the chat UI. make sure to register the listener!
     listener = new Max.MessageListener('channelMessageListener', function(mmxMessage) {
       // dont take action on messages not sent to the current channel
-      if (!mmxMessage.channel || mmxMessage.channel.name != channel.name) return;
+      if (!mmxMessage.channel || mmxMessage.channel.name != channel.name.toLowerCase()) return;
 
       Audio.onReceive();
       // TODO: this can be replaced with a real profile pic

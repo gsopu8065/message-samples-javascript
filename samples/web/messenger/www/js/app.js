@@ -18,9 +18,9 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', '
 //  baseUrl: 'https://sandy.magnet.com/mobile/api'
 //});
 Max.init({
-  clientId: 'b5925354-828e-4a8c-8ef8-4836e015d7bb',
-  clientSecret: 'sVGCDxBpS5hDFdxa_5OoEsgm5NKtSV20BTt2mORfCp4',
-  baseUrl: 'https://dandy.magnet.com/mobile/api'
+  clientId: 'b3cd37b8-1388-4c48-a55c-41122db578bb',
+  clientSecret: 'Uij_-O1UaCKCetxvZsJSI0xUWV8DgQmUMWTikx7lzRo',
+  baseUrl: 'http://192.168.58.1:8443/api'
 });
 
   // handle not authorized and session expiry errors by redirecting to login page
