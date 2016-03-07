@@ -279,6 +279,14 @@ label.action-icon-label input[type="file"] {
     margin-right: 10px;
 }
 
+.end-of-messages-alert {
+  text-align: center;
+  font-size: 25px;
+  color: #ccc;
+  font-weight: 800;
+  padding:20px 0;
+}
+
 .loading-screen{z-index:10000;text-align:center;opacity: 0.9;}
 .loading-screen > div{
     margin: 0 auto;

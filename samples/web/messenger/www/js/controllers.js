@@ -201,6 +201,10 @@ angular.module('starter.controllers', [])
   var footerBar;
   var scroller;
   var txtInput;
+  var lastScrollHeight;
+  var messageOffset;
+  var messageStartDate;
+  var fetchingMessagesActive;
 
   var channel;
   var listener;
@@ -211,7 +215,8 @@ angular.module('starter.controllers', [])
     currentUser: null,
     message: '',
     subscribers: {},
-    isLoading: false
+    isLoading: false,
+    messageEndReached: false
   };
 
   $scope.$on('$ionicView.enter', function() {
@@ -226,6 +231,10 @@ angular.module('starter.controllers', [])
     $scope.data.messages = [];
     $scope.data.message = '';
     $scope.data.subscribers = {};
+    messageOffset = null;
+    messageStartDate = new Date();
+    $scope.data.messageEndReached = false;
+    fetchingMessagesActive = false;
 
     $scope.data.channelTitle = $stateParams.channelName == 'DeveloperWeek' ? $stateParams.channelName : 'Private Chat';
 
@@ -238,29 +247,18 @@ angular.module('starter.controllers', [])
       userId: $stateParams.channelName == 'DeveloperWeek' ? null : $stateParams.userId
     });
 
-    // you only need to fetch chat history when you enter the page.
-    // messages sent and received later will be added in real-time with the listener.
-    Max.Channel.getChannelSummary([channel], 100, 30).success(function(channelSummaries) {
-      $scope.doneLoading = true;
-
-      if (!channelSummaries.length || !channelSummaries[0].messages.length) return;
-
-      for (i=0;i<channelSummaries[0].messages.length;++i) {
-        // TODO: these can be replaced with real profile pics
-          channelSummaries[0].messages[i].pic = 'img/messenger-icon.png';
+    // get a list of users subscribed to the current channel
+    channel.getAllSubscribers(100).success(function(subscribers) {
+      for (i=0;i<subscribers.length;++i) {
+        $scope.data.subscribers[subscribers[i].userId] = subscribers[i].userName;
       }
-      // populate message history
-      $scope.data.messages = channelSummaries[0].messages;
+    });
 
-      // maintain a list of subscribers
-      for (i=0;i<channelSummaries[0].subscribers.length;++i) {
-        $scope.data.subscribers[channelSummaries[0].subscribers[i].userId] = channelSummaries[0].subscribers[i].userName;
-      }
-
-      $timeout(function() {
-        viewScroll.scrollBottom();
-      }, 0);
-
+    // fetch initial set of messages. messages received afterwards will be added in real-time with the listener.
+    fetchMessages(function() {
+        $timeout(function() {
+          viewScroll.scrollBottom();
+        }, 0);
     });
 
     // create a listener to listen for messages and populate the chat UI. make sure to register the listener!
@@ -375,6 +373,53 @@ angular.module('starter.controllers', [])
       alert(err);
     }
   };
+
+  $scope.onMessageScroll = function() {
+    // if there are no more messages to fetch, stop fetching upon scroll
+    if ($scope.data.messageEndReached) return;
+    // don't check for messages if messages are currently being fetched
+    if (fetchingMessagesActive) return;
+
+    // infinite scroll of messages
+    if (viewScroll.getScrollPosition().top <= 30) {
+      lastScrollHeight = document.getElementById('channel-messages').scrollHeight;
+        fetchingMessagesActive = true;
+        fetchMessages(function(messageLength) {
+          var currentScrollHeight = document.getElementById('channel-messages').scrollHeight;
+          var lastPosition = currentScrollHeight - lastScrollHeight + (messageLength * 50);
+          viewScroll.scrollTo(0, lastPosition, false);
+          fetchingMessagesActive = false;
+      });
+    }
+  };
+
+  function fetchMessages(cb) {
+    messageOffset = messageOffset === null ? 0 : (messageOffset + 20);
+
+    // fetch chat history ending with the time user enters the view (messages created afterwards are not loaded)
+    channel.getMessages(null, messageStartDate, 30, messageOffset, true).success(function(messages, total) {
+
+      if (!messages.length) {
+        // no more messages, set flag
+        $scope.safeApply(function() {
+          $scope.data.messageEndReached = true;
+        });
+        return;
+      }
+
+      for (i=0;i<messages.length;++i) {
+        // TODO: these can be replaced with real profile pics
+          messages[i].pic = 'img/messenger-icon.png';
+      }
+
+      $scope.safeApply(function() {
+        // append messages to message history
+        $scope.data.messages = messages.concat($scope.data.messages);
+      });
+
+      (cb || angular.noop)(messages.length);
+    });
+  }
 
   // this keeps the keyboard open on a device only after sending a message, it is non obtrusive
   function keepKeyboardOpen() {
