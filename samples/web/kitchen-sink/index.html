@@ -88,11 +88,7 @@ Max.User.login(userName, password).success(function() {
 <h3>User search List</h3>
 <div class="row-fluid clearfix">
     <div class="col-sm-6">
-<pre>Max.User.search({
-    query: {userName: '*'},
-    limit: 10,
-    offset: 0
-}).success(function(users) {
+<pre>Max.User.search({userName: '*'}, 10, 0).success(function(users) {
     // do something
 });</pre>
     </div>
@@ -408,11 +404,7 @@ mmxChannel.publish(channelMsg).success(function() {
 
                         if (mmxPrivateChannel) {
 
-                            Max.User.search({
-                                limit: 3,
-                                offset: 0,
-                                query: {userName: '*'}
-                            }).success(function(users) {
+                            Max.User.search({userName: '*'}, 3, 0).success(function(users) {
                                 $('#usersearch-info').html(JSON.stringify(users, false, 4));
 
                                 mmxPrivateChannel.addSubscribers(users).success(function(res) {

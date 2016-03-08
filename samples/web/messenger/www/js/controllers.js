@@ -275,13 +275,7 @@ angular.module('starter.controllers', [])
 
       // this tells us to add the sender to the list of subscribers
       if (!$scope.data.subscribers[mmxMessage.sender.userId]) {
-        Max.User.search({
-          limit: 1,
-          offset: 0,
-          query: {
-            userId: mmxMessage.sender.userId
-          }
-        }).success(function (users) {
+        Max.User.search({ userId: mmxMessage.sender.userId }, 1, 0).success(function (users) {
           if (users.length) {
             var user = users[0];
             $scope.safeApply(function() {
@@ -586,11 +580,7 @@ angular.module('starter.controllers', [])
     }
 
     // retrieve a list of users
-    Max.User.search({
-      limit: 100,
-      offset: 0,
-      query: {userName: '*'}
-    }).success(function (users) {
+    Max.User.search({userName: '*'}, 100, 0).success(function (users) {
 
       if (channel) {
         // get all the users subscribed to the channel
