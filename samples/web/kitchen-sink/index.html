@@ -56,12 +56,10 @@ Max.User.register(userObj).success(function() {
 <h3>Login</h3>
 <div class="row-fluid clearfix">
     <div class="col-sm-6">
-<pre>var userObj = {
-    userName: 'jack.doe',
-    password: 'magnet'
-};
+<pre>var userName = 'jack.doe';
+var password = 'magnet';
 
-Max.User.login(userObj).success(function() {
+Max.User.login(userName, password).success(function() {
     // do something
 });</pre>
     </div>
@@ -368,7 +366,7 @@ mmxChannel.publish(channelMsg).success(function() {
 
                 $('#register-info').html(JSON.stringify(res, false, 4));
 
-                Max.User.login(user).success(function(loginUser, loginDevice) {
+                Max.User.login(user.userName, user.password).success(function(loginUser, loginDevice) {
 
                     $('#user-info').html(JSON.stringify(Max.getCurrentUser(), false, 4));
                     $('#login-info').html(JSON.stringify(loginUser, false, 4));

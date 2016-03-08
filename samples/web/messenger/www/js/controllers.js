@@ -38,7 +38,9 @@ angular.module('starter.controllers', [])
     Max.User.register($scope.registerData).success(function() {
 
       // login with the newly registered user
-      Max.User.login($scope.registerData).success(function() {
+      var username = $scope.registerData.userName;
+      var password = $scope.registerData.password;
+      Max.User.login(username, password).success(function() {
         $state.go('app.channels');
       }).error(function(err) {
         alert(err);

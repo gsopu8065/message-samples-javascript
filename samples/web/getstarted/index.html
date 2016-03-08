@@ -39,7 +39,7 @@
             Max.User.register(user).always(function() {
 
                 // 4. login with your newly registered user
-                Max.User.login(user).success(function() {
+                Max.User.login(user.userName, user.password).success(function() {
 
                     // 5. start listening for messages
                     Max.start();
