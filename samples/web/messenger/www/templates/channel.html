@@ -11,7 +11,7 @@
   <ion-content has-bouncing="true" class="has-header has-footer" id="channel-messages"
       delegate-handle="userMessageScroll" on-scroll="onMessageScroll()" scroll-event-interval="50">
 
-      <div ng-if="data.messageEndReached" class="end-of-messages-alert">NO MORE MESSAGES</div>
+      <div ng-if="data.messages.length > 30 && data.messageEndReached" class="end-of-messages-alert">NO MORE MESSAGES</div>
 
       <div ng-repeat="message in data.messages" class="message-wrapper"
           on-hold="onMessageHold($event, $index, message)">
