@@ -69,7 +69,9 @@ angular.module('starter.controllers', [])
   $scope.doLogin = function() {
 
     // login user by supplying credentials
-    Max.User.login($scope.loginData).success(function() {
+    var username = $scope.loginData.userName;
+    var password = $scope.loginData.password;
+    Max.User.login(username, password).success(function() {
       $state.go('app.channels');
     }).error(function(err) {
       alert(JSON.stringify(err));
@@ -266,7 +268,7 @@ angular.module('starter.controllers', [])
     // create a listener to listen for messages and populate the chat UI. make sure to register the listener!
     listener = new Max.MessageListener('channelMessageListener', function(mmxMessage) {
       // dont take action on messages not sent to the current channel
-      if (!mmxMessage.channel || mmxMessage.channel.name != channel.name.toLowerCase()) return;
+      if (!mmxMessage.channel || mmxMessage.channel.name != channel.name) return;
 
       Audio.onReceive();
       // TODO: this can be replaced with a real profile pic

@@ -204,7 +204,7 @@ Max.registerListener(listener);
 <pre>Max.Channel.getPrivateChannel('myprivatechannel').success(function(channel) {
     // do something
 });</pre>
-<pre>Max.Channel.getPubliChannel('mypublicchannel').success(function(channel) {
+<pre>Max.Channel.getPublicChannel('mypublicchannel').success(function(channel) {
     // do something
 });</pre>
     </div>
@@ -307,7 +307,7 @@ Max.Channel.findChannelsBySubscribers([user]).success(function(channels) {
 <h3>getMessages</h3>
 <div class="row-fluid clearfix">
     <div class="col-sm-6">
-<pre>Max.Channel.getMessages(new Date(), new Date(), 10, 0, true).success(function(messages) {
+<pre>mmxChannel.getMessages(new Date(), new Date(), 10, 0, true).success(function(messages) {
     // do something
 });</pre>
     </div>
@@ -332,17 +332,16 @@ mmxChannel.publish(channelMsg).success(function() {
 </div>
 
 
-
 <script src="jquery.js"></script>
 <script src="http://cdn.magnet.com/downloads/magnet-max-sdk.min.js"></script>
 <script src="magnet-max-sdk.js"></script>
 <script>
 
-  Max.init({
-      clientId: '<your client id>',
-      clientSecret: '<your client secret>',
-      baseUrl: 'https://sandbox.magnet.com/mobile/api'
-  });
+    Max.init({
+        clientId: '<your client id>',
+        clientSecret: '<your client secret>',
+        baseUrl: 'https://sandbox.magnet.com/mobile/api'
+    });
 
     $(document).ready(function() {
 
