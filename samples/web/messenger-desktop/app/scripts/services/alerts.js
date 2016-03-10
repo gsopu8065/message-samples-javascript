@@ -8,10 +8,10 @@
  * Service in the messengerApp.
  */
 angular.module('messengerApp')
-  .factory('Alerts', function($modal) {
+  .factory('Alerts', function($uibModal) {
         return {
             General : function(obj, cb) {
-                $modal.open({
+                var modalInstance = $uibModal.open({
                     templateUrl : 'AlertGeneralModal.html',
                     controller  : 'GeneralAlertCtrl',
                     resolve     : {
@@ -26,7 +26,7 @@ angular.module('messengerApp')
                 });
             },
             Confirm : function(obj, yes, no, custom) {
-                $modal.open({
+                var modalInstance = $uibModal.open({
                     templateUrl : 'AlertConfirmModal.html',
                     controller  : 'GeneralAlertCtrl',
                     resolve     : {
@@ -42,7 +42,7 @@ angular.module('messengerApp')
                 });
             },
             Success : function(obj, cb) {
-                $modal.open({
+                var modalInstance = $uibModal.open({
                     templateUrl : 'AlertSuccessModal.html',
                     controller  : 'GeneralAlertCtrl',
                     resolve     : {
@@ -57,7 +57,7 @@ angular.module('messengerApp')
                 });
             },
             Error : function(obj, cb) {
-                $modal.open({
+                var modalInstance = $uibModal.open({
                     templateUrl : 'AlertErrorModal.html',
                     controller  : 'GeneralAlertCtrl',
                     resolve     : {
@@ -70,10 +70,10 @@ angular.module('messengerApp')
                 }), function() { });
             }
         }
-  }).controller('GeneralAlertCtrl', ['$scope', '$modalInstance', 'params', function($scope, $modalInstance, params) {
+  }).controller('GeneralAlertCtrl', ['$scope', '$uibModalInstance', 'params', function($scope, $uibModalInstance, params) {
         $scope.data = params;
         $scope.ok = function(result, result2) {
-            $modalInstance.close(result || $scope, result2);
+            $uibModalInstance.close(result || $scope, result2);
         };
         $scope.action = function(action) {
             if (params && typeof params[action] === typeof Function) {
@@ -81,10 +81,10 @@ angular.module('messengerApp')
             }
         };
         $scope.close = function() {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         };
         $scope.cancel = function() {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         };
         $scope.validators = params ? params.validators : {};
     }

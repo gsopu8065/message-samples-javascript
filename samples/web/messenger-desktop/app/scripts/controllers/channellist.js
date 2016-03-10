@@ -8,7 +8,7 @@
  * Controller of the messengerApp
  */
 angular.module('messengerApp')
-  .controller('ChannellistCtrl', function ($scope, authService, channelService, $state) {
+  .controller('ChannellistCtrl', function ($scope, authService, navService, channelService, $state, Alerts) {
 
     if (!authService.isAuthenticated) return $state.go('login');
     channelService.reset();
@@ -29,18 +29,20 @@ angular.module('messengerApp')
             $scope.$apply(function() {
               $scope.data.channelSummaries[i].latestMsgTime = mmxMessage.timestamp;
               $scope.data.channelSummaries[i].latestMessage = getLatestMessage(mmxMessage);
-              $scope.data.channelSummaries[i].isUnread = true;
+              if (!navService.currentChannel || mmxMessage.channel.name != navService.currentChannel.name) {
+                $scope.data.channelSummaries[i].isUnread = true;
+              }
             });
           }
         }
         if (!isExistingChannel) {
-          refreshChannelList();
+          refreshChannelList(mmxMessage.channel.name);
         }
       }
     });
     Max.registerListener(listener);
 
-    function refreshChannelList() {
+    function refreshChannelList(newChannelName) {
 
       // find a public channel by name
       Max.Channel.findPublicChannels('DeveloperWeek').success(function (channels) {
@@ -64,7 +66,7 @@ angular.module('messengerApp')
         // retrieve detailed channel information, including subscribers and past messages
         Max.Channel.getChannelSummary(channels, 5, 1).success(function(channelSummaries) {
 
-          for (var i = 0; i < channelSummaries.length; ++i) {
+          for(var i = 0; i < channelSummaries.length; ++i) {
             var subscriberNames = [];
             for (var j = 0; j < channelSummaries[i].subscribers.length; ++j) {
               if (channelSummaries[i].subscribers[j].userId != Max.getCurrentUser().userId)
@@ -77,6 +79,10 @@ angular.module('messengerApp')
               && channelSummaries[i].messages[0].messageContent) {
               channelSummaries[i].latestMessage = getLatestMessage(channelSummaries[i].messages[0]);
               channelSummaries[i].latestMsgTime = channelSummaries[i].messages[0].timestamp;
+              if (newChannelName && channelSummaries[i].channel.name == newChannelName
+                && newChannelName != navService.currentChannel.name) {
+                channelSummaries[i].isUnread = true;
+              }
             }
 
             channelService.channelSummaries.push(channelSummaries[i]);
@@ -88,9 +94,25 @@ angular.module('messengerApp')
       });
     }
 
-    $scope.$watch(function () { return channelService.channelSummaries }, function (newVal, oldVal) {
+    $scope.$watch(function() {
+      return channelService.channelSummaries
+    }, function(newVal, oldVal) {
         if (typeof newVal !== 'undefined') {
             $scope.data.channelSummaries = channelService.channelSummaries;
+        }
+    });
+
+    $scope.$watch(function () {
+      return navService.currentChannel
+    }, function(newVal, oldVal) {
+        if (typeof newVal !== 'undefined') {
+          for (var i = 0; i < $scope.data.channelSummaries.length; ++i) {
+            if (navService.currentChannel
+              && navService.currentChannel.name
+              && $scope.data.channelSummaries[i].channel.name == navService.currentChannel.name) {
+              $scope.data.channelSummaries[i].isUnread = false;
+            }
+          }
         }
     });
 
@@ -106,27 +128,26 @@ angular.module('messengerApp')
     //  Max.unregisterListener(listener);
     //});
 
-    $scope.confirmLeave = function(channelSummary) {
+    $scope.leaveConversation = function(channelSummary) {
       var channel = channelSummary.channel;
 
-      $ionicPopup.confirm({
-        title: 'Leave this channel?',
-        template: 'Are you sure you wish to leave this chat room?'
-      }).then(function(yes) {
-        if (yes) {
-          // leave the channel by unsubscribing, then refresh the view
-          channel.unsubscribe().success(function() {
+      Alerts.Confirm({
+          title       : 'Leave This Chat?',
+          description : 'Are you sure you wish to leave this chat room?'
+      }, function() {
+        // leave the channel by unsubscribing, then refresh the view
+        channel.unsubscribe().success(function() {
 
-            for (var i=0;i<$scope.data.channelSummaries.length;++i) {
-              if ($scope.data.channelSummaries[i].channelName == channel.name) {
-                $scope.$apply(function() {
-                  $scope.data.channelSummaries.splice(i, 1);
-                });
-                break;
-              }
+          for (var i=0;i<$scope.data.channelSummaries.length;++i) {
+            if ($scope.data.channelSummaries[i].channelName == channel.name) {
+              $scope.$apply(function() {
+                $scope.data.channelSummaries.splice(i, 1);
+              });
+              navService.currentChannel = null;
+              break;
             }
-          })
-        }
+          }
+        })
       });
     };
 

@@ -8,15 +8,12 @@
  * Controller of the messengerApp
  */
 angular.module('messengerApp')
-  .controller('RegisterCtrl', function ($scope, navService, $location) {
+  .controller('RegisterCtrl', function ($scope) {
 
       $scope.data = {
         userName : '',
         password : ''
       };
-
-      navService.currentPage = 'register';
-      navService.$currentScope = $scope;
 
       $scope.doRegister = function() {
         // register user by supplying credentials

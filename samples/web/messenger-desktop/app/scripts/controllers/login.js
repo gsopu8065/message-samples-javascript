@@ -8,15 +8,12 @@
  * Controller of the messengerApp
  */
 angular.module('messengerApp')
-  .controller('LoginCtrl', function ($scope, navService) {
+  .controller('LoginCtrl', function ($scope) {
 
       $scope.data = {
         userName : '',
         password : ''
       };
-
-      navService.currentPage = 'login';
-      navService.$currentScope = $scope;
 
       $scope.doLogin = function() {
 

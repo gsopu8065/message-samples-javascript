@@ -22,11 +22,11 @@ angular
 
   .run(function($location, authService, $rootScope, $state) {
 
-    // initialize the MessageSDK by setting client information
+    // initialize the SDK by setting client information
     Max.init({
-        clientId: '39f1ee1c-e84c-4ce0-b517-1a4b5b61cf44',
-        clientSecret: 'qjlysq_NTzzGetj4cGR8rvu3pM9oVUkj_BE0LDXEnEY',
-        baseUrl: 'http://192.168.58.1:8443/api'
+        clientId: '<your client id>',
+        clientSecret: '<your client secret>',
+        baseUrl: 'https://sandbox.magnet.com/mobile/api'
     });
 
     //Max.Config.logging = true;

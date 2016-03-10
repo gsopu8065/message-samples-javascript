@@ -33,8 +33,6 @@ angular.module('messengerApp')
 
     if (!authService.isAuthenticated) return $state.go('login');
 
-    navService.currentPage = 'channel';
-    navService.$currentScope = $scope;
     navService.currentChannel = {
       name: $stateParams.channelName,
       userId: $stateParams.channelName == 'DeveloperWeek' ? null : $stateParams.userId
@@ -79,7 +77,7 @@ angular.module('messengerApp')
 
       Audio.onReceive();
       // TODO: this can be replaced with a real profile pic
-      mmxMessage.pic = 'images/messenger-icon.png';
+      mmxMessage.pic = 'images/user_bernie.png';
       $scope.safeApply(function() {
         $scope.data.messages.push(mmxMessage);
       });
@@ -210,7 +208,7 @@ angular.module('messengerApp')
 
         for (i=0;i<messages.length;++i) {
           // TODO: these can be replaced with real profile pics
-            messages[i].pic = 'images/messenger-icon.png';
+            messages[i].pic = 'images/user_bernie.png';
         }
 
         $scope.safeApply(function() {
@@ -240,7 +238,9 @@ angular.module('messengerApp')
     function scrollBottom() {
       setTimeout(function() {
         var viewScroll = document.getElementById('channel-messages');
-        viewScroll.scrollTop = viewScroll.scrollHeight;
+        if (viewScroll) {
+          viewScroll.scrollTop = viewScroll.scrollHeight;
+        }
       }, 5);
     }
 

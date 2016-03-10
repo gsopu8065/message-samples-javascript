@@ -40,7 +40,7 @@
             ng-click="toggleSelection(user)"
             ng-if="user.userName != authService.currentUser.userName"
               class="list-group-item">
-            <img src="images/messenger-icon.png" class="pull-left" />
+            <img src="images/user_bernie.png" class="pull-left" />
             <div>
               {{user.firstName}} {{user.lastName}} ({{user.userName}})
             </div>
@@ -67,7 +67,7 @@
           <a ng-repeat="user in data.users"
             ng-if="user.userName != authService.currentUser.userName"
               class="list-group-item">
-            <img src="images/messenger-icon.png" class="pull-left" />
+            <img src="images/user_bernie.png" class="pull-left" />
             <div>
               {{user.firstName}} {{user.lastName}} ({{user.userName}})
             </div>
@@ -150,7 +150,7 @@
               ng-click="toggleSelection(user)"
               ng-if="user.userName != authService.currentUser.userName"
                 class="list-group-item">
-              <img src="images/messenger-icon.png" class="pull-left" />
+              <img src="images/user_bernie.png" class="pull-left" />
               {{user.firstName}} {{user.lastName}} ({{user.userName}})
             </a>
           </div>
@@ -171,12 +171,12 @@
     <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/angular-moment/angular-moment.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
     <script src="//cdn.magnet.com/downloads/magnet-max-sdk.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-moment/0.8.2/angular-moment.min.js"></script>
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/plugins/magnet-max-sdk.js"></script>
     <script src="scripts/plugins/plugins.js"></script>
@@ -190,7 +190,6 @@
     <script src="scripts/controllers/chat.js"></script>
     <script src="scripts/services/alerts.js"></script>
     <script src="scripts/controllers/userselect.js"></script>
-    <script src="scripts/controllers/modal.js"></script>
     <script src="scripts/controllers/channeldetails.js"></script>
     <!-- endbuild -->
 </body>

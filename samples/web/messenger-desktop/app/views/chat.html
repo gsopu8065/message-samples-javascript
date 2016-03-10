@@ -22,6 +22,9 @@
 
               <div class="chat-bubble left">
 
+                <div ng-click="viewProfile(message)"
+                    class="user-displayname">{{data.subscribers[message.sender.userId]}}</div>
+
                   <div class="message"
                        ng-if="message.messageContent && message.messageContent.message"
                        ng-bind-html="message.messageContent.message | nl2br" autolinker>
@@ -30,15 +33,15 @@
                   <a target="_blank"
                      ng-if="message.messageContent.type == 'location'"
                      ng-href="https://www.google.com/maps?ll={{message.messageContent.latitude}},{{message.messageContent.longitude}}">
-                    <img src="http://maps.googleapis.com/maps/api/staticmap?center={{message.messageContent.latitude}},{{message.messageContent.longitude}}&zoom=14&size=400x300&sensor=false"
-                         style="width:100%" imageonload />
+                    <img class="map-message" src="http://maps.googleapis.com/maps/api/staticmap?center={{message.messageContent.latitude}},{{message.messageContent.longitude}}&zoom=14&size=400x300&sensor=false"
+                         imageonload />
                   </a>
 
                   <div ng-repeat="attachment in message.attachments">
                     <a target="_blank" href="{{attachment.downloadUrl}}"
                        ng-if="message.messageContent.type == 'photo'"
                        >
-                      <img ng-src="{{attachment.downloadUrl}}" style="width:100%" imageonload />
+                      <img class="image-message" ng-src="{{attachment.downloadUrl}}" imageonload />
                     </a>
                     <a target="_blank"
                        ng-if="message.messageContent.type != 'text'
@@ -48,9 +51,9 @@
                   </div>
 
                   <div class="message-detail">
-                      <span ng-click="viewProfile(message)"
-                          class="bold">{{data.subscribers[message.sender.userId]}}</span>,
-                      <span am-time-ago="message.timestamp"></span>
+                      <!--<span ng-click="viewProfile(message)"-->
+                          <!--class="bold">{{data.subscribers[message.sender.userId]}}</span>,-->
+                      <!--<span am-time-ago="message.timestamp"></span>-->
                   </div>
 
               </div>
@@ -63,6 +66,9 @@
 
               <div class="chat-bubble right">
 
+                  <div ng-click="viewProfile(message)"
+                      class="user-displayname">{{data.subscribers[message.sender.userId]}}</div>
+
                   <div class="message"
                        ng-if="message.messageContent && message.messageContent.message"
                        ng-bind-html="message.messageContent.message | nl2br" autolinker>
@@ -71,14 +77,14 @@
                   <a target="_blank"
                      ng-if="message.messageContent.type == 'location'"
                      ng-href="https://www.google.com/maps?ll={{message.messageContent.latitude}},{{message.messageContent.longitude}}">
-                    <img src="http://maps.googleapis.com/maps/api/staticmap?center={{message.messageContent.latitude}},{{message.messageContent.longitude}}&zoom=14&size=400x300&sensor=false"
-                         style="width:100%" imageonload />
+                    <img class="map-message" src="http://maps.googleapis.com/maps/api/staticmap?center={{message.messageContent.latitude}},{{message.messageContent.longitude}}&zoom=14&size=400x300&sensor=false"
+                          imageonload />
                   </a>
 
                   <div ng-repeat="attachment in message.attachments">
                     <a target="_blank" href="{{attachment.downloadUrl}}"
                        ng-if="message.messageContent.type == 'photo'">
-                      <img ng-src="{{attachment.downloadUrl}}" style="width:100%" imageonload />
+                      <img class="image-message" ng-src="{{attachment.downloadUrl}}" imageonload />
                     </a>
                     <a target="_blank"
                        ng-if="message.messageContent.type != 'text'
@@ -88,9 +94,9 @@
                   </div>
 
                   <div class="message-detail">
-                      <span ng-click="viewProfile(message)"
-                          class="bold">{{data.subscribers[message.sender.userId]}}</span>,
-                      <span am-time-ago="message.timestamp"></span>
+                      <!--<span ng-click="viewProfile(message)"-->
+                          <!--class="bold">{{data.subscribers[message.sender.userId]}}</span>,-->
+                      <!--<span am-time-ago="message.timestamp"></span>-->
                   </div>
 
               </div>
@@ -144,7 +150,8 @@
               </label>
           </div>
           <label class="item-input-wrapper">
-              <textarea ng-model="data.message" value="" placeholder="Send a message..." required
+              <textarea ng-model="data.message" value="" placeholder="Send a message..." required autofocus
+                focus-me="true"
                  ng-keyup="$event.keyCode == 13 && !$event.shiftKey && sendMessage(sendMessageForm)"
                   minlength="1" maxlength="1500" msd-elastic></textarea>
           </label>
