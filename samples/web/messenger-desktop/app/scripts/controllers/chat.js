@@ -63,11 +63,11 @@ angular.module('messengerApp')
       for (i=0;i<subscribers.length;++i) {
         $scope.data.subscribers[subscribers[i].userId] = subscribers[i].userName;
       }
-    });
 
-    // fetch initial set of messages. messages received afterwards will be added in real-time with the listener.
-    fetchMessages(function() {
-        scrollBottom();
+      // fetch initial set of messages. messages received afterwards will be added in real-time with the listener.
+      fetchMessages(function() {
+          scrollBottom();
+      });
     });
 
     // create a listener to listen for messages and populate the chat UI. make sure to register the listener!
@@ -78,9 +78,6 @@ angular.module('messengerApp')
       Audio.onReceive();
       // TODO: this can be replaced with a real profile pic
       mmxMessage.pic = 'images/user_bernie.png';
-      $scope.safeApply(function() {
-        $scope.data.messages.push(mmxMessage);
-      });
 
       // this tells us to add the sender to the list of subscribers
       if (!$scope.data.subscribers[mmxMessage.sender.userId]) {
@@ -89,8 +86,13 @@ angular.module('messengerApp')
             var user = users[0];
             $scope.safeApply(function() {
               $scope.data.subscribers[user.userId] = user.userName;
+              $scope.data.messages.push(mmxMessage);
             });
           }
+        });
+      } else {
+        $scope.safeApply(function() {
+          $scope.data.messages.push(mmxMessage);
         });
       }
 
