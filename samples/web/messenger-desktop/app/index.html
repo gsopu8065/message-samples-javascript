@@ -33,7 +33,7 @@
       </div>
       <div class="modal-body user-list-container">
 
-        <p ng-if="!data.users.length && 1 == 2">No users to select!</p>
+        <p ng-if="data.users.length === 1">No users to select!</p>
 
         <div class="list-group">
           <a ng-repeat="user in data.users"
@@ -63,6 +63,8 @@
         <h4 class="modal-title">Members</h4>
       </div>
       <div class="modal-body user-list-container">
+
+        <p ng-if="data.users.length === 1">Nobody else is in this chat.</p>
 
         <div class="list-group">
           <a ng-repeat="user in data.users"

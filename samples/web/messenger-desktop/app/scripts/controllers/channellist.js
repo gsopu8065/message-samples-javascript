@@ -65,14 +65,14 @@ angular.module('messengerApp')
 
         // retrieve detailed channel information, including subscribers and past messages
         Max.Channel.getChannelSummary(channels, 5, 1).success(function(channelSummaries) {
-
           for(var i = 0; i < channelSummaries.length; ++i) {
             var subscriberNames = [];
             for (var j = 0; j < channelSummaries[i].subscribers.length; ++j) {
               if (channelSummaries[i].subscribers[j].userId != Max.getCurrentUser().userId)
                 subscriberNames.push(channelSummaries[i].subscribers[j].userName);
             }
-            channelSummaries[i].subscriberNames = subscriberNames.join(', ');
+            channelSummaries[i].subscriberNames = subscriberNames.length === 0
+              ? Max.getCurrentUser().userName : subscriberNames.join(', ');
             channelSummaries[i].ownerId = channelSummaries[i].owner.userId;
             if (channelSummaries[i].messages
               && channelSummaries[i].messages[0]
@@ -117,7 +117,7 @@ angular.module('messengerApp')
     });
 
     function getLatestMessage(mmxMessage) {
-      var msg = ('"'+mmxMessage.messageContent.message+'"');
+      var msg = (mmxMessage.messageContent.message);
       if (mmxMessage.attachments && mmxMessage.attachments.length) msg = 'a file was uploaded';
       if (mmxMessage.messageContent.type == 'location') msg = 'a location was posted';
       return msg

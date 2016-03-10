@@ -29,10 +29,6 @@ angular
         baseUrl: 'https://sandbox.magnet.com/mobile/api'
     });
 
-    //Max.Config.logging = true;
-    //Max.Config.payloadLogging = true;
-    //Max.Config.logLevel = 'FINE';
-
     // handle not authorized and session expiry errors by redirecting to login page
     Max.on('not-authenticated', function() {
       authService.isAuthenticated = false;

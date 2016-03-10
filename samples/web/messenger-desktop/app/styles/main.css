@@ -49,23 +49,27 @@ img.profile-pic{width:40px;height:40px;border-radius:50%;position:absolute;botto
 img.profile-pic.left{left:10px}
 img.profile-pic.right{right:10px}
 .ion-email{float:right;font-size:32px;vertical-align:middle}
-.message{font-size:14px}
+.message{font-size:14px;word-wrap:break-word;max-width:340px}
 .message-detail{white-space:nowrap;font-size:14px}
 .bar.item-input-inset .item-input-wrapper input{width:100%!important}
 .message-wrapper{position:relative;margin:12px 0}
 .message-wrapper:last-child{}
-.chat-bubble{border-radius:25px;display:inline-block;padding:6px 17px;position:relative;margin:10px;max-width:80%;min-width:82px;text-align:center}
+.chat-bubble{border-radius:25px;display:inline-block;padding:6px 17px;position:relative;margin:10px;max-width:80%;min-width:82px;text-align:left}
 .chat-bubble:before{content:"\00a0";display:block;height:16px;width:9px;position:absolute;bottom:-7.5px}
 .chat-bubble.left{background-color:#fff;float:left;margin-left:55px}
-.chat-bubble.left:before{background-color:#fff;left:15px;-webkit-transform:rotate(70deg) skew(5deg)}
+.chat-bubble.left:before{background-color:#fff;left:20px;-webkit-transform:rotate(70deg) skew(5deg)}
 .chat-bubble.right{background-color:#037dff;color:#fff;float:right;margin-right:55px}
 .chat-bubble.right:before{background-color:#037dff;right:25px;-webkit-transform:rotate(118deg) skew(-5deg)}
 .chat-bubble.right a.autolinker{color:#fff;font-weight:700}
-.user-displayname{position:absolute;top:-16px;left:0;font-size:12px;color:#999;width:100%;text-align:center}
+.chat-bubble.right .message-user{font-size:12px;color:#fff}
+.chat-bubble.right .message-timestamp{font-size:12px;color:#eaeaea}
+.chat-bubble.left .message-user{font-size:12px;color:#222}
+.chat-bubble.left .message-timestamp{font-size:12px;color:#777}
 .user-messages-top-icon{font-size:28px;display:inline-block;vertical-align:middle;position:relative;top:-3px;right:5px}
 .msg-header-username{display:inline-block;vertical-align:middle;position:relative;top:-3px}
 .map-message{max-width:300px;width:100%;margin:9px 0;border-radius:12px}
 .image-message{max-width:300px;margin:9px 0;border-radius:12px}
+.download-message{text-decoration:underline}
 input,textarea,.item-input,.item-input-wrapper{background-color:#f4f4f4!important}
 .bold{font-weight:700}
 .cf{clear:both!important}
@@ -95,7 +99,7 @@ label.action-icon-label input[type="file"]{position:fixed;top:-1000px}
 .form-signin input[type="password"]{margin-bottom:10px;border-top-left-radius:0;border-top-right-radius:0}
 
 /* modals */
-.user-list-container{overflow-y:scroll}
+.user-list-container{overflow-y:scroll;max-height:300px}
 .user-list-container img{width:30px;margin-right:6px}
 .user-list-container .list-group-item{height:40px;padding:4px}
 .user-list-container .list-group-item div{margin:5px}

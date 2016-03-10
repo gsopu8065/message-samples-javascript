@@ -3,10 +3,11 @@
         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 no-float">
 
           <div class="header">
+            <img src="images/btn_menu.png" class="pull-left" />
             <img src="images/user_bernie.png" class="pull-left" />
             <!--<i class="fa fa-2x fa-cog"></i>-->
             <i class="fa fa-2x fa-sign-out" ng-click="logout()"></i>
-            <i class="fa fa-2x fa-plus-circle" ng-click="createConversation()"></i>
+            <img src="images/btn_newmsg.png" class="pull-right" ng-click="createConversation()" />
           </div>
 
           <div ng-controller="ChannellistCtrl" class="sidebar-scroll fullpos">
@@ -43,10 +44,10 @@
                 <img src="images/user_bernie.png" />
                 <img src="images/user_bernie.png" />
             </div>
-            <i ng-if="authService.currentUser.userId == navService.currentChannel.userId"
-               class="fa fa-2x fa-user-plus pull-left" ng-click="inviteUsers()"></i>
+            <img ng-if="authService.currentUser.userId == navService.currentChannel.userId"
+                 src="images/btn_addtogroup.png" class="pull-right" ng-click="inviteUsers()" />
             <i ng-if="navService.currentChannel"
-               class="fa fa-2x fa-cog pull-right" ng-click="viewChannelDetails()"></i>
+               class="fa fa-2x fa-cog pull-left" ng-click="viewChannelDetails()"></i>
           </div>
 
           <div id="chat-container" ng-show="navService.currentChannel" ui-view class="fullpos"></div>

@@ -22,9 +22,6 @@
 
               <div class="chat-bubble left">
 
-                <div ng-click="viewProfile(message)"
-                    class="user-displayname">{{data.subscribers[message.sender.userId]}}</div>
-
                   <div class="message"
                        ng-if="message.messageContent && message.messageContent.message"
                        ng-bind-html="message.messageContent.message | nl2br" autolinker>
@@ -44,16 +41,17 @@
                       <img class="image-message" ng-src="{{attachment.downloadUrl}}" imageonload />
                     </a>
                     <a target="_blank"
+                       class="download-message"
                        ng-if="message.messageContent.type != 'text'
                        && message.messageContent.type != 'photo'
                        && message.messageContent.type != 'location'"
-                       href="{{attachment.downloadUrl}}" style="color:#fff">Download</a>
+                       href="{{attachment.downloadUrl}}">Download</a>
                   </div>
 
                   <div class="message-detail">
-                      <!--<span ng-click="viewProfile(message)"-->
-                          <!--class="bold">{{data.subscribers[message.sender.userId]}}</span>,-->
-                      <!--<span am-time-ago="message.timestamp"></span>-->
+                      <span ng-click="viewProfile(message)"
+                          class="bold message-user">{{data.subscribers[message.sender.userId]}}</span>,
+                      <span class="message-timestamp" am-time-ago="message.timestamp"></span>
                   </div>
 
               </div>
@@ -61,13 +59,10 @@
 
           <div ng-if="data.currentUser.userId === message.sender.userId">
 
-               <img ng-click="viewProfile(message)" class="profile-pic right"
+            <img ng-click="viewProfile(message)" class="profile-pic right"
                   ng-src="{{message.pic}}" onerror="onProfilePicError(this)" />
 
               <div class="chat-bubble right">
-
-                  <div ng-click="viewProfile(message)"
-                      class="user-displayname">{{data.subscribers[message.sender.userId]}}</div>
 
                   <div class="message"
                        ng-if="message.messageContent && message.messageContent.message"
@@ -87,6 +82,7 @@
                       <img class="image-message" ng-src="{{attachment.downloadUrl}}" imageonload />
                     </a>
                     <a target="_blank"
+                       class="download-message"
                        ng-if="message.messageContent.type != 'text'
                        && message.messageContent.type != 'photo'
                        && message.messageContent.type != 'location'"
@@ -94,9 +90,9 @@
                   </div>
 
                   <div class="message-detail">
-                      <!--<span ng-click="viewProfile(message)"-->
-                          <!--class="bold">{{data.subscribers[message.sender.userId]}}</span>,-->
-                      <!--<span am-time-ago="message.timestamp"></span>-->
+                      <span ng-click="viewProfile(message)"
+                          class="bold message-user">{{data.subscribers[message.sender.userId]}}</span>,
+                      <span class="message-timestamp" am-time-ago="message.timestamp"></span>
                   </div>
 
               </div>
