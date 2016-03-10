@@ -344,6 +344,7 @@ module.exports = function (grunt) {
             '*.png',
             'views/{,*/}*.html',
             'images/{,*/}*.{webp}',
+            'fonts/{,*/}*.*',
             'sounds/{,*/}*.*',
             'loader/{,*/}*.*',
             'styles/fonts/{,*/}*.*'
