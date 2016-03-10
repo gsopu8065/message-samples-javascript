@@ -51,6 +51,7 @@ angular
     Max.onReady(function() {
       setTimeout(function() {
         // do something
+        loading_screen.finish();
       }, 500);
     });
 
