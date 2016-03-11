@@ -41,7 +41,7 @@
             ng-click="toggleSelection(user)"
             ng-if="user.userName != authService.currentUser.userName"
               class="list-group-item">
-            <img src="images/user_bernie.png" class="pull-left" />
+            <!--<img src="images/user_bernie.png" class="pull-left" />-->
             <div>
               {{user.firstName}} {{user.lastName}} ({{user.userName}})
             </div>
@@ -70,7 +70,7 @@
           <a ng-repeat="user in data.users"
             ng-if="user.userName != authService.currentUser.userName"
               class="list-group-item">
-            <img src="images/user_bernie.png" class="pull-left" />
+            <!--<img src="images/user_bernie.png" class="pull-left" />-->
             <div>
               {{user.firstName}} {{user.lastName}} ({{user.userName}})
             </div>
@@ -82,7 +82,6 @@
         <button type="button" class="btn btn-default" ng-click="cancel()">Close</button>
       </div>
     </script>
-
 
     <script type="text/ng-template" id="AlertConfirmModal.html">
         <div class="modal-header">

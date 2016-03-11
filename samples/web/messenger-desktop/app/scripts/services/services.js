@@ -11,7 +11,24 @@ angular.module('messengerApp')
 
   .factory('authService', function() {
     return {
-      isAuthenticated: false
+      isAuthenticated: false,
+      userAvatar: null,
+      getInitials: function(user) {
+        var a = '', b =  '', fn;
+        if (!user || !user.userName) return '';
+        if (user.firstName && user.lastName) {
+          a = user.firstName.charAt(0);
+          b = user.lastName.charAt(0);
+        } else if (user.userName && user.userName.indexOf(' ') != -1) {
+          fn = user.userName.split(' ');
+          a = fn[0];
+          b = fn[1];
+        } else {
+          if (user.firstName) a = user.firstName.charAt(0);
+          if (user.lastName) b = user.lastName.charAt(0);
+        }
+        return a.toUpperCase() + '' + b.toUpperCase();
+      }
     }
   })
   .factory('navService', function() {
@@ -87,6 +104,26 @@ angular.module('messengerApp')
       }
     });
   };
+})
+
+.directive('imageload', function() {
+  return {
+    restrict: 'A',
+    scope: {
+      method:'&imageload',
+      item: '=item'
+    },
+    link: function(scope, element, attrs) {
+      var expressionHandler = scope.method();
+
+      element.bind('load', function() {
+          expressionHandler(scope.item, true);
+      });
+      element.bind('error', function() {
+          expressionHandler(scope.item);
+      });
+    }
+  }
 })
 
 .directive('autolinker', ['$timeout',

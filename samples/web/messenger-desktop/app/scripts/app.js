@@ -23,11 +23,16 @@ angular
   .run(function($location, authService, $rootScope, $state) {
 
     // initialize the SDK by setting client information
+
     Max.init({
         clientId: '<your client id>',
         clientSecret: '<your client secret>',
         baseUrl: 'https://sandbox.magnet.com/mobile/api'
     });
+
+    Max.Config.logging = true;
+    Max.Config.payloadLogging = true;
+    Max.Config.logLevel = 'FINE';
 
     // handle not authorized and session expiry errors by redirecting to login page
     Max.on('not-authenticated', function() {
@@ -40,6 +45,8 @@ angular
     Max.on('authenticated', function() {
       authService.isAuthenticated = true;
       authService.currentUser = Max.getCurrentUser();
+      authService.userAvatar = authService.currentUser.extras.hasAvatar ? authService.currentUser.getAvatarUrl() : null;
+      authService.initials = authService.getInitials(authService.currentUser);
       $state.go('app');
     });
 
@@ -50,15 +57,6 @@ angular
         loading_screen.finish();
       }, 500);
     });
-
-    $rootScope.$safeApply = function(_$scope, fn) {
-      fn = fn || function() {};
-      if (_$scope.$$phase) {
-        fn();
-      } else {
-        _$scope.$apply(fn);
-      }
-    };
 
   })
 

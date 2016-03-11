@@ -64,6 +64,30 @@ angular.module('messengerApp')
       });
     };
 
+    $scope.updateAvatar = function(el) {
+      var user = Max.getCurrentUser();
+
+      // upload avatar for current user
+      user.setAvatar(el.files[0]).success(function() {
+        try {
+          el.value = null;
+        } catch(ex) { }
+        if (el.value) {
+          el.parentNode.replaceChild(el.cloneNode(true), el);
+        }
+        authService.currentUser = Max.getCurrentUser();
+        // get avatar from url, appending timestamp to bust browser cache
+        authService.userAvatar = authService.currentUser.getAvatarUrl()+'&'+new Date().getTime();
+
+        $scope.safeApply(function() {
+          $scope.authService.userAvatar = authService.userAvatar;
+        });
+
+      }).error(function(e) {
+        alert(e);
+      })
+    };
+
     $scope.$watch(function () {
       return navService.currentChannel
     }, function(newVal, oldVal) {
@@ -71,5 +95,24 @@ angular.module('messengerApp')
           $scope.navService = navService;
         }
     });
+
+    $scope.$watch(function () {
+      return authService.userAvatar
+    }, function(newVal, oldVal) {
+        if (typeof newVal !== 'undefined') {
+          $scope.authService = authService;
+        }
+    });
+
+    $scope.safeApply = function(fn) {
+      var phase = this.$root.$$phase;
+      if(phase == '$apply' || phase == '$digest') {
+        if(fn && (typeof(fn) === 'function')) {
+          fn();
+        }
+      } else {
+        this.$apply(fn);
+      }
+    };
 
   });

@@ -67,13 +67,18 @@ angular.module('messengerApp')
         Max.Channel.getChannelSummary(channels, 5, 1).success(function(channelSummaries) {
           for(var i = 0; i < channelSummaries.length; ++i) {
             var subscriberNames = [];
+            var chatPhotoUser = null;
+
             for (var j = 0; j < channelSummaries[i].subscribers.length; ++j) {
-              if (channelSummaries[i].subscribers[j].userId != Max.getCurrentUser().userId)
+              if (channelSummaries[i].subscribers[j].userId != Max.getCurrentUser().userId) {
                 subscriberNames.push(channelSummaries[i].subscribers[j].userName);
+                chatPhotoUser = channelSummaries[i].subscribers[j];
+              }
             }
             channelSummaries[i].subscriberNames = subscriberNames.length === 0
               ? Max.getCurrentUser().userName : subscriberNames.join(', ');
             channelSummaries[i].ownerId = channelSummaries[i].owner.userId;
+
             if (channelSummaries[i].messages
               && channelSummaries[i].messages[0]
               && channelSummaries[i].messages[0].messageContent) {
@@ -84,6 +89,14 @@ angular.module('messengerApp')
                 channelSummaries[i].isUnread = true;
               }
             }
+
+            if (!chatPhotoUser) {
+              chatPhotoUser = Max.getCurrentUser();
+            }
+            channelSummaries[i].chatPhoto = {
+              url: chatPhotoUser.getAvatarUrl(),
+              initials: authService.getInitials(chatPhotoUser)
+            };
 
             channelService.channelSummaries.push(channelSummaries[i]);
           }
@@ -148,6 +161,12 @@ angular.module('messengerApp')
             }
           }
         })
+      });
+    };
+
+    $scope.onLoadAttempt = function(channelSummary, state) {
+      $scope.$apply(function() {
+        channelSummary.showPhoto = state;
       });
     };
 

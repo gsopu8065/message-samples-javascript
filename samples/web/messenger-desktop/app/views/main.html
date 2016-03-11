@@ -3,8 +3,16 @@
         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 no-float">
 
           <div class="header">
-            <img src="images/btn_menu.png" class="pull-left" />
-            <img src="images/user_bernie.png" class="pull-left" />
+            <!--<img src="images/btn_menu.png" class="pull-left" />-->
+            <label class="action-icon-label">
+              <input type="file" required onchange="angular.element(this).scope().updateAvatar(this)"
+                  accept="image/*" />
+              <img ng-if="authService.userAvatar" ng-src="{{authService.userAvatar}}" class="pull-left" />
+              <div class="icon-initials" ng-if="!authService.userAvatar">
+                <span>{{authService.initials}}</span>
+                <img src="images/icon_empty.png" />
+              </div>
+            </label>
             <!--<i class="fa fa-2x fa-cog"></i>-->
             <i class="fa fa-2x fa-sign-out" ng-click="logout()"></i>
             <img src="images/btn_newmsg.png" class="pull-right" ng-click="createConversation()" />
@@ -19,13 +27,23 @@
             <div id="channel-list" class="sidebar-list">
               <div class="list-group">
                 <a ng-repeat="channelSummary in data.channelSummaries"
+
                     href="#/chat/{{channelSummary.channelName}}/{{channelSummary.ownerId}}"
                     ng-if="channelSummary.channelName != 'DeveloperWeek' && channelSummary.channelName != 'developerweek'"
                     on-hold="confirmLeave(channelSummary)"
-                    class="list-group-item" ng-class="{'active': navService.currentChannel.name == channelSummary.channelName}">
+                    class="list-group-item"
+                   ng-class="{'active': navService.currentChannel.name == channelSummary.channelName}">
                   <i class="fa fa-circle" ng-class="{'is-unread': channelSummary.isUnread}"></i>
                   <i class="fa fa-trash" ng-click="leaveConversation(channelSummary)"></i>
-                  <img src="images/user_bernie.png" />
+                  <img ng-if="channelSummary.subscribers.length > 2" src="images/user_group.png" />
+                  <img ng-if="channelSummary.subscribers.length < 3"
+                       ng-src="{{channelSummary.chatPhoto.url}}"
+                       ng-show="channelSummary.showPhoto"
+                       imageload="onLoadAttempt" item="channelSummary" />
+                  <div class="icon-initials" ng-if="channelSummary.subscribers.length < 3 && !channelSummary.showPhoto">
+                    <span>{{channelSummary.chatPhoto.initials}}</span>
+                    <img src="images/icon_empty.png" />
+                  </div>
                   <b class="overflowable">{{channelSummary.subscriberNames}}</b>
                   <div class="hidden-sm hidden-xs timestamp pull-right" am-time-ago="channelSummary.latestMsgTime"></div>
                   <br />  <span>{{channelSummary.latestMessage || 'no messages yet!'}}</span>

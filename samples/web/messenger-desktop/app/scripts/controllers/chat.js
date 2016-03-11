@@ -31,6 +31,8 @@ angular.module('messengerApp')
       messageEndReached: false
     };
 
+    $scope.authService = authService;
+
     if (!authService.isAuthenticated) return $state.go('login');
 
     navService.currentChannel = {
@@ -61,7 +63,8 @@ angular.module('messengerApp')
     // get a list of users subscribed to the current channel
     channel.getAllSubscribers(100).success(function(subscribers) {
       for (i=0;i<subscribers.length;++i) {
-        $scope.data.subscribers[subscribers[i].userId] = subscribers[i].userName;
+        subscribers[i].initials = authService.getInitials(subscribers[i]);
+        $scope.data.subscribers[subscribers[i].userId] = subscribers[i];
       }
 
       // fetch initial set of messages. messages received afterwards will be added in real-time with the listener.
@@ -85,7 +88,7 @@ angular.module('messengerApp')
           if (users.length) {
             var user = users[0];
             $scope.safeApply(function() {
-              $scope.data.subscribers[user.userId] = user.userName;
+              $scope.data.subscribers[user.userId] = user;
               $scope.data.messages.push(mmxMessage);
             });
           }
@@ -255,17 +258,6 @@ angular.module('messengerApp')
       }
     }
 
-    $scope.safeApply = function(fn) {
-      var phase = this.$root.$$phase;
-      if(phase == '$apply' || phase == '$digest') {
-        if(fn && (typeof(fn) === 'function')) {
-          fn();
-        }
-      } else {
-        this.$apply(fn);
-      }
-    };
-
     $scope.gotoConversationDetails = function() {
       $state.go('app.details', {
         channelName: channel.name,
@@ -285,6 +277,14 @@ angular.module('messengerApp')
 
       footerBar.style.height = newFooterHeight + 'px';
       scroller.style.bottom = newFooterHeight + 'px';
+    });
+
+    $scope.$watch(function () {
+      return authService.userAvatar
+    }, function(newVal, oldVal) {
+        if (typeof newVal !== 'undefined') {
+          $scope.authService = authService;
+        }
     });
 
   });
