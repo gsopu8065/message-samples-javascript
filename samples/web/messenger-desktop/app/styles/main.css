@@ -13,6 +13,7 @@ body,html{height:100%;background:#eee}
 .header .fa{margin:10px;float:right;cursor:pointer;color:#037dff}
 .fullpos{height:auto;position:absolute;top:0;left:0;right:0;bottom:0}
 .overflowable{width:10em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.overflowable-no-dots{width:80%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 .icon-initials{display:inline-block;color:#fff;text-align:center;position:relative}
 .icon-initials span{font-size:17px;z-index:10;position:absolute;top:13px;letter-spacing:2px;font-weight:normal;left:1px;width:100%;display:block;color:#fff !important}
@@ -21,9 +22,9 @@ body,html{height:100%;background:#eee}
 /* sidebar */
 .sidebar-scroll{margin-top:50px;padding:0;overflow-y:auto}
 .sidebar-title{font-size:16px;color:#aaa;margin:10px 10px 1px 10px}
-.sidebar-list .list-group-item{padding:7px 2px;background:none;border:none;color:#555;opacity:.9}
+.sidebar-list .list-group-item{padding:7px 2px;background:none;border:none;color:#555;opacity:.9;min-height:51px;overflow:hidden}
 .sidebar-list .list-group-item b{display:block;font-weight:normal;overflow-x:hidden;font-size:14px;position:absolute;top:11px;left:0;width:95%;padding-left:58px;padding-right:65px}
-.sidebar-list .list-group-item span{color:#999;font-size:13px;font-weight:normal !important}
+.sidebar-list .list-group-item .last-message{display:block;position:absolute;top:28px;left:0;padding-left:58px;color:#999;font-size:13px;font-weight:normal !important}
 .sidebar-list .list-group-item .timestamp{color:#999;position:absolute;top:12px;right:7px;font-size:11px;font-weight:normal !important}
 .sidebar-list .list-group-item:hover{background:#fafafa;color:#333}
 .sidebar-list .list-group-item.active{background:#eee}
@@ -31,7 +32,7 @@ body,html{height:100%;background:#eee}
 
 #channel-list img, #channel-list .icon-initials{width:30px;float:left;margin:5px 10px 5px 17px}
 #channel-list .icon-initials img{width:100%;margin:0}
-#channel-list .icon-initials span{top:6px}
+#channel-list .icon-initials span{font-size:13px;top:7px}
 #channel-list .fa-circle{position:absolute;left:7px;top:17px;color:#999;font-size:.7em}
 #channel-list .fa-circle.is-unread{color:#037dff}
 #channel-list .fa-trash{position:absolute;bottom:7px;right:7px;color:#037dff;display:none;font-size:1.2em}
