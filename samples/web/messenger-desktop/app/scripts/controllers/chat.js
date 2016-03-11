@@ -142,7 +142,7 @@ angular.module('messengerApp')
       var msg = new Max.Message({
         type: type
       });
-      channel.publish(msg, el.files[0]).success(function() {
+      channel.publish(msg, el.files).success(function() {
         Audio.onSend();
       }).error(function(err) {
         alert(err);
