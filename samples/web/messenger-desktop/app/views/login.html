@@ -6,7 +6,7 @@
     <input type="password" ng-model="data.password" class="form-control" placeholder="Password" required>
     <div class="checkbox">
       <label>
-        <input type="checkbox" value="remember-me"> Remember me
+        <input type="checkbox" ng-model="data.rememberMe"> Remember me
       </label>
     </div>
     <button class="btn btn-lg btn-primary btn-block" ng-click="doLogin()">Sign in</button>
