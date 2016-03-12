@@ -23,17 +23,12 @@ angular
   .run(function($location, authService, $rootScope, $state) {
 
     // initialize the SDK by setting client information
-
     Max.init({
         clientId: '<your client id>',
         clientSecret: '<your client secret>',
         baseUrl: 'https://sandbox.magnet.com/mobile/api'
     });
-
-    Max.Config.logging = true;
-    Max.Config.payloadLogging = true;
-    Max.Config.logLevel = 'FINE';
-
+    
     // handle not authorized and session expiry errors by redirecting to login page
     Max.on('not-authenticated', function() {
       authService.isAuthenticated = false;
