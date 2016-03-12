@@ -29,7 +29,7 @@
                 <a ng-repeat="channelSummary in data.channelSummaries"
 
                     href="#/chat/{{channelSummary.channelName}}/{{channelSummary.ownerId}}"
-                    ng-if="channelSummary.channelName != 'DeveloperWeek' && channelSummary.channelName != 'developerweek'"
+                    ng-if="!channelSummary.channel.isPublic"
                     on-hold="confirmLeave(channelSummary)"
                     class="list-group-item"
                    ng-class="{'active': navService.currentChannel.name == channelSummary.channelName}">
@@ -51,6 +51,26 @@
               </div>
             </div>
 
+          </div>
+
+          <div id="forum-carousel" ng-controller="ForumcarouselCtrl">
+
+            <div class="sidebar-title">
+              Forums
+            </div>
+
+            <div id="forum-container">
+              <uib-carousel active="active" interval="slideInterval" no-wrap="noWrapSlides">
+                <uib-slide ng-repeat="slide in slides track by slide.id"
+                           index="slide.id"
+                           ng-click="goToConversation(slide.channel)">
+                  <img ng-src="{{slide.image}}" style="margin:auto;">
+                  <div class="carousel-caption">
+                    <p>{{slide.text}}</p>
+                  </div>
+                </uib-slide>
+              </uib-carousel>
+            </div>
           </div>
 
         </div>

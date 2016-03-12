@@ -28,7 +28,7 @@ angular
         clientSecret: '<your client secret>',
         baseUrl: 'https://sandbox.magnet.com/mobile/api'
     });
-    
+
     // handle not authorized and session expiry errors by redirecting to login page
     Max.on('not-authenticated', function() {
       authService.isAuthenticated = false;
@@ -42,6 +42,7 @@ angular
       authService.currentUser = Max.getCurrentUser();
       authService.userAvatar = authService.currentUser.extras.hasAvatar ? authService.currentUser.getAvatarUrl() : null;
       authService.initials = authService.getInitials(authService.currentUser);
+      bootstrapPublicChannels();
       $state.go('app');
     });
 
@@ -52,6 +53,34 @@ angular
         loading_screen.finish();
       }, 500);
     });
+
+    var bootstrapped = false;
+
+    function bootstrapPublicChannels() {
+      if (bootstrapped) return;
+      bootstrapped = true;
+
+      var publicChannels = ['DeveloperWeek', 'AskMagnet', 'News'];
+      createIfNotExist(publicChannels, 0);
+    }
+
+    // create public channels if they don't already exist
+    function createIfNotExist(channels, index) {
+      if (!channels[index]) return;
+
+      Max.Channel.getPublicChannel(channels[index]).success(function() {
+        createIfNotExist(channels, ++index);
+      }).error(function() {
+        Max.Channel.create({
+          name: channels[index],
+          summary: channels[index],
+          isPublic: true,
+          publishPermission: 'subscribers'
+        }).success(function() {
+          createIfNotExist(channels, ++index);
+        });
+      });
+    }
 
   })
 

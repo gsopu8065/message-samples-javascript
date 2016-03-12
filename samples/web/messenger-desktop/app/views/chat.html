@@ -18,11 +18,21 @@
           <div ng-if="data.currentUser.userId !== message.sender.userId">
 
             <img ng-click="viewProfile(message)" class="profile-pic left"
-                 ng-if="data.subscribers[message.sender.userId].extras.hasAvatar"
+                 ng-if="data.subscribers[message.sender.userId]
+                  && data.subscribers[message.sender.userId].extras
+                  && data.subscribers[message.sender.userId].extras.hasAvatar"
                   ng-src="{{data.subscribers[message.sender.userId].getAvatarUrl()}}" />
 
             <div class="icon-initials profile-pic left"
-                 ng-if="!data.subscribers[message.sender.userId].extras.hasAvatar">
+                 ng-if="!data.subscribers[message.sender.userId]">
+              <span>{{message.sender.initials}}</span>
+              <img src="images/icon_empty.png" />
+            </div>
+
+            <div class="icon-initials profile-pic left"
+                 ng-if="data.subscribers[message.sender.userId]
+                 && (!data.subscribers[message.sender.userId].extras
+                 || !data.subscribers[message.sender.userId].extras.hasAvatar)">
               <span>{{data.subscribers[message.sender.userId].initials}}</span>
               <img src="images/icon_empty.png" />
             </div>
@@ -57,7 +67,7 @@
 
                   <div class="message-detail">
                       <span ng-click="viewProfile(message)"
-                          class="bold message-user">{{data.subscribers[message.sender.userId].userName}}</span>,
+                          class="bold message-user">{{message.sender.userName}}</span>,
                       <span class="message-timestamp" am-time-ago="message.timestamp"></span>
                   </div>
 
@@ -66,11 +76,11 @@
 
           <div ng-if="data.currentUser.userId === message.sender.userId">
 
-            <img ng-if="authService.userAvatar" ng-src="{{authService.userAvatar}}" class="profile-pic right" />
-            <div class="icon-initials profile-pic right" ng-if="!authService.userAvatar">
-              <span>{{authService.initials}}</span>
-              <img src="images/icon_empty.png" />
-            </div>
+              <img ng-if="authService.userAvatar" ng-src="{{authService.userAvatar}}" class="profile-pic right" />
+              <div class="icon-initials profile-pic right" ng-if="!authService.userAvatar">
+                <span>{{authService.initials}}</span>
+                <img src="images/icon_empty.png" />
+              </div>
 
               <div class="chat-bubble right">
 
@@ -101,7 +111,7 @@
 
                   <div class="message-detail">
                       <span ng-click="viewProfile(message)"
-                          class="bold message-user">{{data.subscribers[message.sender.userId].userName}}</span>,
+                          class="bold message-user">{{message.sender.userName}}</span>,
                       <span class="message-timestamp" am-time-ago="message.timestamp"></span>
                   </div>
 

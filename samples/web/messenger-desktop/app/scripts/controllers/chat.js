@@ -37,7 +37,7 @@ angular.module('messengerApp')
 
     navService.currentChannel = {
       name: $stateParams.channelName,
-      userId: $stateParams.channelName == 'DeveloperWeek' ? null : $stateParams.userId
+      userId: $stateParams.userId == '*' ? null : $stateParams.userId
     };
 
     var i;
@@ -49,7 +49,7 @@ angular.module('messengerApp')
     $scope.data.messageEndReached = false;
     fetchingMessagesActive = false;
 
-    $scope.data.channelTitle = $stateParams.channelName == 'DeveloperWeek' ? $stateParams.channelName : 'Private Chat';
+    $scope.data.channelTitle = $stateParams.userId == '*' ? $stateParams.channelName : 'Private Chat';
 
     // get current user information
     $scope.data.currentUser = Max.getCurrentUser();
@@ -57,7 +57,7 @@ angular.module('messengerApp')
     // create an instance of channel given channel name and userId (if exists)
     channel = new Max.Channel({
       name: $stateParams.channelName,
-      userId: $stateParams.channelName == 'DeveloperWeek' ? null : $stateParams.userId
+      userId: $stateParams.userId == '*' ? null : $stateParams.userId
     });
 
     // get a list of users subscribed to the current channel
@@ -79,8 +79,8 @@ angular.module('messengerApp')
       if (!mmxMessage.channel || mmxMessage.channel.name != channel.name) return;
 
       Audio.onReceive();
-      // TODO: this can be replaced with a real profile pic
-      mmxMessage.pic = 'images/user_bernie.png';
+
+      mmxMessage.sender.initials = authService.getInitials(mmxMessage.sender);
 
       // this tells us to add the sender to the list of subscribers
       if (!$scope.data.subscribers[mmxMessage.sender.userId]) {
@@ -212,8 +212,7 @@ angular.module('messengerApp')
         }
 
         for (i=0;i<messages.length;++i) {
-          // TODO: these can be replaced with real profile pics
-            messages[i].pic = 'images/user_bernie.png';
+            messages[i].sender.initials = authService.getInitials(messages[i].sender);
         }
 
         $scope.safeApply(function() {

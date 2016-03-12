@@ -44,19 +44,6 @@ angular.module('messengerApp')
 
     function refreshChannelList(newChannelName) {
 
-      // find a public channel by name
-      Max.Channel.findPublicChannels('DeveloperWeek').success(function (channels) {
-        if (!channels.length) return;
-
-        $scope.$apply(function() {
-          $scope.data.developerWeekChannel = channels[0];
-
-          // subscribe to the channel
-          $scope.data.developerWeekChannel.subscribe();
-
-        });
-      });
-
       // retrieve all channels the current user is subscribed to
       Max.Channel.getAllSubscriptions().success(function(channels) {
         if (!channels.length) return;

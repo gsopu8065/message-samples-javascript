@@ -20,7 +20,7 @@ body,html{height:100%;background:#eee}
 .icon-initials img{z-index:0}
 
 /* sidebar */
-.sidebar-scroll{margin-top:50px;padding:0;overflow-y:auto}
+.sidebar-scroll{margin-top:50px;margin-bottom:100px;padding:0;overflow-y:auto}
 .sidebar-title{font-size:16px;color:#aaa;margin:10px 10px 1px 10px}
 .sidebar-list .list-group-item{padding:7px 2px;background:none;border:none;color:#555;opacity:.9;min-height:51px;overflow:hidden}
 .sidebar-list .list-group-item b{display:block;font-weight:normal;overflow-x:hidden;font-size:14px;position:absolute;top:11px;left:0;width:95%;padding-left:58px;padding-right:65px}
@@ -37,6 +37,14 @@ body,html{height:100%;background:#eee}
 #channel-list .fa-circle.is-unread{color:#037dff}
 #channel-list .fa-trash{position:absolute;bottom:7px;right:7px;color:#037dff;display:none;font-size:1.2em}
 #channel-list .list-group-item:hover .fa-trash{display:inline-block}
+
+#forum-carousel{position:absolute;bottom:0;left:0;width:100%;height:100px}
+#forum-container{position:absolute;bottom:0;left:0;width:100%;height:60px}
+#forum-container img{height:60px !important;cursor:pointer}
+#forum-container .carousel-indicators{display:none}
+#forum-container .carousel-control .glyphicon{margin-top:-16px}
+#forum-container .carousel-caption{padding:0;bottom:10px;right:auto;left:90px;cursor:pointer}
+#forum-container .carousel-caption p{font-size:16px;cursor:pointer}
 
 /* chat */
 .header .members{float:left}
