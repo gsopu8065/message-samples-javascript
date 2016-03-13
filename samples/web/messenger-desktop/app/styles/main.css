@@ -50,7 +50,7 @@ body,html{height:100%;background:#eee}
 .header .members{float:left}
 .header .members img{margin:6px 0 6px 6px;float:left}
 #chat-container{top:50px}
-#userMessagesScroll{margin-top:0;background:url(../images/bg_chat_tile.png) repeat 0 0}
+#userMessagesScroll{margin-top:0;margin-bottom:0px;background:url(../images/bg_chat_tile.png) repeat 0 0}
 .scroll-content{position:absolute;top:0;right:0;bottom:50px;left:0;overflow-x:hidden;overflow-y:auto;margin-top:-1px;padding-top:1px;margin-bottom:-1px;width:auto;height:auto}
 .general-icon-container{height:33px;background:#666;border-radius:15px;padding:4px;margin:0;cursor:pointer}
 .bar-footer{overflow:visible!important;bottom:0;border-top:solid 1px #b2b2b2;background-position:top;padding:3px 10px;display:flex;align-items:center;color:#444;background-color:#f8f8f8;position:fixed;right:0;z-index:9;width:66.66666667%}
