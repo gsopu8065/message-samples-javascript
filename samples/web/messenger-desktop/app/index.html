@@ -28,7 +28,7 @@
 
     <script type="text/ng-template" id="InviteUsers.html">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">{{data.channelState == 'new' ? 'Select users to invite to your new chat' : 'Select users to invite to your chat'}}</h4>
       </div>
       <div class="modal-body user-list-container">
@@ -59,7 +59,7 @@
 
     <script type="text/ng-template" id="ChannelDetails.html">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">Members</h4>
       </div>
       <div class="modal-body user-list-container">
@@ -85,7 +85,7 @@
 
     <script type="text/ng-template" id="SendCodeSnippet.html">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()">
           <span aria-hidden="true">&times;</span>
         </button>
         <h4 class="modal-title">Code Snippet</h4>
@@ -120,7 +120,7 @@
 
     <script type="text/ng-template" id="ShowCodeSnippet.html">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()">
           <span aria-hidden="true">&times;</span>
         </button>
         <h4 class="modal-title">Code Snippet</h4>

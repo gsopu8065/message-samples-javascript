@@ -34,6 +34,7 @@ angular
         baseUrl: 'https://sandbox.magnet.com/mobile/api'
     });
 
+
     // handle not authorized and session expiry errors by redirecting to login page
     Max.on('not-authenticated', function() {
       authService.isAuthenticated = false;
