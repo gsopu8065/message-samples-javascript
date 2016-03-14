@@ -71,16 +71,44 @@ angular.module('messengerApp')
     if (!users.length) return alert('no users selected');
     if (channel) return subscribeUsers(channel, users);
 
-    // create a new private channel
-    var channelName = new Date().getTime();
-    Max.Channel.create({
-      name: channelName,
-      summary: authService.currentUser.userName,
-      isPublic: false,
-      publishPermissions: 'subscribers'
-    }).success(function(mmxPrivateChannel) {
-      subscribeUsers(mmxPrivateChannel, users, true);
+    // check if a channel already exists that contains the same users.
+    // if so, just join the existing channel instead of creating a new one.
+    var potentialSubscribers = angular.copy(users);
+    potentialSubscribers.push(Max.getCurrentUser());
+    Max.Channel.findChannelsBySubscribers(potentialSubscribers).success(function(channels) {
+
+      var matchedChannel;
+
+      for (var i=0;i<channels.length;++i) {
+        if (!channels[i].isPublic) {
+          matchedChannel = channels[i];
+        }
+      }
+
+      if (matchedChannel) {
+        $state.go('app.chat', {
+          channelName: matchedChannel.name,
+          userId: matchedChannel.userId
+        });
+
+        $uibModalInstance.close(users);
+
+      } else {
+
+        // no matching channel found, just create a new private channel
+        var channelName = new Date().getTime();
+        Max.Channel.create({
+          name: channelName,
+          summary: authService.currentUser.userName,
+          isPublic: false,
+          publishPermissions: 'subscribers'
+        }).success(function(mmxPrivateChannel) {
+          subscribeUsers(mmxPrivateChannel, users, true);
+        });
+
+      }
     });
+
   };
 
   function subscribeUsers(channel, users, isNew) {
