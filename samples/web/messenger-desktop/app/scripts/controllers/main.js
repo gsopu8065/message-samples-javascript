@@ -38,7 +38,7 @@ angular.module('messengerApp')
         return alert('passwords don\'t match');
 
       var updatedUser = angular.merge(authService.currentUser, $scope.data);
-
+console.log(updatedUser);
       Max.User.updateProfile(updatedUser).success(function() {
         Alerts.Success({
             title       : 'Profile Updated',
@@ -142,9 +142,6 @@ angular.module('messengerApp')
       // get avatar from url, appending timestamp to bust browser cache
       if (isAvatarUpdate) {
         authService.userAvatar = authService.currentUser.getAvatarUrl()+'&'+new Date().getTime();
-      } else {
-        authService.userAvatar = (authService.currentUser.extras && authService.currentUser.extras.hasAvatar)
-          ? authService.currentUser.getAvatarUrl() : null;
       }
 
       $scope.safeApply(function() {

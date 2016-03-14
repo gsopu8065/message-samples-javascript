@@ -25,8 +25,8 @@ body,html{height:100%;background:#eee}
 #profile-drawer .drawer-controls{height:44px;width:38px;margin:4px;cursor:pointer;padding:0;background:#fff;position:absolute;top:0;right:-50px}
 #profile-drawer.open{box-shadow:1px 0 7px #aaa;border-right:solid 1px #aaa}
 #profile-drawer .drawer-contents{overflow:visible}
-#profile-drawer .drawer-body{text-align:center}
-#profile-drawer .drawer-heading{padding:12px 15px 11px}
+#profile-drawer .drawer-body{text-align:center;padding:40px 15px}
+#profile-drawer .drawer-heading{display:none;padding:12px 15px 11px}
 #profile-drawer .drawer-body .btn{margin-top:7px}
 #profile-drawer .drawer-nav li{cursor:pointer}
 #profile-drawer .drawer-footer{border-top:solid 1px #ccc;position:absolute;bottom:0;left:0;width:100%;cursor:pointer}
@@ -41,6 +41,7 @@ body,html{height:100%;background:#eee}
 #profile-drawer .col-sm-12{margin-top:10px}
 #sidebar .action-icon-label{margin-left:45px}
 
+#sidebar .header .action-icon-label, #sidebar .header .action-icon-label img{cursor:default}
 .sidebar-scroll{margin-top:50px;margin-bottom:100px;padding:0;overflow-y:auto}
 .sidebar-title{font-size:16px;color:#aaa;margin:10px 10px 1px 10px}
 .sidebar-list .list-group-item{padding:7px 2px;background:none;border:none;color:#555;opacity:.9;min-height:51px;overflow:hidden}
