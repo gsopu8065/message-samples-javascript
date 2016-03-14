@@ -347,6 +347,7 @@ module.exports = function (grunt) {
             'fonts/{,*/}*.*',
             'sounds/{,*/}*.*',
             'loader/{,*/}*.*',
+            'config/{,*/}*.*',
             'styles/fonts/{,*/}*.*'
           ]
         }, {
