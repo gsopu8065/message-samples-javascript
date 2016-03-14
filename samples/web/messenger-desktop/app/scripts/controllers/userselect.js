@@ -61,15 +61,15 @@ angular.module('messengerApp')
   };
 
   $scope.startConversation = function() {
-    var uids = [];
+    var users = [];
     for (var key in $scope.data.users) {
       if ($scope.data.users[key].uiActive) {
-        uids.push($scope.data.users[key].userId);
+        users.push($scope.data.users[key]);
       }
     }
 
-    if (!uids.length) return alert('no users selected');
-    if (channel) return subscribeUsers(channel, uids);
+    if (!users.length) return alert('no users selected');
+    if (channel) return subscribeUsers(channel, users);
 
     // create a new private channel
     var channelName = new Date().getTime();
@@ -79,18 +79,24 @@ angular.module('messengerApp')
       isPublic: false,
       publishPermissions: 'subscribers'
     }).success(function(mmxPrivateChannel) {
-      subscribeUsers(mmxPrivateChannel, uids);
+      subscribeUsers(mmxPrivateChannel, users);
     });
   };
 
-  function subscribeUsers(channel, uids) {
+  function subscribeUsers(channel, users) {
     // subscribe the selected users to the private channel
-    channel.addSubscribers(uids).success(function() {
+    channel.addSubscribers(users).success(function() {
+
+      if (navService.currentChannel) {
+        navService.list.updateSubscribers(navService.currentChannel, users);
+      }
+
       $state.go('app.chat', {
         channelName: channel.name,
         userId: channel.userId
       });
-      $uibModalInstance.dismiss('cancel');
+
+      $uibModalInstance.close(users);
     });
   }
 

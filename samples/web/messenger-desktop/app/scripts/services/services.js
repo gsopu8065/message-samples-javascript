@@ -35,7 +35,8 @@ angular.module('messengerApp')
     return {
       currentPage: null,
       $currentScope: null,
-      currentChannel: null
+      currentChannel: null,
+      list: null
     }
   })
 

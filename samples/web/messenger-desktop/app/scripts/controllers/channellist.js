@@ -16,6 +16,7 @@ angular.module('messengerApp')
     $scope.data = {};
     $scope.data.developerWeekChannel = null;
     $scope.data.channelSummaries = channelService.channelSummaries;
+    navService.list = $scope;
 
     // register a listener to listen for messages and update the channel summaries
     var listener = new Max.MessageListener('receivedMessageListener', function(mmxMessage) {
@@ -123,11 +124,6 @@ angular.module('messengerApp')
       return msg
     }
 
-    //$scope.$on('$ionicView.leave', function() {
-    //  // IMPORTANT: always make sure to unregister the listener when you leave the page
-    //  Max.unregisterListener(listener);
-    //});
-
     $scope.leaveConversation = function(channelSummary) {
       var channel = channelSummary.channel;
 
@@ -155,6 +151,26 @@ angular.module('messengerApp')
       $scope.$apply(function() {
         channelSummary.showPhoto = state;
       });
+    };
+
+    $scope.updateSubscribers = function(channel, newUsers) {
+      var subscriberNames = [];
+      for (var i=0;i<$scope.data.channelSummaries.length;++i) {
+        if (channel.name == $scope.data.channelSummaries[i].channelName) {
+
+          $scope.data.channelSummaries[i].subscribers = $scope.data.channelSummaries[i].subscribers.concat(newUsers);
+          for (var j = 0; j < $scope.data.channelSummaries[i].subscribers.length; ++j) {
+            if ($scope.data.channelSummaries[i].subscribers[j].userId != Max.getCurrentUser().userId) {
+              subscriberNames.push($scope.data.channelSummaries[i].subscribers[j].userName);
+            }
+          }
+
+          $scope.$apply(function() {
+            $scope.data.channelSummaries[i].subscriberNames = subscriberNames.join(', ');
+          });
+          break;
+        }
+      }
     };
 
     refreshChannelList();
