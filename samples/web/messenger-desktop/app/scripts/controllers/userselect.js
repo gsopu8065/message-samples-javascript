@@ -79,15 +79,17 @@ angular.module('messengerApp')
       isPublic: false,
       publishPermissions: 'subscribers'
     }).success(function(mmxPrivateChannel) {
-      subscribeUsers(mmxPrivateChannel, users);
+      subscribeUsers(mmxPrivateChannel, users, true);
     });
   };
 
-  function subscribeUsers(channel, users) {
+  function subscribeUsers(channel, users, isNew) {
     // subscribe the selected users to the private channel
     channel.addSubscribers(users).success(function() {
 
-      if (navService.currentChannel) {
+      if (isNew) {
+        navService.list.refreshChannelList();
+      } else if (navService.currentChannel) {
         navService.list.updateSubscribers(navService.currentChannel, users);
       }
 

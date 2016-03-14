@@ -37,13 +37,13 @@ angular.module('messengerApp')
           }
         }
         if (!isExistingChannel) {
-          refreshChannelList(mmxMessage.channel.name);
+          $scope.refreshChannelList(mmxMessage.channel.name);
         }
       }
     });
     Max.registerListener(listener);
 
-    function refreshChannelList(newChannelName) {
+    $scope.refreshChannelList = function(newChannelName) {
 
       // retrieve all channels the current user is subscribed to
       Max.Channel.getAllSubscriptions().success(function(channels) {
@@ -73,7 +73,7 @@ angular.module('messengerApp')
               channelSummaries[i].latestMessage = getLatestMessage(channelSummaries[i].messages[0]);
               channelSummaries[i].latestMsgTime = channelSummaries[i].messages[0].timestamp;
               if (newChannelName && channelSummaries[i].channel.name == newChannelName
-                && newChannelName != navService.currentChannel.name) {
+                && (navService.currentChannel && newChannelName != navService.currentChannel.name)) {
                 channelSummaries[i].isUnread = true;
               }
             }
@@ -93,7 +93,7 @@ angular.module('messengerApp')
           });
         });
       });
-    }
+    };
 
     $scope.$watch(function() {
       return channelService.channelSummaries
@@ -173,6 +173,6 @@ angular.module('messengerApp')
       }
     };
 
-    refreshChannelList();
+    $scope.refreshChannelList();
 
   });

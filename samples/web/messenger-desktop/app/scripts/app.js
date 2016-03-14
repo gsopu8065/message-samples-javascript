@@ -25,7 +25,6 @@ angular
 
     // handle not authorized and session expiry errors by redirecting to login page
     Max.on('not-authenticated', function() {
-      console.log('not');
       authService.isAuthenticated = false;
       authService.currentUser = null;
       $state.go('login');
@@ -33,7 +32,6 @@ angular
 
     // handle authentication by redirecting to home page
     Max.on('authenticated', function() {
-      console.log('auth');
       authService.isAuthenticated = true;
       authService.currentUser = Max.getCurrentUser();
       authService.initials = authService.getInitials(authService.currentUser);
@@ -47,7 +45,6 @@ angular
     Max.onReady(function() {
       setTimeout(function() {
         // do something
-      console.log('ready');
         loading_screen.finish();
       }, 500);
     });
