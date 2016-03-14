@@ -16,6 +16,11 @@ angular.module('messengerApp')
       };
 
       $scope.doRegister = function() {
+        if (!$scope.data.userName.trim().length) return alert('username is required');
+        if (!$scope.data.firstName.trim().length) return alert('first name is required');
+        if (!$scope.data.lastName.trim().length) return alert('last name is required');
+        if (!$scope.data.password.trim().length) return alert('password is required');
+
         // register user by supplying credentials
         Max.User.register($scope.data).success(function() {
 

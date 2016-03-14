@@ -74,6 +74,7 @@ button.ion-android-send{padding-top:2px}
 .message .ace-tm{width:320px;height:100px;margin:9px 0;border-radius:12px}
 .message .ace_scrollbar{display:none}
 .message .ace_scroller{right:0 !important;bottom:0 !important;border-radius:12px}
+#code-snippet-reader .ace-tm{height:300px}
 .message-detail{white-space:nowrap;font-size:14px}
 .bar.item-input-inset .item-input-wrapper input{width:100%!important}
 .message-wrapper{position:relative;margin:12px 0}
