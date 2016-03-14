@@ -8,7 +8,8 @@
  * Controller of the messengerApp
  */
 angular.module('messengerApp')
-  .controller('ChatCtrl', function ($scope, $rootScope, $state, $stateParams, $timeout, $interval, navService, authService) {
+  .controller('ChatCtrl', function ($scope, $rootScope, $state, $stateParams, $timeout,
+                                    $interval, navService, authService, $uibModal) {
 
     var footerBar;
     var scroller;
@@ -82,6 +83,10 @@ angular.module('messengerApp')
 
       mmxMessage.sender.initials = authService.getInitials(mmxMessage.sender);
 
+      if (mmxMessage.messageContent.format == 'code') {
+        mmxMessage.messageContent.message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+
       // this tells us to add the sender to the list of subscribers
       if (!$scope.data.subscribers[mmxMessage.sender.userId]) {
         Max.User.search({ userId: mmxMessage.sender.userId }, 1, 0).success(function (users) {
@@ -132,7 +137,6 @@ angular.module('messengerApp')
       }).error(function(err) {
         alert(err);
       });
-
     };
 
     $scope.onFileSelect = function(el, type) {
@@ -179,6 +183,37 @@ angular.module('messengerApp')
       }
     };
 
+    $scope.onCreateCodeSnippet = function() {
+      var modalInstance = $uibModal.open({
+        animation: $scope.animationsEnabled,
+        templateUrl: 'SendCodeSnippet.html',
+        controller: 'CreatesnippetCtrl'
+      });
+
+      modalInstance.result.then(function(codeObj) {
+        $scope.sendCodeSnippet(codeObj);
+      });
+    };
+
+    $scope.sendCodeSnippet = function(codeObj) {
+      showLoading();
+
+      // publish code snippet to the channel
+      var msg = new Max.Message({
+        type: 'text',
+        format: 'code',
+        lang: codeObj.lang,
+        message: codeObj.snippet
+      });
+      channel.publish(msg).success(function() {
+        Audio.onSend();
+      }).error(function(err) {
+        alert(err);
+      }).always(function() {
+        hideLoading();
+      });
+    };
+
     $scope.onMessageScroll = function() {
       // if there are no more messages to fetch, stop fetching upon scroll
       if ($scope.data.messageEndReached) return;
@@ -213,6 +248,9 @@ angular.module('messengerApp')
 
         for (i=0;i<messages.length;++i) {
             messages[i].sender.initials = authService.getInitials(messages[i].sender);
+            if (messages[i].messageContent.format == 'code') {
+              messages[i].messageContent.message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            }
         }
 
         $scope.safeApply(function() {
@@ -261,6 +299,32 @@ angular.module('messengerApp')
       $state.go('app.details', {
         channelName: channel.name,
         userId: channel.userId
+      });
+    };
+
+    $scope.aceLoaded = function(_editor) {
+      _editor.setReadOnly(true);
+      _editor.setOptions({
+          readOnly: true,
+          highlightActiveLine: false,
+          highlightGutterLine: false
+      });
+      _editor.renderer.$cursorLayer.element.style.opacity = 0;
+      _editor.container.style.pointerEvents = 'none';
+      _editor.renderer.setStyle('disabled', true);
+      _editor.blur();
+    };
+
+    $scope.showFullSnippet = function(messageContent) {
+      var modalInstance = $uibModal.open({
+        animation: $scope.animationsEnabled,
+        templateUrl: 'ShowCodeSnippet.html',
+        controller: 'ShowsnippetCtrl',
+        resolve: {
+          items: function() {
+            return messageContent;
+          }
+        }
       });
     };
 

@@ -85,8 +85,25 @@
               <div class="chat-bubble right">
 
                   <div class="message"
-                       ng-if="message.messageContent && message.messageContent.message"
+                       ng-if="message.messageContent
+                       && message.messageContent.message
+                       && message.messageContent.format != 'code'"
                        ng-bind-html="message.messageContent.message | nl2br" autolinker>
+                  </div>
+
+                  <div class="message code-block" ng-click="showFullSnippet(message.messageContent)"
+                       ng-if="message.messageContent
+                       && message.messageContent.message
+                       && message.messageContent.format == 'code'">
+                    <div class="code-block-overlay">
+                      <i class="fa fa-code fa-4x"></i>
+                    </div>
+                    <div ng-model="message.messageContent.message" ui-ace="{
+                      showGutter: false,
+                      mode: message.messageContent.lang,
+                      onLoad: aceLoaded
+                    }">
+                    </div>
                   </div>
 
                   <a target="_blank"
@@ -150,19 +167,41 @@
 
   <form name="sendMessageForm" ng-submit="sendMessage(sendMessageForm)" novalidate>
       <div id="chat-footer" class="bar bar-footer bar-stable item-input-inset message-footer" keyboard-attach>
-          <div>
-              <label class="action-icon-label">
-                  <i class="fa fa-map-marker" ng-click="onLocationSend()"></i>
-              </label>
-              <label class="action-icon-label">
-                  <input type="file" required onchange="angular.element(this).scope().onFileSelect(this, 'photo')"
-                      accept="image/*" multiple />
-                  <span><i class="fa fa-picture-o"></i></span>
-              </label>
-              <!--<label class="action-icon-label">-->
-                  <!--<input type="file" required onchange="angular.element(this).scope().onFileSelect(this, 'file')" />-->
-                  <!--<span><i class="fa fa-file-text"></i></span>-->
-              <!--</label>-->
+          <div class="btn-group dropup" uib-dropdown keyboard-nav dropdown-append-to="appendToEl">
+            <img id="add-attachment-btn" src="images/btn_addattachment.png" uib-dropdown-toggle />
+            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="btn-append-to">
+              <li role="menuitem">
+                <label class="action-icon-label" ng-click="onLocationSend()">
+                    <i class="fa fa-map-marker"></i>
+                    Send Location
+                </label>
+              </li>
+              <li class="divider"></li>
+              <li role="menuitem">
+                <label class="action-icon-label">
+                    <input type="file" required onchange="angular.element(this).scope().onFileSelect(this, 'photo')"
+                        accept="image/*" multiple />
+                    <span><i class="fa fa-picture-o"></i></span>
+                    Upload Picture
+                </label>
+              </li>
+              <li class="divider"></li>
+              <li role="menuitem">
+                <label class="action-icon-label" ng-click="onCreateCodeSnippet()">
+                    <span><i class="fa fa-code"></i></span>
+                    Code Snippet
+                </label>
+              </li>
+              <!--<li class="divider"></li>-->
+              <!--<li role="menuitem">-->
+                <!--<label class="action-icon-label">-->
+                    <!--<input type="file" required onchange="angular.element(this).scope().onFileSelect(this, 'file')"-->
+                           <!--multiple />-->
+                    <!--<span><i class="fa fa-file-text"></i></span>-->
+                    <!--Upload File-->
+                <!--</label>-->
+              <!--</li>-->
+            </ul>
           </div>
           <label class="item-input-wrapper">
               <textarea ng-model="data.message" value="" placeholder="Send a message..." required autofocus

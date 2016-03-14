@@ -17,10 +17,15 @@ angular
     'ngTouch',
     'monospaced.elastic',
     'angularMoment',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'ui.ace'
   ])
 
   .run(function($location, authService, $rootScope, $state) {
+
+    Max.Config.logging = true;
+    Max.Config.payloadLogging = true;
+    Max.Config.logLevel = 'FINE';
 
     // initialize the SDK by setting client information
     Max.init({
