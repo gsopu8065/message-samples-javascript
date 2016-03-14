@@ -233,8 +233,7 @@ angular.module('messengerApp')
     };
 
     function fetchMessages(cb) {
-      messageOffset = messageOffset === null ? 0 : (messageOffset + 20);
-
+      messageOffset = messageOffset === null ? 0 : (messageOffset + 30);
       // fetch chat history ending with the time user enters the view (messages created afterwards are not loaded)
       channel.getMessages(null, messageStartDate, 30, messageOffset, true).success(function(messages, total) {
 

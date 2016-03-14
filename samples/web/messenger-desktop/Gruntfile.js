@@ -369,7 +369,7 @@ module.exports = function (grunt) {
       },
       code: {
         expand: true,
-        cwd: 'bower_components/ace-builds/src-min',
+        cwd: 'bower_components/ace-builds/src-min-noconflict',
         dest: '<%= yeoman.dist %>',
         src: [
           'mode-csharp.js',
