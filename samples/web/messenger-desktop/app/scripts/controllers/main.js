@@ -38,7 +38,7 @@ angular.module('messengerApp')
         return alert('passwords don\'t match');
 
       var updatedUser = angular.merge(authService.currentUser, $scope.data);
-console.log(updatedUser);
+
       Max.User.updateProfile(updatedUser).success(function() {
         Alerts.Success({
             title       : 'Profile Updated',

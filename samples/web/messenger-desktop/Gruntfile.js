@@ -366,6 +366,28 @@ module.exports = function (grunt) {
         cwd: '<%= yeoman.app %>/styles',
         dest: '.tmp/styles/',
         src: '{,*/}*.css'
+      },
+      code: {
+        expand: true,
+        cwd: 'bower_components/ace-builds/src-min',
+        dest: '<%= yeoman.dist %>',
+        src: [
+          'mode-csharp.js',
+          'mode-java.js',
+          'mode-javascript.js',
+          'mode-json.js',
+          'mode-markdown.js',
+          'mode-objectivec.js',
+          'mode-plain_text.js',
+          'mode-php.js',
+          'mode-python.js',
+          'mode-ruby.js',
+          'mode-sh.js',
+          'mode-sql.js',
+          'mode-swift.js',
+          'worker-xml.js',
+          'mode-xml.js'
+        ]
       }
     },
 
@@ -432,6 +454,7 @@ module.exports = function (grunt) {
     'concat',
     'ngAnnotate',
     'copy:dist',
+    'copy:code',
     'cdnify',
     'cssmin',
     'uglify',

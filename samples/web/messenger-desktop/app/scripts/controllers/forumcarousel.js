@@ -17,23 +17,9 @@ angular.module('messengerApp')
     var currIndex = 0;
 
     slides.push({
-      image: 'images/bg_msg_askmagnet.png',
-      text: 'Ask Magnet',
-      channel: 'AskMagnet',
-      id: currIndex++
-    });
-
-    slides.push({
       image: 'images/bg_msg_devweek.png',
       text: 'Developer Week',
       channel: 'DeveloperWeek',
-      id: currIndex++
-    });
-
-    slides.push({
-      image: 'images/bg_msg_news.png',
-      text: 'News',
-      channel: 'News',
       id: currIndex++
     });
 

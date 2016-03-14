@@ -23,19 +23,9 @@ angular
 
   .run(function($location, authService, $rootScope, $state) {
 
-    Max.Config.logging = true;
-    Max.Config.payloadLogging = true;
-    Max.Config.logLevel = 'FINE';
-
-    // initialize the SDK by setting client information
-    Max.init({
-        clientId: '<your client id>',
-        clientSecret: '<your client secret>',
-        baseUrl: 'https://sandbox.magnet.com/mobile/api'
-    });
-
     // handle not authorized and session expiry errors by redirecting to login page
     Max.on('not-authenticated', function() {
+      console.log('not');
       authService.isAuthenticated = false;
       authService.currentUser = null;
       $state.go('login');
@@ -43,6 +33,7 @@ angular
 
     // handle authentication by redirecting to home page
     Max.on('authenticated', function() {
+      console.log('auth');
       authService.isAuthenticated = true;
       authService.currentUser = Max.getCurrentUser();
       authService.initials = authService.getInitials(authService.currentUser);
@@ -56,6 +47,7 @@ angular
     Max.onReady(function() {
       setTimeout(function() {
         // do something
+      console.log('ready');
         loading_screen.finish();
       }, 500);
     });
@@ -66,7 +58,7 @@ angular
       if (bootstrapped) return;
       bootstrapped = true;
 
-      var publicChannels = ['DeveloperWeek', 'AskMagnet', 'News'];
+      var publicChannels = ['DeveloperWeek'];
       createIfNotExist(publicChannels, 0);
     }
 
