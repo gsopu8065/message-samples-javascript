@@ -44,9 +44,6 @@ angular
     // handle authentication by redirecting to home page
     Max.on('authenticated', function() {
       authService.isAuthenticated = true;
-      authService.currentUser = Max.getCurrentUser();
-      authService.userAvatar = authService.currentUser.extras.hasAvatar ? authService.currentUser.getAvatarUrl() : null;
-      authService.initials = authService.getInitials(authService.currentUser);
       bootstrapPublicChannels();
       $state.go('app');
     });

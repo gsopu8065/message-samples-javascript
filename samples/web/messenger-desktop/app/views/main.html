@@ -1,20 +1,69 @@
-<div class="container">
+<div class="container has-inner-drawer">
+
+    <div id="profile-drawer" class="drawer drawer-inside dw-xs-4 fold"
+         ng-class="{'open' : showDrawer}" aria-labelledby="profile-drawer">
+        <div class="drawer-controls" ng-click="toggleDrawer()">
+              <img data-toggle="drawer" src="images/btn_menu.png" />
+        </div>
+        <div class="drawer-contents">
+            <div class="drawer-heading">
+                <h3 class="drawer-title">Profile</h3>
+            </div>
+            <div class="drawer-body">
+
+              <label class="action-icon-label">
+                <input type="file" required onchange="angular.element(this).scope().updateAvatar(this)"
+                    accept="image/*" />
+                <img ng-if="authService.userAvatar" ng-src="{{authService.userAvatar}}" />
+                <div class="icon-initials" ng-if="!authService.userAvatar">
+                  <span>{{authService.initials}}</span>
+                  <img src="images/icon_empty.png" />
+                </div>
+                <br />
+                <span>Update Avatar</span>
+              </label>
+
+              <div class="row-fluid text-left">
+                <div class="col-sm-6">
+                  <label>First Name</label>
+                  <input type="text" ng-model="data.firstName" class="form-control" placeholder="First Name" required>
+                </div>
+                <div class="col-sm-6">
+                  <label>Last Name</label>
+                  <input type="text" ng-model="data.lastName" class="form-control" placeholder="Last Name" required>
+                </div>
+                <div class="col-sm-6">
+                  <label>Password</label>
+                  <input type="password" ng-model="data.password" class="form-control" placeholder="Password" required>
+                </div>
+                <div class="col-sm-6">
+                  <label>Confirm Password</label>
+                  <input type="password" ng-model="data.confirm" class="form-control" placeholder="Confirm Password" required>
+                </div>
+                <div class="col-sm-12">
+                  <button class="btn btn-primary" ng-click="updateProfile()">Save Changes</button>
+                </div>
+              </div>
+
+            </div>
+            <div class="drawer-footer" ng-click="logout()">
+                <i class="fa fa-2x fa-sign-out"></i>
+                <div>Sign Out</div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
-        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 no-float">
+        <div id="sidebar" class="col-lg-4 col-md-4 col-sm-4 col-xs-4 no-float">
 
           <div class="header">
-            <!--<img src="images/btn_menu.png" class="pull-left" />-->
             <label class="action-icon-label">
-              <input type="file" required onchange="angular.element(this).scope().updateAvatar(this)"
-                  accept="image/*" />
               <img ng-if="authService.userAvatar" ng-src="{{authService.userAvatar}}" class="pull-left" />
               <div class="icon-initials" ng-if="!authService.userAvatar">
                 <span>{{authService.initials}}</span>
                 <img src="images/icon_empty.png" />
               </div>
             </label>
-            <!--<i class="fa fa-2x fa-cog"></i>-->
-            <i class="fa fa-2x fa-sign-out" ng-click="logout()"></i>
             <img src="images/btn_newmsg.png" class="pull-right" ng-click="createConversation()" />
           </div>
 

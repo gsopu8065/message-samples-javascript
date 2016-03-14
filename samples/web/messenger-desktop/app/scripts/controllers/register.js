@@ -12,14 +12,19 @@ angular.module('messengerApp')
 
       $scope.data = {
         userName : '',
+        firstName: '',
+        lastName: '',
         password : ''
       };
 
+    var emailRxp = /^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+
       $scope.doRegister = function() {
-        if (!$scope.data.userName.trim().length) return alert('username is required');
-        if (!$scope.data.firstName.trim().length) return alert('first name is required');
-        if (!$scope.data.lastName.trim().length) return alert('last name is required');
-        if (!$scope.data.password.trim().length) return alert('password is required');
+        if (!$scope.data.firstName || !$scope.data.firstName.trim().length) return alert('first name is required');
+        if (!$scope.data.lastName || !$scope.data.lastName.trim().length) return alert('last name is required');
+        if (!$scope.data.userName || !$scope.data.userName.trim().length) return alert('email is required');
+        if (!emailRxp.test($scope.data.userName)) return alert('invalid email address');
+        if (!$scope.data.password || !$scope.data.password.trim().length) return alert('password is required');
 
         // register user by supplying credentials
         Max.User.register($scope.data).success(function() {

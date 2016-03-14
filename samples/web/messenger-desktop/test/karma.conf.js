@@ -29,9 +29,9 @@ module.exports = function(config) {
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'bower_components/moment/moment.js',
       'bower_components/angular-moment/angular-moment.js',
-      'bower_components/please-wait/build/please-wait.js',
       'bower_components/ace-builds/src-min-noconflict/ace.js',
       'bower_components/angular-ui-ace/ui-ace.js',
+      'bower_components/bootstrap-drawer/dist/js/drawer.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',

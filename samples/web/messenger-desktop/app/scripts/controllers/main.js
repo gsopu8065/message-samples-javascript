@@ -10,8 +10,12 @@
 angular.module('messengerApp')
   .controller('MainCtrl', function ($scope, authService, navService, $uibModal, Alerts) {
 
+    if (!authService.isAuthenticated) return;
+
     $scope.navService = navService;
     $scope.authService = authService;
+    $scope.showDrawer = false;
+    $scope.data = {};
 
     $scope.logout = function() {
       Alerts.Confirm({
@@ -27,8 +31,26 @@ angular.module('messengerApp')
 
     };
 
-    $scope.authService = authService;
-    $scope.navService = navService;
+    $scope.updateProfile = function() {
+      if (!$scope.data.firstName.trim().length) return alert('first name is required');
+      if (!$scope.data.lastName.trim().length) return alert('last name is required');
+      if ($scope.data.password.trim().length && $scope.data.password != $scope.data.confirm)
+        return alert('passwords don\'t match');
+
+      var updatedUser = angular.merge(authService.currentUser, $scope.data);
+
+      Max.User.updateProfile(updatedUser).success(function() {
+        Alerts.Success({
+            title       : 'Profile Updated',
+            description : 'Your profile has been updated successfully.'
+        }, function() {
+          $scope.data.password = '';
+          $scope.data.confirm = '';
+
+          refreshUserData();
+        });
+      });
+    };
 
     $scope.createConversation = function() {
       var modalInstance = $uibModal.open({
@@ -75,17 +97,15 @@ angular.module('messengerApp')
         if (el.value) {
           el.parentNode.replaceChild(el.cloneNode(true), el);
         }
-        authService.currentUser = Max.getCurrentUser();
-        // get avatar from url, appending timestamp to bust browser cache
-        authService.userAvatar = authService.currentUser.getAvatarUrl()+'&'+new Date().getTime();
-
-        $scope.safeApply(function() {
-          $scope.authService.userAvatar = authService.userAvatar;
-        });
+        refreshUserData(true);
 
       }).error(function(e) {
         alert(e);
       })
+    };
+
+    $scope.toggleDrawer = function() {
+      $scope.showDrawer = !$scope.showDrawer;
     };
 
     $scope.$watch(function () {
@@ -114,5 +134,29 @@ angular.module('messengerApp')
         this.$apply(fn);
       }
     };
+
+    function refreshUserData(isAvatarUpdate) {
+
+      authService.currentUser = Max.getCurrentUser();
+      authService.initials = authService.getInitials(authService.currentUser);
+      // get avatar from url, appending timestamp to bust browser cache
+      if (isAvatarUpdate) {
+        authService.userAvatar = authService.currentUser.getAvatarUrl()+'&'+new Date().getTime();
+      } else {
+        authService.userAvatar = (authService.currentUser.extras && authService.currentUser.extras.hasAvatar)
+          ? authService.currentUser.getAvatarUrl() : null;
+      }
+
+      $scope.safeApply(function() {
+        $scope.data.firstName = authService.currentUser.firstName;
+        $scope.data.lastName = authService.currentUser.lastName;
+        $scope.data.password = '';
+        $scope.data.confirm = '';
+
+        $scope.authService.userAvatar = authService.userAvatar;
+      });
+    }
+
+    refreshUserData();
 
   });
