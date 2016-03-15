@@ -63,8 +63,8 @@
 
                   <a target="_blank"
                      ng-if="message.messageContent.type == 'location'"
-                     ng-href="https://www.google.com/maps?ll={{message.messageContent.latitude}},{{message.messageContent.longitude}}">
-                    <img class="map-message" src="http://maps.googleapis.com/maps/api/staticmap?center={{message.messageContent.latitude}},{{message.messageContent.longitude}}&zoom=14&size=400x300&sensor=false"
+                     ng-href="https://www.google.com/maps?q={{message.messageContent.latitude}},{{message.messageContent.longitude}}&ll={{message.messageContent.latitude}},{{message.messageContent.longitude}}">
+                    <img class="map-message" src="http://maps.googleapis.com/maps/api/staticmap?center={{message.messageContent.latitude}},{{message.messageContent.longitude}}&zoom=14&size=400x300&sensor=false&markers=color:red|{{message.messageContent.latitude}},{{message.messageContent.longitude}}"
                          imageonload />
                   </a>
 
@@ -125,8 +125,8 @@
 
                   <a target="_blank"
                      ng-if="message.messageContent.type == 'location'"
-                     ng-href="https://www.google.com/maps?ll={{message.messageContent.latitude}},{{message.messageContent.longitude}}">
-                    <img class="map-message" src="http://maps.googleapis.com/maps/api/staticmap?center={{message.messageContent.latitude}},{{message.messageContent.longitude}}&zoom=14&size=400x300&sensor=false"
+                     ng-href="https://www.google.com/maps?q={{message.messageContent.latitude}},{{message.messageContent.longitude}}&ll={{message.messageContent.latitude}},{{message.messageContent.longitude}}">
+                    <img class="map-message" src="http://maps.googleapis.com/maps/api/staticmap?center={{message.messageContent.latitude}},{{message.messageContent.longitude}}&zoom=14&size=400x300&sensor=false&markers=color:red|{{message.messageContent.latitude}},{{message.messageContent.longitude}}"
                           imageonload />
                   </a>
 
