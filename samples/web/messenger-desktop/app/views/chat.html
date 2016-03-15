@@ -40,14 +40,31 @@
               <div class="chat-bubble left">
 
                   <div class="message"
-                       ng-if="message.messageContent && message.messageContent.message"
+                       ng-if="message.messageContent
+                       && message.messageContent.message
+                       && message.messageContent.format != 'code'"
                        ng-bind-html="message.messageContent.message | nl2br" autolinker>
+                  </div>
+
+                  <div class="message code-block" ng-click="showFullSnippet(message.messageContent)"
+                       ng-if="message.messageContent
+                       && message.messageContent.message
+                       && message.messageContent.format == 'code'">
+                    <div class="code-block-overlay">
+                      <i class="fa fa-code fa-4x"></i>
+                    </div>
+                    <div ng-model="message.messageContent.message" ui-ace="{
+                      showGutter: false,
+                      mode: message.messageContent.lang,
+                      onLoad: aceLoaded
+                    }">
+                    </div>
                   </div>
 
                   <a target="_blank"
                      ng-if="message.messageContent.type == 'location'"
-                     ng-href="https://www.google.com/maps?ll={{message.messageContent.latitude}},{{message.messageContent.longitude}}">
-                    <img class="map-message" src="http://maps.googleapis.com/maps/api/staticmap?center={{message.messageContent.latitude}},{{message.messageContent.longitude}}&zoom=14&size=400x300&sensor=false"
+                     ng-href="https://www.google.com/maps?q={{message.messageContent.latitude}},{{message.messageContent.longitude}}&ll={{message.messageContent.latitude}},{{message.messageContent.longitude}}">
+                    <img class="map-message" src="http://maps.googleapis.com/maps/api/staticmap?center={{message.messageContent.latitude}},{{message.messageContent.longitude}}&zoom=14&size=400x300&sensor=false&markers=color:red|{{message.messageContent.latitude}},{{message.messageContent.longitude}}"
                          imageonload />
                   </a>
 
@@ -108,8 +125,8 @@
 
                   <a target="_blank"
                      ng-if="message.messageContent.type == 'location'"
-                     ng-href="https://www.google.com/maps?ll={{message.messageContent.latitude}},{{message.messageContent.longitude}}">
-                    <img class="map-message" src="http://maps.googleapis.com/maps/api/staticmap?center={{message.messageContent.latitude}},{{message.messageContent.longitude}}&zoom=14&size=400x300&sensor=false"
+                     ng-href="https://www.google.com/maps?q={{message.messageContent.latitude}},{{message.messageContent.longitude}}&ll={{message.messageContent.latitude}},{{message.messageContent.longitude}}">
+                    <img class="map-message" src="http://maps.googleapis.com/maps/api/staticmap?center={{message.messageContent.latitude}},{{message.messageContent.longitude}}&zoom=14&size=400x300&sensor=false&markers=color:red|{{message.messageContent.latitude}},{{message.messageContent.longitude}}"
                           imageonload />
                   </a>
 
@@ -192,15 +209,15 @@
                     Code Snippet
                 </label>
               </li>
-              <li class="divider"></li>
-              <li role="menuitem">
-                <label class="action-icon-label">
-                    <input type="file" required onchange="angular.element(this).scope().onFileSelect(this, 'file')"
-                           multiple />
-                    <span><i class="fa fa-file-text"></i></span>
-                    Upload File
-                </label>
-              </li>
+              <!--<li class="divider"></li>-->
+              <!--<li role="menuitem">-->
+                <!--<label class="action-icon-label">-->
+                    <!--<input type="file" required onchange="angular.element(this).scope().onFileSelect(this, 'file')"-->
+                           <!--multiple />-->
+                    <!--<span><i class="fa fa-file-text"></i></span>-->
+                    <!--Upload File-->
+                <!--</label>-->
+              <!--</li>-->
             </ul>
           </div>
           <label class="item-input-wrapper">

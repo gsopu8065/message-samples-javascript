@@ -151,6 +151,7 @@ angular.module('messengerApp')
         $scope.data.confirm = '';
 
         $scope.authService.userAvatar = authService.userAvatar;
+        $scope.authService.initials = authService.initials;
       });
     }
 
