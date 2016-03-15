@@ -250,6 +250,10 @@ angular.module('messengerApp')
             if (messages[i].messageContent.format == 'code') {
               messages[i].messageContent.message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
             }
+          if (!messages[i].sender.userName && $scope.data.subscribers[messages[i].sender.userId]) {
+            messages[i].sender.userName = $scope.data.subscribers[messages[i].sender.userId].firstName
+              + ' ' + $scope.data.subscribers[messages[i].sender.userId].lastName;
+          }
         }
 
         $scope.safeApply(function() {
