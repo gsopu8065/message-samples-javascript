@@ -40,8 +40,25 @@
               <div class="chat-bubble left">
 
                   <div class="message"
-                       ng-if="message.messageContent && message.messageContent.message"
+                       ng-if="message.messageContent
+                       && message.messageContent.message
+                       && message.messageContent.format != 'code'"
                        ng-bind-html="message.messageContent.message | nl2br" autolinker>
+                  </div>
+
+                  <div class="message code-block" ng-click="showFullSnippet(message.messageContent)"
+                       ng-if="message.messageContent
+                       && message.messageContent.message
+                       && message.messageContent.format == 'code'">
+                    <div class="code-block-overlay">
+                      <i class="fa fa-code fa-4x"></i>
+                    </div>
+                    <div ng-model="message.messageContent.message" ui-ace="{
+                      showGutter: false,
+                      mode: message.messageContent.lang,
+                      onLoad: aceLoaded
+                    }">
+                    </div>
                   </div>
 
                   <a target="_blank"

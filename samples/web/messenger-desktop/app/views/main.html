@@ -77,7 +77,7 @@
 
             <div id="channel-list" class="sidebar-list">
               <div class="list-group">
-                <a ng-repeat="channelSummary in data.channelSummaries"
+                <a ng-repeat="channelSummary in data.channelSummaries | orderBy:lastPublishedTime:true"
 
                     href="#/chat/{{channelSummary.channelName}}/{{channelSummary.ownerId}}"
                     ng-if="!channelSummary.channel.isPublic"
