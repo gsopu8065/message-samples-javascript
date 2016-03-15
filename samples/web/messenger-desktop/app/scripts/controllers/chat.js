@@ -94,12 +94,15 @@ angular.module('messengerApp')
             var user = users[0];
             $scope.safeApply(function() {
               $scope.data.subscribers[user.userId] = user;
+              setUserUsername(mmxMessage);
+
               $scope.data.messages.push(mmxMessage);
             });
           }
         });
       } else {
         $scope.safeApply(function() {
+          setUserUsername(mmxMessage);
           $scope.data.messages.push(mmxMessage);
         });
       }
@@ -246,10 +249,11 @@ angular.module('messengerApp')
         }
 
         for (i=0;i<messages.length;++i) {
-            messages[i].sender.initials = authService.getInitials(messages[i].sender);
-            if (messages[i].messageContent.format == 'code') {
-              messages[i].messageContent.message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            }
+          messages[i].sender.initials = authService.getInitials(messages[i].sender);
+          if (messages[i].messageContent.format == 'code') {
+            messages[i].messageContent.message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          }
+          setUserUsername(messages[i]);
         }
 
         $scope.safeApply(function() {
@@ -291,6 +295,13 @@ angular.module('messengerApp')
       } catch(ex) { }
       if (ctrl.value) {
         ctrl.parentNode.replaceChild(ctrl.cloneNode(true), ctrl);
+      }
+    }
+
+    function setUserUsername(message) {
+      if (!message.sender.userName && $scope.data.subscribers[user.userId]) {
+        message.sender.userName = $scope.data.subscribers[user.userId].firstName
+          + ' ' + $scope.data.subscribers[user.userId].lastName;
       }
     }
 

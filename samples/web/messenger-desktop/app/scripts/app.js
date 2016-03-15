@@ -63,8 +63,10 @@ angular
     function createIfNotExist(channels, index) {
       if (!channels[index]) return;
 
-      Max.Channel.getPublicChannel(channels[index]).success(function() {
-        createIfNotExist(channels, ++index);
+      Max.Channel.getPublicChannel(channels[index]).success(function(existingChannel) {
+        existingChannel.subscribe().success(function() {
+          createIfNotExist(channels, ++index);
+        });
       }).error(function() {
         Max.Channel.create({
           name: channels[index],

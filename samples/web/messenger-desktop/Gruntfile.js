@@ -389,6 +389,12 @@ module.exports = function (grunt) {
           'worker-xml.js',
           'mode-xml.js'
         ]
+      },
+      sdk: {
+        expand: true,
+        cwd: '<%= yeoman.app %>/scripts',
+        dest: '<%= yeoman.dist %>/scripts',
+        src: 'magnet-max-sdk.js'
       }
     },
 
@@ -460,6 +466,7 @@ module.exports = function (grunt) {
     'cssmin',
     'uglify',
     'filerev',
+    'copy:sdk',
     'usemin',
     'htmlmin'
   ]);
