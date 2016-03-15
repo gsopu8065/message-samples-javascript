@@ -94,6 +94,12 @@ angular.module('messengerApp')
             var user = users[0];
             $scope.safeApply(function() {
               $scope.data.subscribers[user.userId] = user;
+
+              if (!mmxMessage.sender.userName && $scope.data.subscribers[user.userId]) {
+                mmxMessage.sender.userName = $scope.data.subscribers[user.userId].firstName
+                  + ' ' + $scope.data.subscribers[user.userId].lastName;
+              }
+
               $scope.data.messages.push(mmxMessage);
             });
           }
@@ -246,10 +252,10 @@ angular.module('messengerApp')
         }
 
         for (i=0;i<messages.length;++i) {
-            messages[i].sender.initials = authService.getInitials(messages[i].sender);
-            if (messages[i].messageContent.format == 'code') {
-              messages[i].messageContent.message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            }
+          messages[i].sender.initials = authService.getInitials(messages[i].sender);
+          if (messages[i].messageContent.format == 'code') {
+            messages[i].messageContent.message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          }
           if (!messages[i].sender.userName && $scope.data.subscribers[messages[i].sender.userId]) {
             messages[i].sender.userName = $scope.data.subscribers[messages[i].sender.userId].firstName
               + ' ' + $scope.data.subscribers[messages[i].sender.userId].lastName;
