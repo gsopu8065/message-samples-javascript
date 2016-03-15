@@ -299,9 +299,9 @@ angular.module('messengerApp')
     }
 
     function setUserUsername(message) {
-      if (!message.sender.userName && $scope.data.subscribers[user.userId]) {
-        message.sender.userName = $scope.data.subscribers[user.userId].firstName
-          + ' ' + $scope.data.subscribers[user.userId].lastName;
+      if (!message.sender.userName && $scope.data.subscribers[message.sender.userId]) {
+        message.sender.userName = $scope.data.subscribers[message.sender.userId].firstName
+          + ' ' + $scope.data.subscribers[message.sender.userId].lastName;
       }
     }
 
