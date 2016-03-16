@@ -19,7 +19,7 @@ angular.module('messengerApp')
     slides.push({
       image: 'images/bg_msg_devweek.png',
       text: 'Developer Week',
-      channel: 'DeveloperWeek',
+      channel: 'global_dev_week',
       id: currIndex++
     });
 

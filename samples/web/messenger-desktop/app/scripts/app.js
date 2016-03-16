@@ -55,7 +55,7 @@ angular
       if (bootstrapped) return;
       bootstrapped = true;
 
-      var publicChannels = ['DeveloperWeek'];
+      var publicChannels = ['global_dev_week'];
       createIfNotExist(publicChannels, 0);
     }
 
