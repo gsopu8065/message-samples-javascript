@@ -7,6 +7,6 @@ version 0.11.1.
 
 Run `grunt` for building and `grunt serve` for preview.
 
-## Testing
+### Testing
 
 Running `grunt test` will run the unit tests with karma.
