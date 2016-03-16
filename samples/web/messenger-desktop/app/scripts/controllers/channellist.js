@@ -23,7 +23,7 @@ angular.module('messengerApp')
       Audio.onReceive();
 
       var isExistingChannel = false;
-      if (mmxMessage.channel && mmxMessage.channel.name) {
+      if (mmxMessage.channel && mmxMessage.channel.name && mmxMessage.channel.name != 'askMagnet') {
         for (var i=0;i<$scope.data.channelSummaries.length;++i) {
           if ($scope.data.channelSummaries[i].channelName == mmxMessage.channel.name) {
             isExistingChannel = true;
@@ -49,10 +49,18 @@ angular.module('messengerApp')
       Max.Channel.getAllSubscriptions().success(function(channels) {
         if (!channels.length) return;
 
-        $scope.data.channels = channels;
+        var supportedChannels = [];
+
+        for (var i=0;i<channels.length;++i) {
+          if (channels[i].name != 'askMagnet') {
+            supportedChannels.push(channels[i]);
+          }
+        }
+
+        $scope.data.channels = supportedChannels;
 
         // retrieve detailed channel information, including subscribers and past messages
-        Max.Channel.getChannelSummary(channels, 5, 1).success(function(channelSummaries) {
+        Max.Channel.getChannelSummary(supportedChannels, 5, 1).success(function(channelSummaries) {
           for(var i = 0; i < channelSummaries.length; ++i) {
             var subscriberNames = [];
             var chatPhotoUser = null;
