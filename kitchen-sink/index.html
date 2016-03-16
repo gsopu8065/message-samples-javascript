@@ -1,0 +1,557 @@
+
+<!doctype html>
+<html class="no-js fuelux view-developer" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Magnet</title>
+    <meta name="description" content="Magnet Messenger Installer">
+    <meta name="keywords" content="Mobile app development, Mobile platform, Mobile REST API, Mobile messaging">
+    <link rel="stylesheet" href="https://developer.magnet.com/css/bootstrap.min.css" />
+    <link href='//fonts.googleapis.com/css?family=Roboto:400,500,700,900,300,100' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+
+<h3>Initialization</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>Max.onReady(function() {
+    // do something
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <h5>User</h5>
+        <pre id="user-info"></pre>
+        <h5>Device</h5>
+        <pre id="device-info"></pre>
+        <h5>App</h5>
+        <pre id="app-info"></pre>
+        <h5>Anonymous Token</h5>
+        <pre id="auth-info"></pre>
+    </div>
+</div>
+
+
+<h3>Registration</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>var userObj = {
+    userName: 'jack.doe',
+    firstName: 'Jack',
+    password: 'magnet'
+};
+
+Max.User.register(userObj).success(function() {
+    // do something
+});</pre>
+    </div>
+    <div class="col-sm-6">
+<pre id="register-info"></pre>
+    </div>
+</div>
+
+
+<h3>Login</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>var userName = 'jack.doe';
+var password = 'magnet';
+
+Max.User.login(userName, password).success(function() {
+    // do something
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <h5>Login</h5>
+        <pre id="login-info"></pre>
+        <h5>Device Register</h5>
+        <pre id="deviceregister-info"></pre>
+    </div>
+</div>
+
+
+<h3>getUsersByUserNames</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>Max.User.getUsersByUserNames(['jane.doe@magnet.com', 'jack.doe']).success(function(users) {
+    // do something
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <pre id="getUsersByUserNames-info"></pre>
+    </div>
+</div>
+
+
+<h3>User search List</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>Max.User.search({userName: '*'}, 10, 0).success(function(users) {
+    // do something
+});</pre>
+    </div>
+    <div class="col-sm-6">
+<pre id="usersearch-info"></pre>
+    </div>
+</div>
+
+
+<h3>Send Message</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>
+Max.start();
+
+var user = Max.getCurrentUser();
+
+var message = new Max.Message({
+    my: 'sent message'
+}, user);
+
+message.send();</pre>
+    </div>
+    <div class="col-sm-6">
+        <div id="sendmessage-info"></div>
+    </div>
+</div>
+
+
+<h3>Receive Message</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>
+Max.start();
+
+var listener = new Max.MessageListener('myListener', function(mmxMessage) {
+    // do something
+};
+
+Max.registerListener(listener);
+
+// Max.unregisterListener(listener);
+</pre>
+    </div>
+    <div class="col-sm-6">
+        <div id="receivemessage-info"></div>
+    </div>
+</div>
+
+
+<h3>Create Channel</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>Max.Channel.create({
+    name: 'myNewPrivateChannel',
+    summary: 'my restrictive summary',
+    isPublic: false,
+    publishPermissions: 'subscribers'
+}).success(function(newChannel) {
+    // do something
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <div id="createchannel-info"></div>
+    </div>
+</div>
+
+
+<h3>Delete Channel</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>mmxChannel.delete().success(function() {
+    // do something
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <div id="deletechannel-info"></div>
+    </div>
+</div>
+
+
+<h3>Get My Subscriptions</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>Max.Channel.getAllSubscriptions().success(function(subscriptions) {
+    // do something
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <div id="mysubscriptions-info"></div>
+    </div>
+</div>
+
+
+<h3>Find Public Channels</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>Max.Channel.findPublicChannels('GetStarted').success(function(channels) {
+    // do something
+});</pre>
+<pre>Max.Channel.findPrivateChannels(['private1', 'rpvia]).success(function(channels) {
+    // do something
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <div id="getpublicchannels-info"></div>
+    </div>
+</div>
+
+<h3>Get Private Channel</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>Max.Channel.getPrivateChannel('myprivatechannel').success(function(channel) {
+    // do something
+});</pre>
+<pre>Max.Channel.getPublicChannel('mypublicchannel').success(function(channel) {
+    // do something
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <div id="getPrivateChannel-info"></div>
+    </div>
+</div>
+
+<h3>Get Channel Subscribers</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>mmxChannel.getAllSubscribers().success(function(subscribers) {
+    // do something
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <div id="channelsubscribers-info"></div>
+    </div>
+</div>
+
+
+<h3>Subscribe to Channel</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>mmxChannel.subscribe().success(function() {
+    // do something
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <div id="channelsubscribe-info"></div>
+    </div>
+</div>
+
+
+<h3>Unsubscribe from Channel</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>mmxChannel.unsubscribe().success(function() {
+    // do something
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <div id="channelunsubscribe-info"></div>
+    </div>
+</div>
+
+
+<h3>Add Subscriber to Channel</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>mmxChannel.addSubscribers(users).success(function() {
+    // do something
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <div id="channeladdsubscriber-info"></div>
+    </div>
+</div>
+
+
+<h3>Remove Subscriber from Channel</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>mmxChannel.removeSubscribers(users).success(function() {
+    // do something
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <div id="channelremovesubscriber-info"></div>
+    </div>
+</div>
+
+
+<h3>findChannelsBySubscribers</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>var user = Max.getCurrentUser();
+Max.Channel.findChannelsBySubscribers([user]).success(function(channels) {
+    // do something
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <div id="findChannelsBySubscribers-info"></div>
+    </div>
+</div>
+
+
+<h3>getChannelSummary</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>Max.Channel.getChannelSummary([channel], 10, 10).success(function(channelSummaries) {
+    // do something
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <div id="channelSummaries-info"></div>
+    </div>
+</div>
+
+<h3>getMessages</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>mmxChannel.getMessages(new Date(), new Date(), 10, 0, true).success(function(messages) {
+    // do something
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <div id="getMessages-info"></div>
+    </div>
+</div>
+
+<h3>publish to channel</h3>
+<div class="row-fluid clearfix">
+    <div class="col-sm-6">
+<pre>var channelMsg = new Max.Message({
+    my: 'message to channel'
+});
+mmxChannel.publish(channelMsg).success(function() {
+    // do something
+});</pre>
+    </div>
+    <div class="col-sm-6">
+        <div id="channelpublish-info"></div>
+    </div>
+</div>
+
+
+<script src="jquery.js"></script>
+<script src="http://cdn.magnet.com/downloads/magnet-max-sdk-2.6.0.min.js"></script>
+<script>
+
+    Max.init({
+        clientId: '<your client id>',
+        clientSecret: '<your client secret>',
+        baseUrl: 'https://sandbox.magnet.com/mobile/api'
+    });
+
+    $(document).ready(function() {
+
+        Max.onReady(function() {
+
+            $('#device-info').html(JSON.stringify(Max.Device.getCurrentDevice(), false, 4));
+            $('#app-info').html(JSON.stringify(Max.Config, false, 4));
+
+            var user = {
+                userName: new Date().getTime(), // 'jack.doe',
+                firstName: 'Jack' + new Date().getTime(),
+                lastName: 'Doe' + new Date().getTime(),
+                password: 'magnet'
+            };
+
+            Max.User.register(user).always(function(res) {
+
+                $('#register-info').html(JSON.stringify(res, false, 4));
+
+                Max.User.login(user.userName, user.password).success(function(loginUser, loginDevice) {
+
+                    $('#user-info').html(JSON.stringify(Max.getCurrentUser(), false, 4));
+                    $('#login-info').html(JSON.stringify(loginUser, false, 4));
+                    $('#deviceregister-info').html(JSON.stringify(loginDevice, false, 4));
+
+                    Max.User.getUsersByUserNames([user.userName, 'jane.doe@magnet.com']).success(function(res) {
+
+                        $('#getUsersByUserNames-info').html(JSON.stringify(res, false, 4));
+
+                    });
+
+                    Max.start();
+
+                    // listen for messages
+                    var listener = new Max.MessageListener('myListener', function(mmxMessage) {
+                        $('#receivemessage-info').append('<pre>'+JSON.stringify(mmxMessage, false, 4)+'</pre>');
+                    });
+
+                    Max.registerListener(listener);
+
+                    // send message
+                    var message = new Max.Message({
+                        my: 'sent message'
+                    }, Max.getCurrentUser());
+
+                    message.send().success(function(res) {
+                        $('#sendmessage-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
+                    });
+
+                    // channels
+                    var privateChannelName = 'myNewPrivateChannel';
+                    Max.Channel.create({
+                        name: privateChannelName,
+                        summary: 'my restrictive summary',
+                        isPublic: false,
+                        publishPermissions: 'subscribers'
+                    }).success(function(mmxPrivateChannel) {
+                        $('#createchannel-info').append('<pre>'+JSON.stringify(mmxPrivateChannel, false, 4)+'</pre>');
+
+                        if (mmxPrivateChannel) {
+
+                            Max.User.search({userName: '*'}, 3, 0).success(function(users) {
+                                $('#usersearch-info').html(JSON.stringify(users, false, 4));
+
+                                mmxPrivateChannel.addSubscribers(users).success(function(res) {
+                                    $('#channeladdsubscriber-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
+
+                                    mmxPrivateChannel.getAllSubscribers(3).success(function(subscribers) {
+                                        $('#channelsubscribers-info').append('<pre>'+JSON.stringify(subscribers, false, 4)+'</pre>');
+
+                                        var channelMsg = new Max.Message({
+                                            message: 'private message to channel'
+                                        });
+                                        mmxPrivateChannel.publish(channelMsg).success(function(res) {
+                                            $('#channelpublish-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
+
+                                            Max.Channel.getChannelSummary([mmxPrivateChannel], 10, 10).success(function(channelSummaries) {
+                                                $('#channelSummaries-info').append('<pre>'+JSON.stringify(channelSummaries, false, 4)+'</pre>');
+
+                                                mmxPrivateChannel.removeSubscribers(users).success(function(res) {
+                                                    $('#channelremovesubscriber-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
+
+                                                    Max.Channel.getPrivateChannel(privateChannelName).success(function(mmxPrivateChannel2) {
+                                                        $('#getPrivateChannel-info').append('<pre>'+JSON.stringify(mmxPrivateChannel2, false, 4)+'</pre>');
+
+                                                        mmxPrivateChannel.delete().success(function(res) {
+                                                            $('#deletechannel-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
+                                                        });
+
+                                                    });
+
+                                                });
+                                            });
+
+                                        });
+
+                                    });
+
+                                });
+
+                            });
+                        }
+
+                        Max.Channel.create({
+                            name: 'myNewPublicChannel',
+                            summary: 'my public summary'
+                        }).always(function(res) {
+                            $('#createchannel-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
+
+                            Max.Channel.findPublicChannels('myNewPublicChannel').success(function(channels) {
+                                $('#getpublicchannels-info').append('<pre>'+JSON.stringify(channels, false, 4)+'</pre>');
+
+                                if (channels.length) {
+                                    var mmxChannel = channels[0];
+                                    mmxChannel.getAllSubscribers(3).success(function(subscribers) {
+                                        $('#channelsubscribers-info').append('<pre>'+JSON.stringify(subscribers, false, 4)+'</pre>');
+
+                                        var inChannel = false;
+                                        for (var i=0;i<subscribers.length;++i) {
+                                            if (subscribers[i].userId == Max.getCurrentUser().userIdentifier) {
+                                                inChannel = true;
+                                                mmxChannel.unsubscribe().success(function(res) {
+                                                    $('#channelunsubscribe-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
+                                                    continueChannel(mmxChannel);
+                                                });
+                                                break;
+                                            }
+                                        }
+
+                                        if (!inChannel) continueChannel(mmxChannel);
+
+                                    });
+                                }
+                            });
+
+                            function continueChannel(mmxChannel) {
+                                mmxChannel.subscribe().success(function(res) {
+                                    $('#channelsubscribe-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
+                                });
+                            }
+
+                        });
+
+
+                        Max.Channel.findPublicChannels().success(function(channels) {
+
+                            var getStartedChannel;
+
+                            if (channels.length) {
+                                for (var i=0;i<channels.length;++i) {
+                                    if (channels[i].name == 'GetStarted') {
+                                        getStartedChannel = channels[i];
+                                        subscribeAndPublish(getStartedChannel);
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (!getStartedChannel) {
+                                Max.Channel.create({
+                                    name: 'GetStarted',
+                                    summary: 'my public summary'
+                                }).success(function(mmxPublicChannel) {
+                                    subscribeAndPublish(mmxPublicChannel);
+                                });
+                            }
+                        });
+
+                        function subscribeAndPublish(mmxChannel) {
+                            mmxChannel.subscribe().success(function(res) {
+                                $('#channelsubscribe-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
+
+                                Max.Channel.findChannelsBySubscribers([Max.getCurrentUser()]).success(function(channels) {
+                                    $('#findChannelsBySubscribers-info').append('<pre>' + JSON.stringify(channels, false, 4) + '</pre>');
+
+                                    Max.Channel.getAllSubscriptions().success(function(channels) {
+                                        $('#mysubscriptions-info').append('<pre>' + JSON.stringify(channels, false, 4) + '</pre>');
+
+                                        var channelMsg = new Max.Message({
+                                            message: 'message to channel'
+                                        });
+                                        mmxChannel.publish(channelMsg).success(function (res) {
+                                            $('#channelpublish-info').append('<pre>' + JSON.stringify(res, false, 4) + '</pre>');
+
+                                            mmxChannel.getMessages(new Date(), null, 2, 0, false).success(function(messages, total) {
+                                                $('#getMessages-info').append('number of messages: ' + total +
+                                                    '<pre>' + JSON.stringify(messages, false, 4) + '</pre>');
+
+                                                mmxChannel.unsubscribe().success(function(res) {
+                                                    $('#channelunsubscribe-info').append('<pre>'+JSON.stringify(res, false, 4)+'</pre>');
+                                                });
+                                            });
+
+                                        });
+                                    });
+
+                                });
+                            });
+                        }
+
+                    });
+
+
+                });
+
+            });
+
+        });
+
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Get Started Demo</title>
+</head>
+<body>
+
+<label>Your Message</label>
+<input id="my-message" type="text" placeholder="type a message" />
+<button id="send-button" type="button">Send Message</button>
+
+<pre id="messages" style="padding:20px"></pre>
+
+<script src="http://cdn.magnet.com/downloads/magnet-max-sdk-2.6.0.min.js"></script>
+
+<script type="text/javascript">
+    var getStartedChannel;
+
+    // 1. initialize the SDK by setting client information
+    Max.init({
+        clientId: '<your client id>',
+        clientSecret: '<your client secret>'
+    });
+
+    // 2. application logic should execute after onReady()
+    Max.onReady(function() {
+
+        var user = {
+            userName: 'jack.doe',
+            password: 'magnet'
+        };
+
+        Max.User.logout().always(function() {
+
+            // 3. register user by supplying credentials
+            Max.User.register(user).always(function() {
+
+                // 4. login with your newly registered user
+                Max.User.login(user.userName, user.password).success(function() {
+
+                    // 5. start listening for messages
+                    Max.start();
+
+                    // 6. create a channel
+                    Max.Channel.create({
+                        name: 'GetStarted',
+                        summary: 'my get started tutorial channel'
+                    }).always(function() {
+
+                        // 7. add a listener to listen for incoming messages
+                        var listener = new Max.MessageListener('myListener', function(mmxMessage) {
+                            messageContainer.innerHTML = messageContainer.innerHTML + mmxMessage.messageContent.message + '\n';
+                        });
+                        Max.registerListener(listener);
+
+                        // 8. find a public channel with the name 'Get Started'
+                        Max.Channel.findPublicChannels('GetStarted').success(function(channels) {
+                            if (!channels.length) return;
+
+                            // 9. subscribe to the channel
+                            getStartedChannel = channels[0];
+                            getStartedChannel.subscribe().success(function() {
+
+                                sendMessage('hello world!')
+
+                            });
+
+                        });
+
+                    });
+
+                }).error(function(err) {
+                    alert(JSON.stringify(err));
+                });
+
+            });
+
+        });
+    });
+
+    var messageContainer = document.getElementById('messages');
+    var messageInput = document.getElementById('my-message');
+
+    function sendMessage(msg) {
+        if (!getStartedChannel) return;
+
+        // 10. publish a message to the channel
+        var message = new Max.Message({
+            message: msg
+        });
+        getStartedChannel.publish(message).success(function() {
+            alert('sent message: ' + msg);
+        });
+    }
+
+    document.getElementById('send-button').onclick = function() {
+        sendMessage(messageInput.value);
+    };
+
+</script>
+
+</body>
+</html>
