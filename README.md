@@ -43,6 +43,8 @@ A basic web app created to showcase Magnet Message JS SDK APIs.
 A full-featured chat app created with Magnet Message on top of the of [AngularJS](https://angularjs.org/). Demonstrates
 how to create public and private channels, and invite/chat with members of the channels.
 
+![Magnet Messenger - Desktop](/images/messenger-desktop.png)
+
 ### Prerequisites
 
 1. Install [Node.js](https://nodejs.org/).
@@ -72,10 +74,12 @@ how to create public and private channels, and invite/chat with members of the c
 other user. You will now be able to communicate between the users through a chat screen.
 
 
-## [Magnet Messenger - Ionic](messenger)
+## [Magnet Messenger - Mobile Web](messenger)
 
 A basic chat app created with Magnet Message on top of the [Ionic](http://ionicframework.com/) framework. Demonstrates
 how to create public and private channels, and invite/chat with members of the channels.
+
+![Magnet Messenger - Mobile Web](/images/messenger.png)
 
 ### Prerequisites
 
