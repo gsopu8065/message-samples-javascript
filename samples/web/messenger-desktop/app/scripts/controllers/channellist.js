@@ -29,10 +29,12 @@ angular.module('messengerApp')
             isExistingChannel = true;
             $scope.$apply(function() {
               $scope.data.channelSummaries[i].latestMsgTime = mmxMessage.timestamp;
+              $scope.data.channelSummaries[i].lastPublishedTime = Max.Utils.dateToISO8601(mmxMessage.timestamp);
               $scope.data.channelSummaries[i].latestMessage = getLatestMessage(mmxMessage);
               if (!navService.currentChannel || mmxMessage.channel.name != navService.currentChannel.name) {
                 $scope.data.channelSummaries[i].isUnread = true;
               }
+              sortChannelSummary();
             });
           }
         }
@@ -64,7 +66,7 @@ angular.module('messengerApp')
           for(var i = 0; i < channelSummaries.length; ++i) {
             var subscriberNames = [];
             var chatPhotoUser = null;
-
+            console.log(channelSummaries[i].lastPublishedTime);
             for (var j = 0; j < channelSummaries[i].subscribers.length; ++j) {
               if (channelSummaries[i].subscribers[j].userId != Max.getCurrentUser().userId) {
                 subscriberNames.push(channelSummaries[i].subscribers[j].userName);
@@ -96,8 +98,10 @@ angular.module('messengerApp')
 
             channelService.channelSummaries.push(channelSummaries[i]);
           }
+
           $scope.$apply(function() {
             $scope.data.channelSummaries = channelSummaries;
+            sortChannelSummary();
           });
         });
       });
@@ -180,6 +184,13 @@ angular.module('messengerApp')
         }
       }
     };
+
+    function sortChannelSummary() {
+      $scope.data.channelSummaries.sort(function(a, b) {
+        return (a.lastPublishedTime > b.lastPublishedTime)
+          ? 1 : ((b.lastPublishedTime > a.lastPublishedTime) ? -1 : 0);
+      });
+    }
 
     $scope.refreshChannelList();
 

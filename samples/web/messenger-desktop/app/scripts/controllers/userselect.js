@@ -20,7 +20,8 @@ angular.module('messengerApp')
     selectCount: 0,
     channelState: items,
     search: '',
-    searchError: null
+    searchError: null,
+    selectedUsers: {}
   };
 
   if (items === 'existing') {
@@ -79,28 +80,27 @@ angular.module('messengerApp')
         });
       } else {
         $scope.$apply(function () {
-        $scope.data.users = [];
+          $scope.data.users = [];
           $scope.data.users = users;
         });
       }
     });
   };
 
-  $scope.toggleSelection = function(user) {
-    user.uiActive = user.uiActive ? false : true;
-    if (user.uiActive) {
-      $scope.data.selectCount += 1;
-    } else {
-      $scope.data.selectCount -= 1;
-    }
+  $scope.addUser = function(user) {
+    $scope.data.selectCount += 1;
+    $scope.data.selectedUsers[user.userId] = user;
+  };
+
+  $scope.removeUser = function(user) {
+    $scope.data.selectCount -= 1;
+    delete $scope.data.selectedUsers[user.userId];
   };
 
   $scope.startConversation = function() {
     var users = [];
-    for (var key in $scope.data.users) {
-      if ($scope.data.users[key].uiActive) {
-        users.push($scope.data.users[key]);
-      }
+    for (var key in $scope.data.selectedUsers) {
+      users.push($scope.data.selectedUsers[key]);
     }
 
     if (!users.length) return alert('no users selected');
@@ -175,6 +175,17 @@ angular.module('messengerApp')
 
   $scope.cancel = function () {
     $uibModalInstance.dismiss('cancel');
+  };
+
+  $scope.safeApply = function(fn) {
+    var phase = this.$root.$$phase;
+    if(phase == '$apply' || phase == '$digest') {
+      if(fn && (typeof(fn) === 'function')) {
+        fn();
+      }
+    } else {
+      this.$apply(fn);
+    }
   };
 
 });
