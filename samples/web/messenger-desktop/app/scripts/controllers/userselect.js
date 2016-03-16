@@ -69,6 +69,7 @@ angular.module('messengerApp')
           var uids = getUIDs(subscribers);
 
           $scope.$apply(function() {
+            $scope.data.users = [];
             for (var i=0;i<users.length;++i) {
               if (uids.indexOf(users[i].userId) == -1) {
                 $scope.data.users.push(users[i]);
@@ -78,6 +79,7 @@ angular.module('messengerApp')
         });
       } else {
         $scope.$apply(function () {
+        $scope.data.users = [];
           $scope.data.users = users;
         });
       }
