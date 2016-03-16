@@ -1,6 +1,6 @@
 {
-    "name": "magnet-js-sdk-web-sample-proxy",
-    "version": "0.0.1",
+    "name": "message-samples-javascript",
+    "version": "2.6.0-SNAPSHOT",
     "private": true,
     "dependencies": {
         "express": "3.4.0"
