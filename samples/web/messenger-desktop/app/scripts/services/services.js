@@ -105,7 +105,6 @@ angular.module('messengerApp')
       if (dir == 'up' && raw.scrollTop < 30) {
         scope.$apply(attr.whenScrolled);
       }
-      console.log(raw.scrollTop, (raw.scrollHeight - raw.clientHeight - 30), raw.scrollHeight, raw.clientHeight);
       if (dir == 'down' && raw.scrollTop > (raw.scrollHeight - raw.clientHeight - 30)) {
         scope.$apply(attr.whenScrolled);
       }
