@@ -13,6 +13,8 @@ angular.module('messengerApp')
   if (!authService.isAuthenticated) return $state.go('login');
 
   var channel;
+  var fetchingActive = false;
+  var recordOffset = 0;
   $scope.authService = authService;
 
   $scope.data = {
@@ -21,7 +23,8 @@ angular.module('messengerApp')
     channelState: items,
     search: '',
     searchError: null,
-    selectedUsers: {}
+    selectedUsers: {},
+    fetchEndReached: false
   };
 
   if (items === 'existing') {
@@ -32,37 +35,25 @@ angular.module('messengerApp')
     });
   }
 
-  // retrieve a list of users
-  Max.User.search({userName: '*'}, 20, 0).success(function (users) {
-    if (channel) {
-      // get all the users subscribed to the channel
-      channel.getAllSubscribers(100).success(function(subscribers) {
-        var uids = getUIDs(subscribers);
+  $scope.searchUsers = function(offset, cb) {
 
-        $scope.$apply(function() {
-          for (var i=0;i<users.length;++i) {
-            if (uids.indexOf(users[i].userId) == -1) {
-              $scope.data.users.push(users[i]);
-            }
-          }
-        });
-      });
-    } else {
-      $scope.$apply(function () {
-        $scope.data.users = users;
-      });
+    if (!offset) {
+      $scope.data.users = [];
+      $scope.data.fetchEndReached = false;
+      recordOffset = 0;
+      offset = 0;
     }
-  });
-
-  $scope.searchUsers = function() {
-    $scope.data.users = [];
-    $scope.data.searchError = $scope.data.search.trim().length < 2;
-    if ($scope.data.search.trim().length < 2) return;
 
     // search for users based on username
-    Max.User.search({userName: '*' + $scope.data.search + '*'}, 10, 0).success(function (users) {
+    Max.User.search({userName: '*' + $scope.data.search + '*'}, 10, offset).success(function (users) {
 
-      if (!users.length) return;
+      if (!users.length) {
+        // no more users, set flag
+        $scope.safeApply(function() {
+          $scope.data.fetchEndReached = true;
+        });
+        return;
+      }
 
       if (channel) {
         // get all the users subscribed to the channel
@@ -70,18 +61,18 @@ angular.module('messengerApp')
           var uids = getUIDs(subscribers);
 
           $scope.$apply(function() {
-            $scope.data.users = [];
             for (var i=0;i<users.length;++i) {
               if (uids.indexOf(users[i].userId) == -1) {
                 $scope.data.users.push(users[i]);
               }
             }
+            (cb || angular.noop)();
           });
         });
       } else {
         $scope.$apply(function () {
-          $scope.data.users = [];
-          $scope.data.users = users;
+          $scope.data.users = $scope.data.users.concat(users);
+          (cb || angular.noop)();
         });
       }
     });
@@ -173,6 +164,26 @@ angular.module('messengerApp')
     return uids;
   }
 
+  $scope.onUserScroll = function() {
+    // if there are no more records to fetch, stop fetching upon scroll
+    if ($scope.data.fetchEndReached) return;
+    // don't check for records if records are currently being fetched
+    if (fetchingActive) return;
+
+    // infinite scroll of messages
+    fetchingActive = true;
+
+    var lastScrollHeight = document.getElementById('user-selection-list').scrollHeight;
+    recordOffset += 10;
+
+    $scope.searchUsers(recordOffset, function() {
+      var viewScroll = document.getElementById('user-selection-list');
+      var currentScrollHeight = document.getElementById('user-selection-list').scrollHeight;
+      viewScroll.scrollTop = currentScrollHeight - lastScrollHeight;
+      fetchingActive = false;
+    });
+  };
+
   $scope.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };
@@ -187,5 +198,7 @@ angular.module('messengerApp')
       this.$apply(fn);
     }
   };
+
+  $scope.searchUsers();
 
 });

@@ -153,13 +153,16 @@ label.action-icon-label input[type="file"]{position:fixed;top:-1000px}
 /* modals */
 .user-list-container{overflow-y:scroll;max-height:300px}
 .user-list-container img{width:30px;margin-right:6px}
-.user-list-container .list-group-item{height:40px;padding:4px}
+.user-list-container .list-group{margin-bottom:0}
+.user-list-container .list-group-item{height:40px;padding:4px;border-radius:0}
+.user-list-container .list-group-item .overflowable{width:100%}
 .user-list-container .list-group-item div{margin:5px}
-.user-list-container .alert{padding:5px 35px 5px 5px;margin:0 0 4px 4px}
-.user-list-container > .row-fluid .col-sm-6{padding:0 15px 0 0}
-.user-list-container > .row-fluid .col-sm-6.odd{padding:0}
+.user-list-container .alert{padding:5px 35px 5px 5px}
+.user-list-container > .row-fluid{margin-top:8px}
+.user-list-container > .row-fluid .col-sm-6{padding:0;overflow-y:auto;max-height:200px}
+.user-list-container .alert{background:#eee}
 .user-list-container .alert div{width:90%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-
+#member-list{max-height:200px}
 
 /* loading */
 .loading-screen{z-index:10000;text-align:center;opacity: 0.9;}

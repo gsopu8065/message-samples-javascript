@@ -221,8 +221,7 @@ angular.module('messengerApp')
       fetchMessages(function(messageLength) {
         var viewScroll = document.getElementById('channel-messages');
         var currentScrollHeight = document.getElementById('channel-messages').scrollHeight;
-        var lastPosition = currentScrollHeight - lastScrollHeight;
-        viewScroll.scrollTop = lastPosition;
+        viewScroll.scrollTop = currentScrollHeight - lastScrollHeight;
         fetchingMessagesActive = false;
       });
     };

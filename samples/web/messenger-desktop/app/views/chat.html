@@ -6,7 +6,7 @@
       </div>
   </div>
 
-  <div has-bouncing="true" class="scroll-content has-header has-footer" id="channel-messages" when-scrolled="onMessageScroll()">
+  <div has-bouncing="true" class="scroll-content has-header has-footer" id="channel-messages" direction="up" when-scrolled="onMessageScroll()">
 
       <div ng-if="data.messages.length === 0" class="end-of-messages-alert">NO MESSAGES</div>
 

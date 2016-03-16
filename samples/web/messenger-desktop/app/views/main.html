@@ -150,29 +150,33 @@
   </div>
   <div class="modal-body user-list-container">
 
-    <b>Selected Users</b>
-    <div class="row-fluid">
-       <div class="col-sm-6" ng-class="{'odd' : $index % 2 === 1}" ng-repeat="user in data.selectedUsers">
-         <uib-alert type="info" close="removeUser(user)">
-           {{user.firstName}} {{user.lastName}} ({{user.userName}})
-         </uib-alert>
-       </div>
-    </div>
-
     <input type="text" ng-model="data.search" ng-change="searchUsers(value)" name="search" class="form-control" placeholder="Search for users" />
 
-    <p class="search-error" ng-if="data.searchError">please type at least 2 characters</p>
+    <div class="row-fluid">
+      <div class="col-sm-6" direction="down" when-scrolled="onUserScroll(searchUsers)">
 
-    <div class="list-group">
-      <a ng-repeat="user in data.users"
-        ng-class="{'active':user.uiActive}"
-        ng-click="addUser(user)"
-        ng-if="user.userName != authService.currentUser.userName && !data.selectedUsers[user.userId]"
-          class="list-group-item">
-        <div>
-          {{user.firstName}} {{user.lastName}} ({{user.userName}})
+        <div id="user-selection-list" class="list-group">
+          <a ng-repeat="user in data.users"
+            ng-class="{'active':user.uiActive}"
+            ng-click="addUser(user)"
+            ng-if="user.userName != authService.currentUser.userName && !data.selectedUsers[user.userId]"
+              class="list-group-item">
+            <div class="overflowable">
+              {{user.firstName}} {{user.lastName}} ({{user.userName}})
+            </div>
+          </a>
         </div>
-      </a>
+
+      </div>
+      <div class="col-sm-6">
+
+        <div class="list-group">
+          <uib-alert type="info" class="list-group-item" close="removeUser(user)" ng-repeat="user in data.selectedUsers">
+           {{user.firstName}} {{user.lastName}} ({{user.userName}})
+         </uib-alert>
+        </div>
+
+      </div>
     </div>
 
   </div>
@@ -189,11 +193,11 @@
     <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
     <h4 class="modal-title">Members</h4>
   </div>
-  <div class="modal-body user-list-container">
+  <div class="modal-body user-list-container" direction="down" when-scrolled="onUserScroll(fetchUsers)">
 
     <p ng-if="data.users.length === 1">Nobody else is in this chat.</p>
 
-    <div class="list-group">
+    <div id="member-list" class="list-group">
       <a ng-repeat="user in data.users"
         ng-if="user.userName != authService.currentUser.userName"
           class="list-group-item">

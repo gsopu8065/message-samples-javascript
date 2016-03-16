@@ -66,7 +66,7 @@ angular.module('messengerApp')
           for(var i = 0; i < channelSummaries.length; ++i) {
             var subscriberNames = [];
             var chatPhotoUser = null;
-            console.log(channelSummaries[i].lastPublishedTime);
+
             for (var j = 0; j < channelSummaries[i].subscribers.length; ++j) {
               if (channelSummaries[i].subscribers[j].userId != Max.getCurrentUser().userId) {
                 subscriberNames.push(channelSummaries[i].subscribers[j].userName);

@@ -100,8 +100,14 @@ angular.module('messengerApp')
     var raw = elm[0];
 
     elm.bind('scroll', function() {
-      if (raw.scrollTop < 30) {
-          scope.$apply(attr.whenScrolled);
+      var dir = raw.getAttribute('direction');
+
+      if (dir == 'up' && raw.scrollTop < 30) {
+        scope.$apply(attr.whenScrolled);
+      }
+      console.log(raw.scrollTop, (raw.scrollHeight - raw.clientHeight - 30), raw.scrollHeight, raw.clientHeight);
+      if (dir == 'down' && raw.scrollTop > (raw.scrollHeight - raw.clientHeight - 30)) {
+        scope.$apply(attr.whenScrolled);
       }
     });
   };
