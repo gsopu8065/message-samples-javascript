@@ -61,17 +61,9 @@ angular.module('messengerApp')
       userId: $stateParams.userId == '*' ? null : $stateParams.userId
     });
 
-    // get a list of users subscribed to the current channel
-    channel.getAllSubscribers(100).success(function(subscribers) {
-      for (i=0;i<subscribers.length;++i) {
-        subscribers[i].initials = authService.getInitials(subscribers[i]);
-        $scope.data.subscribers[subscribers[i].userId] = subscribers[i];
-      }
-
-      // fetch initial set of messages. messages received afterwards will be added in real-time with the listener.
-      fetchMessages(function() {
-          scrollBottom();
-      });
+    // fetch initial set of messages. messages received afterwards will be added in real-time with the listener.
+    fetchMessages(function() {
+        scrollBottom();
     });
 
     // create a listener to listen for messages and populate the chat UI. make sure to register the listener!
@@ -248,20 +240,36 @@ angular.module('messengerApp')
           return;
         }
 
+        var uids = [];
+
         for (i=0;i<messages.length;++i) {
-          messages[i].sender.initials = authService.getInitials(messages[i].sender);
+          uids.push(messages[i].sender.userId);
           if (messages[i].messageContent.format == 'code') {
             messages[i].messageContent.message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
           }
-          setUserUsername(messages[i]);
         }
 
-        $scope.safeApply(function() {
-          // append messages to message history
-          $scope.data.messages = messages.concat($scope.data.messages);
-          setTimeout(function() {
-            (cb || angular.noop)(messages.length);
-          }, 20);
+        // get users given user ids who sent messages within the result set
+        Max.User.getUsersByUserIds(uids).success(function(users) {
+
+          for (i=0;i<users.length;++i) {
+            users[i].initials = authService.getInitials(users[i]);
+            $scope.data.subscribers[users[i].userId] = users[i];
+          }
+
+          for (i=0;i<messages.length;++i) {
+            messages[i].sender.initials = authService.getInitials(messages[i].sender);
+            setUserUsername(messages[i]);
+          }
+
+          $scope.safeApply(function() {
+            // append messages to message history
+            $scope.data.messages = messages.concat($scope.data.messages);
+            setTimeout(function() {
+              (cb || angular.noop)(messages.length);
+            }, 20);
+          });
+
         });
 
       });
@@ -300,8 +308,8 @@ angular.module('messengerApp')
 
     function setUserUsername(message) {
       if (!message.sender.userName && $scope.data.subscribers[message.sender.userId]) {
-        message.sender.userName = $scope.data.subscribers[message.sender.userId].firstName
-          + ' ' + $scope.data.subscribers[message.sender.userId].lastName;
+        message.sender.userName = ($scope.data.subscribers[message.sender.userId].firstName || '')
+          + ' ' + ($scope.data.subscribers[message.sender.userId].lastName || '');
       }
     }
 

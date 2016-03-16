@@ -16,6 +16,7 @@ body,html{height:100%;background:#eee}
 .overflowable-no-dots{width:80%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .action-icon-label{padding:0;display:inline-block;cursor:pointer;font-weight:normal;margin-bottom:0}
 .action-icon-label i{font-size:20px;margin:0 0 0 3px;width:37px;text-align:center}
+.search-error{padding:7px;color:#8B6C6B}
 
 .icon-initials{display:inline-block;color:#fff;text-align:center;position:relative}
 .icon-initials span{font-size:17px;z-index:10;position:absolute;top:13px;letter-spacing:2px;font-weight:normal;left:1px;width:100%;display:block;color:#fff !important}

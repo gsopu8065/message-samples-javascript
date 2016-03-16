@@ -33,7 +33,9 @@
       </div>
       <div class="modal-body user-list-container">
 
-        <p ng-if="data.users.length === 1">No users to select!</p>
+        <input type="text" ng-model="data.search" ng-change="searchUsers(value)" name="search" class="form-control" placeholder="Search for users" />
+
+        <p class="search-error" ng-if="data.searchError">please type at least 2 characters</p>
 
         <div class="list-group">
           <a ng-repeat="user in data.users"

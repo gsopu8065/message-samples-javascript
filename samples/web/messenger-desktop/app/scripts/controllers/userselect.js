@@ -18,7 +18,9 @@ angular.module('messengerApp')
   $scope.data = {
     users: [],
     selectCount: 0,
-    channelState: items
+    channelState: items,
+    search: '',
+    searchError: null
   };
 
   if (items === 'existing') {
@@ -30,7 +32,7 @@ angular.module('messengerApp')
   }
 
   // retrieve a list of users
-  Max.User.search({userName: '*'}, 100, 0).success(function (users) {
+  Max.User.search({userName: '*'}, 20, 0).success(function (users) {
     if (channel) {
       // get all the users subscribed to the channel
       channel.getAllSubscribers(100).success(function(subscribers) {
@@ -50,6 +52,37 @@ angular.module('messengerApp')
       });
     }
   });
+
+  $scope.searchUsers = function() {
+    $scope.data.users = [];
+    $scope.data.searchError = $scope.data.search.trim().length < 2;
+    if ($scope.data.search.trim().length < 2) return;
+
+    // search for users based on username
+    Max.User.search({userName: '*' + $scope.data.search + '*'}, 10, 0).success(function (users) {
+
+      if (!users.length) return;
+
+      if (channel) {
+        // get all the users subscribed to the channel
+        channel.getAllSubscribers(100).success(function(subscribers) {
+          var uids = getUIDs(subscribers);
+
+          $scope.$apply(function() {
+            for (var i=0;i<users.length;++i) {
+              if (uids.indexOf(users[i].userId) == -1) {
+                $scope.data.users.push(users[i]);
+              }
+            }
+          });
+        });
+      } else {
+        $scope.$apply(function () {
+          $scope.data.users = users;
+        });
+      }
+    });
+  };
 
   $scope.toggleSelection = function(user) {
     user.uiActive = user.uiActive ? false : true;
