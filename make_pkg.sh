@@ -20,7 +20,7 @@ cd target
 # zip the sample apps
 zip -r magnet-getstarted-js.zip getstarted
 zip -r magnet-kitchensink-js.zip kitchen-sink
-cd messenger/www
+cd ../messenger/www
 zip -r ../../target/magnet-messenger-mobileweb-js.zip .
 
 # build and zip the messenger desktop app
