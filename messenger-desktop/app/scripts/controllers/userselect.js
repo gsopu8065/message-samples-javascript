@@ -15,6 +15,8 @@ angular.module('messengerApp')
   var channel;
   var fetchingActive = false;
   var recordOffset = 0;
+  var fetchTimeout = null;
+  var query;
   $scope.authService = authService;
 
   $scope.data = {
@@ -44,38 +46,58 @@ angular.module('messengerApp')
       offset = 0;
     }
 
-    // search for users based on username
-    Max.User.search({userName: '*' + $scope.data.search + '*'}, 10, offset).success(function (users) {
+    clearTimeout(fetchTimeout);
 
-      if (!users.length) {
-        // no more users, set flag
-        $scope.safeApply(function() {
-          $scope.data.fetchEndReached = true;
-        });
-        return;
+    fetchTimeout = setTimeout(function() {
+
+      if (!$scope.data.search.trim().length) {
+        query = {firstName: '*'};
+      } else {
+        var nameAry = $scope.data.search.split(' ');
+        query = '';
+        if (nameAry[1]) {
+          query += 'firstName:*' + nameAry[0] + '*' + '%20AND%20' + 'lastName:*' + nameAry[1] + '*';
+        } else if (nameAry[0]) {
+          query += 'firstName:*' + nameAry[0] + '*' + '%20OR%20' + 'lastName:*' + nameAry[0] + '*';
+        }
       }
 
-      if (channel) {
-        // get all the users subscribed to the channel
-        channel.getAllSubscribers(100).success(function(subscribers) {
-          var uids = getUIDs(subscribers);
+      // search for users based on first and last name using advanced search query
+      Max.User.search(query, 10, offset).success(function (users) {
 
-          $scope.$apply(function() {
-            for (var i=0;i<users.length;++i) {
-              if (uids.indexOf(users[i].userId) == -1) {
-                $scope.data.users.push(users[i]);
+        if (!users.length) {
+          // no more users, set flag
+          $scope.safeApply(function() {
+            $scope.data.fetchEndReached = true;
+            fetchingActive = false;
+          });
+          return;
+        }
+
+        if (channel) {
+          // get all the users subscribed to the channel
+          channel.getAllSubscribers(100).success(function(subscribers) {
+            var uids = getUIDs(subscribers);
+
+            $scope.$apply(function() {
+              for (var i=0;i<users.length;++i) {
+                if (uids.indexOf(users[i].userId) == -1) {
+                  $scope.data.users.push(users[i]);
+                }
               }
-            }
+              (cb || angular.noop)();
+            });
+          });
+        } else {
+          $scope.$apply(function () {
+            $scope.data.users = $scope.data.users.concat(users);
             (cb || angular.noop)();
           });
-        });
-      } else {
-        $scope.$apply(function () {
-          $scope.data.users = $scope.data.users.concat(users);
-          (cb || angular.noop)();
-        });
-      }
-    });
+        }
+      });
+
+    }, offset === 0 ? 500 : 0);
+
   };
 
   $scope.addUser = function(user) {
@@ -166,7 +188,8 @@ angular.module('messengerApp')
 
   $scope.onUserScroll = function() {
     // if there are no more records to fetch, stop fetching upon scroll
-    if ($scope.data.fetchEndReached) return;
+    if ($scope.data.fetchEndReached || !$scope.data.users.length) return;
+
     // don't check for records if records are currently being fetched
     if (fetchingActive) return;
 
