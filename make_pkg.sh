@@ -6,7 +6,7 @@ SCRIPT_DIR="$( cd "$( dirname "$0" )" && pwd )"
 cd $SCRIPT_DIR
 
 if [ -z ${1+x} ] || [ -z ${2+x} ]; then
-	echo "Usage: $0 app_name app_version, e.g. $0 magnet-max-sdk 1.0.0"
+	echo "Usage: $0 app_name app_version, e.g. $0 message-samples-javascript 1.0.0"
 	exit 1
 fi
 
@@ -15,11 +15,10 @@ APP_VERSION=$2
 BUILD_NUMBER=$3
 
 mkdir target
-cd target
 
 # zip the sample apps
-zip -r magnet-getstarted-js.zip getstarted
-zip -r magnet-kitchensink-js.zip kitchen-sink
+zip -r target/magnet-getstarted-js.zip getstarted
+zip -r target/magnet-kitchensink-js.zip kitchen-sink
 cd messenger/www
 zip -r ../../target/magnet-messenger-mobileweb-js.zip .
 
