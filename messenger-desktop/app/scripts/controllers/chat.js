@@ -73,8 +73,6 @@ angular.module('messengerApp')
 
       Audio.onReceive();
 
-      mmxMessage.sender.initials = authService.getInitials(mmxMessage.sender);
-
       if (mmxMessage.messageContent.format == 'code') {
         mmxMessage.messageContent.message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
       }
@@ -84,17 +82,18 @@ angular.module('messengerApp')
         Max.User.search({ userId: mmxMessage.sender.userId }, 1, 0).success(function (users) {
           if (users.length) {
             var user = users[0];
+            setUserUsername(mmxMessage);
             $scope.safeApply(function() {
+              user.initials = authService.getInitials(user);
+              user.displayName = authService.getDisplayName(user);
               $scope.data.subscribers[user.userId] = user;
-              setUserUsername(mmxMessage);
-
               $scope.data.messages.push(mmxMessage);
             });
           }
         });
       } else {
+        setUserUsername(mmxMessage);
         $scope.safeApply(function() {
-          setUserUsername(mmxMessage);
           $scope.data.messages.push(mmxMessage);
         });
       }
@@ -246,18 +245,20 @@ angular.module('messengerApp')
           if (messages[i].messageContent.format == 'code') {
             messages[i].messageContent.message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
           }
+          if (messageOffset > 0) messages[i].scrolled = true;
         }
+
 
         // get users given user ids who sent messages within the result set
         Max.User.getUsersByUserIds(uids).success(function(users) {
 
           for (i=0;i<users.length;++i) {
             users[i].initials = authService.getInitials(users[i]);
+            users[i].displayName = authService.getDisplayName(users[i]);
             $scope.data.subscribers[users[i].userId] = users[i];
           }
 
           for (i=0;i<messages.length;++i) {
-            messages[i].sender.initials = authService.getInitials(messages[i].sender);
             setUserUsername(messages[i]);
           }
 
@@ -306,10 +307,10 @@ angular.module('messengerApp')
     }
 
     function setUserUsername(message) {
-      if (!message.sender.userName && $scope.data.subscribers[message.sender.userId]) {
-        message.sender.userName = ($scope.data.subscribers[message.sender.userId].firstName || '')
-          + ' ' + ($scope.data.subscribers[message.sender.userId].lastName || '');
+      if (!message.sender.displayName && $scope.data.subscribers[message.sender.userId]) {
+        message.sender.displayName = authService.getDisplayName($scope.data.subscribers[message.sender.userId]);
       }
+      message.sender.initials = authService.getInitials(message.sender);
     }
 
     $scope.gotoConversationDetails = function() {

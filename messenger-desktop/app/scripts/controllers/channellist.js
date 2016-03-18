@@ -16,6 +16,7 @@ angular.module('messengerApp')
     $scope.data = {};
     $scope.data.developerWeekChannel = null;
     $scope.data.channelSummaries = channelService.channelSummaries;
+    $scope.data.unreads = {};
     navService.list = $scope;
 
     // register a listener to listen for messages and update the channel summaries
@@ -32,7 +33,7 @@ angular.module('messengerApp')
               $scope.data.channelSummaries[i].lastPublishedTime = Max.Utils.dateToISO8601(mmxMessage.timestamp);
               $scope.data.channelSummaries[i].latestMessage = getLatestMessage(mmxMessage);
               if (!navService.currentChannel || mmxMessage.channel.name != navService.currentChannel.name) {
-                $scope.data.channelSummaries[i].isUnread = true;
+                $scope.data.unreads[mmxMessage.channel.name] = true;
               }
               sortChannelSummary();
             });
@@ -54,7 +55,7 @@ angular.module('messengerApp')
         var supportedChannels = [];
 
         for (var i=0;i<channels.length;++i) {
-          if (channels[i].name != 'askMagnet') {
+          if (channels[i].name != 'askMagnet' && !channels[i].isPublic) {
             supportedChannels.push(channels[i]);
           }
         }
@@ -63,18 +64,19 @@ angular.module('messengerApp')
 
         // retrieve detailed channel information, including subscribers and past messages
         Max.Channel.getChannelSummary(supportedChannels, 5, 1).success(function(channelSummaries) {
+
           for(var i = 0; i < channelSummaries.length; ++i) {
             var subscriberNames = [];
             var chatPhotoUser = null;
 
             for (var j = 0; j < channelSummaries[i].subscribers.length; ++j) {
               if (channelSummaries[i].subscribers[j].userId != Max.getCurrentUser().userId) {
-                subscriberNames.push(channelSummaries[i].subscribers[j].userName);
+                subscriberNames.push(authService.getDisplayName(channelSummaries[i].subscribers[j]));
                 chatPhotoUser = channelSummaries[i].subscribers[j];
               }
             }
             channelSummaries[i].subscriberNames = subscriberNames.length === 0
-              ? Max.getCurrentUser().userName : subscriberNames.join(', ');
+              ? authService.getDisplayName(Max.getCurrentUser()) : subscriberNames.join(', ');
             channelSummaries[i].ownerId = channelSummaries[i].owner.userId;
 
             if (channelSummaries[i].messages
@@ -82,10 +84,14 @@ angular.module('messengerApp')
               && channelSummaries[i].messages[0].messageContent) {
               channelSummaries[i].latestMessage = getLatestMessage(channelSummaries[i].messages[0]);
               channelSummaries[i].latestMsgTime = channelSummaries[i].messages[0].timestamp;
-              if (newChannelName && channelSummaries[i].channel.name == newChannelName
-                && (navService.currentChannel && newChannelName != navService.currentChannel.name)) {
-                channelSummaries[i].isUnread = true;
-              }
+            }
+
+            if (newChannelName
+              && channelSummaries[i].channel.name == newChannelName
+                && (!navService.currentChannel
+                  || (navService.currentChannel
+                  && newChannelName != navService.currentChannel.name))) {
+              $scope.data.unreads[channelSummaries[i].channel.name] = true;
             }
 
             if (!chatPhotoUser) {
@@ -173,7 +179,7 @@ angular.module('messengerApp')
           $scope.data.channelSummaries[i].subscribers = $scope.data.channelSummaries[i].subscribers.concat(newUsers);
           for (var j = 0; j < $scope.data.channelSummaries[i].subscribers.length; ++j) {
             if ($scope.data.channelSummaries[i].subscribers[j].userId != Max.getCurrentUser().userId) {
-              subscriberNames.push($scope.data.channelSummaries[i].subscribers[j].userName);
+              subscriberNames.push(authService.getDisplayName($scope.data.channelSummaries[i].subscribers[j]));
             }
           }
 
@@ -183,6 +189,10 @@ angular.module('messengerApp')
           break;
         }
       }
+    };
+
+    $scope.clearUnread = function(channelName) {
+      delete $scope.data.unreads[channelName];
     };
 
     function sortChannelSummary() {

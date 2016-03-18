@@ -65,14 +65,14 @@
                      ng-if="message.messageContent.type == 'location'"
                      ng-href="https://www.google.com/maps?q={{message.messageContent.latitude}},{{message.messageContent.longitude}}&ll={{message.messageContent.latitude}},{{message.messageContent.longitude}}">
                     <img class="map-message" src="http://maps.googleapis.com/maps/api/staticmap?center={{message.messageContent.latitude}},{{message.messageContent.longitude}}&zoom=14&size=400x300&sensor=false&markers=color:red|{{message.messageContent.latitude}},{{message.messageContent.longitude}}"
-                         imageonload />
+                         imageonload="{{message.scrolled}}" />
                   </a>
 
                   <div ng-repeat="attachment in message.attachments">
                     <a target="_blank" href="{{attachment.downloadUrl}}"
                        ng-if="message.messageContent.type == 'photo'"
                        >
-                      <img class="image-message" ng-src="{{attachment.downloadUrl}}" imageonload />
+                      <img class="image-message" ng-src="{{attachment.downloadUrl}}" imageonload="{{message.scrolled}}" />
                     </a>
                     <a target="_blank"
                        class="download-message"
@@ -84,7 +84,7 @@
 
                   <div class="message-detail">
                       <span ng-click="viewProfile(message)"
-                          class="bold message-user">{{message.sender.userName}}</span>,
+                          class="bold message-user">{{data.subscribers[message.sender.userId].displayName || message.sender.displayName || message.sender.userName}}</span>,
                       <span class="message-timestamp" am-time-ago="message.timestamp"></span>
                   </div>
 
@@ -127,13 +127,13 @@
                      ng-if="message.messageContent.type == 'location'"
                      ng-href="https://www.google.com/maps?q={{message.messageContent.latitude}},{{message.messageContent.longitude}}&ll={{message.messageContent.latitude}},{{message.messageContent.longitude}}">
                     <img class="map-message" src="http://maps.googleapis.com/maps/api/staticmap?center={{message.messageContent.latitude}},{{message.messageContent.longitude}}&zoom=14&size=400x300&sensor=false&markers=color:red|{{message.messageContent.latitude}},{{message.messageContent.longitude}}"
-                          imageonload />
+                       imageonload="{{message.scrolled}}" />
                   </a>
 
                   <div ng-repeat="attachment in message.attachments">
                     <a target="_blank" href="{{attachment.downloadUrl}}"
                        ng-if="message.messageContent.type == 'photo'">
-                      <img class="image-message" ng-src="{{attachment.downloadUrl}}" imageonload />
+                      <img class="image-message" ng-src="{{attachment.downloadUrl}}" imageonload="{{message.scrolled}}" />
                     </a>
                     <a target="_blank"
                        class="download-message"
@@ -145,7 +145,7 @@
 
                   <div class="message-detail">
                       <span ng-click="viewProfile(message)"
-                          class="bold message-user">{{message.sender.userName}}</span>,
+                          class="bold message-user">{{data.subscribers[message.sender.userId].displayName || message.sender.displayName || message.sender.userName}}</span>,
                       <span class="message-timestamp" am-time-ago="message.timestamp"></span>
                   </div>
 
