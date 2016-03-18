@@ -17,6 +17,8 @@ body,html{height:100%;background:#eee}
 .action-icon-label{padding:0;display:inline-block;cursor:pointer;font-weight:normal;margin-bottom:0}
 .action-icon-label i{font-size:20px;margin:0 0 0 3px;width:37px;text-align:center}
 .search-error{padding:7px;color:#8B6C6B}
+.light{color:#999;padding:3px}
+
 
 .icon-initials{display:inline-block;color:#fff;text-align:center;position:relative}
 .icon-initials span{font-size:17px;z-index:10;position:absolute;top:13px;letter-spacing:2px;font-weight:normal;left:1px;width:100%;display:block;color:#fff !important}
@@ -46,7 +48,7 @@ body,html{height:100%;background:#eee}
 .sidebar-scroll{margin-top:50px;margin-bottom:100px;padding:0;overflow-y:auto}
 .sidebar-title{font-size:16px;color:#aaa;margin:10px 10px 1px 10px}
 .sidebar-list .list-group-item{padding:7px 2px;background:none;border:none;color:#555;opacity:.9;min-height:51px;overflow:hidden}
-.sidebar-list .list-group-item b{display:block;font-weight:normal;overflow-x:hidden;font-size:14px;position:absolute;top:11px;left:0;width:95%;padding-left:58px;padding-right:65px}
+.sidebar-list .list-group-item b{display:block;font-weight:normal;overflow-x:hidden;font-size:14px;position:absolute;top:11px;left:0;width:64%;padding-left:58px;padding-right:65px}
 .sidebar-list .list-group-item .last-message{display:block;position:absolute;top:28px;left:0;padding-left:58px;color:#999;font-size:13px;font-weight:normal !important}
 .sidebar-list .list-group-item .timestamp{color:#999;position:absolute;top:12px;right:7px;font-size:11px;font-weight:normal !important}
 .sidebar-list .list-group-item:hover{background:#fafafa;color:#333}
@@ -153,15 +155,18 @@ label.action-icon-label input[type="file"]{position:fixed;top:-1000px}
 /* modals */
 .user-list-container{overflow-y:scroll;max-height:300px}
 .user-list-container img{width:30px;margin-right:6px}
-.user-list-container .list-group{margin-bottom:0}
-.user-list-container .list-group-item{height:40px;padding:4px;border-radius:0}
+.user-list-container .list-group{margin-bottom:0;height:100%}
+.user-list-container .list-group-item{padding:2px;border-radius:0;border:0}
 .user-list-container .list-group-item .overflowable{width:100%}
 .user-list-container .list-group-item div{margin:5px}
-.user-list-container .alert{padding:5px 35px 5px 5px}
+.user-list-container .alert{padding:2px 35px 2px 2px}
 .user-list-container > .row-fluid{margin-top:8px}
-.user-list-container > .row-fluid .col-sm-6{padding:0;overflow-y:auto;max-height:200px}
+.user-list-container > .row-fluid .col-sm-6{padding:0;overflow-y:auto;overflow-x:hidden}
+.user-list-container > .row-fluid.list-row .col-sm-6{height:200px;border:solid 1px #ccc}
+.user-list-container > .row-fluid.list-row .col-sm-6.first{border-right:0}
 .user-list-container .alert{background:#eee}
 .user-list-container .alert div{width:90%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.user-list-container .alert-dismissible .close{top:2px}
 #member-list{max-height:200px}
 
 /* loading */

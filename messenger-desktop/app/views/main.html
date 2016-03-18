@@ -77,14 +77,14 @@
 
             <div id="channel-list" class="sidebar-list">
               <div class="list-group">
-                <a ng-repeat="channelSummary in data.channelSummaries | orderBy:lastPublishedTime:true"
-
-                    href="#/chat/{{channelSummary.channelName}}/{{channelSummary.ownerId}}"
-                    ng-if="!channelSummary.channel.isPublic"
-                    on-hold="confirmLeave(channelSummary)"
-                    class="list-group-item"
+                <a ng-if="channelSummary.latestMessage"
+                   ng-repeat="channelSummary in data.channelSummaries | orderBy:lastPublishedTime:true"
+                   href="#/chat/{{channelSummary.channelName}}/{{channelSummary.ownerId}}"
+                   ng-click="clearUnread(channelSummary.channelName)"
+                   on-hold="leaveConversation(channelSummary)"
+                   class="list-group-item"
                    ng-class="{'active': navService.currentChannel.name == channelSummary.channelName}">
-                  <i class="fa fa-circle" ng-class="{'is-unread': channelSummary.isUnread}"></i>
+                  <i class="fa fa-circle is-unread" ng-if="data.unreads[channelSummary.channelName]"></i>
                   <i class="fa fa-trash" ng-click="leaveConversation(channelSummary)"></i>
                   <img ng-if="channelSummary.subscribers.length > 2" src="images/user_group.png" />
                   <img ng-if="channelSummary.subscribers.length < 3"
@@ -150,10 +150,19 @@
   </div>
   <div class="modal-body user-list-container">
 
-    <input type="text" ng-model="data.search" ng-change="searchUsers(value)" name="search" class="form-control" placeholder="Search for users" />
+    <input type="text" ng-model="data.search" ng-change="searchUsers()" name="search" class="form-control" placeholder="Search for users" />
 
-    <div class="row-fluid">
-      <div class="col-sm-6" direction="down" when-scrolled="onUserScroll(searchUsers)">
+    <div class="row-fluid hidden-xs">
+      <div class="col-sm-6">
+        <b>Available users</b>
+      </div>
+      <div class="col-sm-6">
+        <b>Selected users</b>
+      </div>
+    </div>
+
+    <div class="list-row row-fluid">
+      <div class="col-sm-6 first" direction="down" when-scrolled="onUserScroll(searchUsers)">
 
         <div id="user-selection-list" class="list-group">
           <a ng-repeat="user in data.users"
@@ -162,7 +171,7 @@
             ng-if="user.userName != authService.currentUser.userName && !data.selectedUsers[user.userId]"
               class="list-group-item">
             <div class="overflowable">
-              {{user.firstName}} {{user.lastName}} ({{user.userName}})
+              {{user.firstName}} {{user.lastName}}
             </div>
           </a>
         </div>
@@ -171,8 +180,9 @@
       <div class="col-sm-6">
 
         <div class="list-group">
+          <p class="light" ng-if="data.selectCount < 1">No users selected yet</p>
           <uib-alert type="info" class="list-group-item" close="removeUser(user)" ng-repeat="user in data.selectedUsers">
-           {{user.firstName}} {{user.lastName}} ({{user.userName}})
+           {{user.firstName}} {{user.lastName}}
          </uib-alert>
         </div>
 
@@ -203,7 +213,7 @@
           class="list-group-item">
         <!--<img src="images/user_bernie.png" class="pull-left" />-->
         <div>
-          {{user.firstName}} {{user.lastName}} ({{user.userName}})
+          {{user.firstName}} {{user.lastName}}
         </div>
       </a>
     </div>
@@ -336,7 +346,7 @@
           ng-if="user.userName != authService.currentUser.userName"
             class="list-group-item">
           <img src="images/user_bernie.png" class="pull-left" />
-          {{user.firstName}} {{user.lastName}} ({{user.userName}})
+          {{user.firstName}} {{user.lastName}}
         </a>
       </div>
 

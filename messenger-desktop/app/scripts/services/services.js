@@ -15,19 +15,29 @@ angular.module('messengerApp')
       userAvatar: null,
       getInitials: function(user) {
         var a = '', b =  '', fn;
-        if (!user || !user.userName) return '';
+        if (!user) return '';
         if (user.firstName && user.lastName) {
           a = user.firstName.charAt(0);
           b = user.lastName.charAt(0);
+        } else if (user.displayName && user.displayName.indexOf(' ') != -1) {
+          fn = user.displayName.split(' ');
+          a = fn[0];
+          b = fn[1];
         } else if (user.userName && user.userName.indexOf(' ') != -1) {
           fn = user.userName.split(' ');
           a = fn[0];
           b = fn[1];
+        } else if (user.displayName) {
+          a = user.displayName[0];
+          b = '';
         } else {
           if (user.firstName) a = user.firstName.charAt(0);
           if (user.lastName) b = user.lastName.charAt(0);
         }
         return a.toUpperCase() + '' + b.toUpperCase();
+      },
+      getDisplayName: function(user) {
+        return (user.firstName || '') + ' ' + (user.lastName || '');
       }
     }
   })
@@ -54,7 +64,12 @@ angular.module('messengerApp')
 .directive('imageonload', function() {
     return {
       restrict: 'A',
+      scope: {
+        loadstate: '@loadstate'
+      },
       link: function(scope, element, attrs) {
+        if (attrs['imageonload']) return;
+
         element.bind('load', function() {
           var view = document.getElementById('channel-messages');
           view.scrollTop = view.scrollHeight;
