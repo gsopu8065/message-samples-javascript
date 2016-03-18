@@ -15,12 +15,11 @@ APP_VERSION=$2
 BUILD_NUMBER=$3
 
 mkdir target
-cd target
 
 # zip the sample apps
-zip -r magnet-getstarted-js.zip getstarted
-zip -r magnet-kitchensink-js.zip kitchen-sink
-cd ../messenger/www
+zip -r target/magnet-getstarted-js.zip getstarted
+zip -r target/magnet-kitchensink-js.zip kitchen-sink
+cd messenger/www
 zip -r ../../target/magnet-messenger-mobileweb-js.zip .
 
 # build and zip the messenger desktop app
