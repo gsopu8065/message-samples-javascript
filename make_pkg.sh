@@ -6,7 +6,7 @@ SCRIPT_DIR="$( cd "$( dirname "$0" )" && pwd )"
 cd $SCRIPT_DIR
 
 if [ -z ${1+x} ] || [ -z ${2+x} ]; then
-	echo "Usage: $0 app_name app_version, e.g. $0 magnet-max-sdk 1.0.0"
+	echo "Usage: $0 app_name app_version, e.g. $0 message-samples-javascript 1.0.0"
 	exit 1
 fi
 
