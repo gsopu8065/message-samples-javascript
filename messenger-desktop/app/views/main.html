@@ -14,7 +14,7 @@
               <label class="action-icon-label">
                 <input type="file" required onchange="angular.element(this).scope().updateAvatar(this)"
                     accept="image/*" />
-                <img ng-if="authService.userAvatar" ng-src="{{authService.userAvatar}}" />
+                <img class="header-avatar" ng-if="authService.userAvatar" ng-src="{{authService.userAvatar}}" />
                 <div class="icon-initials" ng-if="!authService.userAvatar">
                   <span>{{authService.initials}}</span>
                   <img src="images/icon_empty.png" />
