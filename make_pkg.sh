@@ -27,7 +27,7 @@ cd ../../messenger-desktop
 
 ### sdk location update ##
 
-if [ -f scripts/magnet-max-sdk.js ] ; then
+if [ -f app/scripts/magnet-max-sdk.js ] ; then
 	echo "found SDK, importing into sample app"
 	sed -i -- 's/\/\/cdn.magnet.com\/downloads\/magnet-max-sdk.min.js/scripts\/magnet-max-sdk.js/g' app/index.html
 fi
