@@ -26,7 +26,12 @@ zip -r ../../target/magnet-messenger-mobileweb-js.zip .
 cd ../../messenger-desktop
 
 ### sdk location update ##
-#sed -i -- 's/\/\/cdn.magnet.com\/downloads\/magnet-max-sdk.min.js/scripts\/magnet-max-sdk.js/g' app/index.html
+
+if [ -f scripts/magnet-max-sdk.js ] ; then
+	echo "found SDK, importing into sample app"
+	sed -i -- 's/\/\/cdn.magnet.com\/downloads\/magnet-max-sdk.min.js/scripts\/magnet-max-sdk.js/g' app/index.html
+fi
+
 npm install
 bower install
 grunt build
