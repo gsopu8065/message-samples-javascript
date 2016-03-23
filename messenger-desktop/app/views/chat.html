@@ -39,6 +39,8 @@
 
               <div class="chat-bubble left">
 
+                  <span ng-if="data.isOwner" ng-click="deleteMessage(message, $index)" class="delete-message-btn fa fa-trash"></span>
+
                   <div class="message"
                        ng-if="message.messageContent
                        && message.messageContent.message
@@ -100,6 +102,8 @@
               </div>
 
               <div class="chat-bubble right">
+
+                  <span ng-click="deleteMessage(message, $index)" class="delete-message-btn fa fa-trash"></span>
 
                   <div class="message"
                        ng-if="message.messageContent

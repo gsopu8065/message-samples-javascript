@@ -9,7 +9,7 @@
  */
 angular.module('messengerApp')
   .controller('ChatCtrl', function ($scope, $rootScope, $state, $stateParams, $timeout,
-                                    $interval, navService, authService, $uibModal) {
+                                    $interval, navService, authService, $uibModal, Alerts) {
 
     var footerBar;
     var scroller;
@@ -41,19 +41,20 @@ angular.module('messengerApp')
       userId: $stateParams.userId == '*' ? null : $stateParams.userId
     };
 
-    var i;
-    $scope.data.messages = [];
-    $scope.data.message = '';
-    $scope.data.subscribers = {};
-    messageOffset = null;
-    messageStartDate = new Date();
-    $scope.data.messageEndReached = false;
-    fetchingMessagesActive = false;
-
     $scope.data.channelTitle = $stateParams.userId == '*' ? $stateParams.channelName : 'Private Chat';
 
     // get current user information
     $scope.data.currentUser = Max.getCurrentUser();
+
+    var i;
+    $scope.data.messages = [];
+    $scope.data.message = '';
+    $scope.data.subscribers = {};
+    $scope.data.isOwner = $scope.data.currentUser.userId === $stateParams.userId;
+    messageOffset = null;
+    messageStartDate = new Date();
+    $scope.data.messageEndReached = false;
+    fetchingMessagesActive = false;
 
     // create an instance of channel given channel name and userId (if exists)
     channel = new Max.Channel({
@@ -317,6 +318,24 @@ angular.module('messengerApp')
       $state.go('app.details', {
         channelName: channel.name,
         userId: channel.userId
+      });
+    };
+
+    $scope.deleteMessage = function(message, index) {
+      Alerts.Confirm({
+          title       : 'Delete This Message?',
+          description : 'Are you sure you wish to delete this message?'
+      }, function() {
+
+        // delete message. only available if current user is channel owner or message creator.
+        channel.deleteMessage(message.messageID).success(function(e) {
+          $scope.safeApply(function() {
+            $scope.data.messages.splice(index, 1);
+          });
+        }).error(function(e) {
+          console.log(e);
+        });
+
       });
     };
 

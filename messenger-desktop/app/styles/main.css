@@ -103,7 +103,7 @@ button.ion-android-send{padding-top:2px}
 .bar.item-input-inset .item-input-wrapper input{width:100%!important}
 .message-wrapper{position:relative;margin:12px 0}
 .message-wrapper:last-child{}
-.chat-bubble{border-radius:25px;display:inline-block;padding:6px 17px;position:relative;margin:10px;max-width:80%;min-width:82px;text-align:left}
+.chat-bubble{border-radius:15px;display:inline-block;padding:6px 17px;position:relative;margin:10px;max-width:80%;min-width:82px;text-align:left}
 .chat-bubble:before{content:"\00a0";display:block;height:16px;width:9px;position:absolute;bottom:-7.5px}
 .chat-bubble.left{background-color:#fff;float:left;margin-left:55px}
 .chat-bubble.left:before{background-color:#fff;left:20px;-webkit-transform:rotate(70deg) skew(5deg)}
@@ -143,6 +143,10 @@ label.action-icon-label input[type="file"]{position:fixed;top:-1000px}
 #add-attachment-btn{cursor:pointer}
 .ace-tm{border:solid 1px #ccc;height:180px}
 .end-of-messages-alert{text-align:center;font-size:25px;color:#ccc;font-weight:800;padding:20px 0}
+.delete-message-btn{position:absolute;top:30%;border-radius:50%;background:#fff;color:#037dff;padding:6px;cursor:pointer;width:27px;text-align:center;opacity:.8}
+.delete-message-btn:hover{background:#037dff;color:#fff}
+.chat-bubble.left .delete-message-btn{right:-38px}
+.chat-bubble.right .delete-message-btn{left:-38px}
 
 /* sign-in */
 .form-signin{max-width:330px;padding:15px;margin:0 auto}
