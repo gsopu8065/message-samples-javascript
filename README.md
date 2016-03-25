@@ -24,6 +24,8 @@ A basic web app created to demonstrate how to create channels and send/receive m
 
 A basic kitchen sink web app created to demonstrate Magnet Message JS SDK APIs.
 
+![How To](/images/howto.png)
+
 ### Instructions
 1. Sign in at [Magnet Sandbox](https://sandbox.magnet.com).
 2. Create an app, and copy the `Client Id` and `Client Secret`.
