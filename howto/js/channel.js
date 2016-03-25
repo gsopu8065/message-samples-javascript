@@ -1,0 +1,7 @@
+var Channel = {
+
+    create: function() {
+
+    }
+
+};
