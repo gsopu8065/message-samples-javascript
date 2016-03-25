@@ -16,19 +16,19 @@ body,html{height:100%;background:#eee}
 .action-icon-label{padding:0;display:inline-block;cursor:pointer;font-weight:normal;margin-bottom:0}
 .vspacing{padding:15px 0}
 .hspacing{padding:0 15px}
-.note{font-size:11px;color:#888}
+.note{font-size:11px;color:#888;padding:3px 0}
 
 /* sidebar */
 .sidebar-scroll{top:50px;padding:0;overflow-y:auto}
 .sidebar-title{font-size:16px;color:#aaa;margin:10px 10px 1px 10px}
 #sidebar .list-group{border:none}
-#sidebar .list-group-item{padding:7px 15px;background:none;border:none;color:#555;opacity:.9}
+#sidebar .list-group-item{padding:7px 15px;background:none;border:none;color:#555;opacity:.9;cursor:pointer}
 #sidebar .list-group-item:last-child, #sidebar .list-group-item:first-child{border-radius:0}
-#sidebar .collapse .list-group-item{padding-left:20px;border-bottom:solid 1px #eee;margin-bottom:1px}
-#sidebar .list-group.panel > .list-group-item{border-bottom:solid 1px #aaa;margin-bottom:1px;background:#eee}
-#sidebar .list-group-item:hover{background:#fafafa;color:#333}
+#sidebar .collapse .list-group-item{padding-left:20px;border-bottom:solid 1px #ddd;margin-bottom:1px}
+#sidebar .list-group.panel > .list-group-item{border-bottom:solid 1px #aaa;margin-bottom:1px;background:#ddd}
+#sidebar .list-group-item:hover{background:#F2FAFF;color:#333}
 #sidebar .list-group-item.active{background:#D1E8F8}
-#sidebar .list-group-item.active b{font-weight:bold;color:#333}
+#sidebar .list-group-item.active{font-weight:bold;color:#333}
 #sidebar .list-group-submenu{margin-left:20px}
 
 /* main */
@@ -38,6 +38,9 @@ body,html{height:100%;background:#eee}
 #feature-container > .btn{margin-top:15px}
 
 /* features */
-#feature-container .panel{padding:10px;max-height:160px;overflow-y:auto}
+#feature-container .panel{padding:10px;max-height:200px;overflow-y:auto}
 #feature-container .form-inline{padding-bottom:20px}
 #feature-container ul{margin-top:7px}
+#feature-container ul.list-group{margin-top:0;border:solid 1px #ccc}
+#feature-container .form-group .form-inline{padding-bottom:0}
+#feature-container .tab-content{padding:30px 15px 0 15px;border:solid 1px #ccc;background:#fff;border-top:0}

@@ -53,7 +53,7 @@ var User = {
         });
     },
 
-    retrieveByUserName: function() {
+    getUsersByUserNames: function() {
         var inputs = collectFormData('feature-container'), html = '';
 
         // search for users using a list of userNames
@@ -66,7 +66,7 @@ var User = {
         });
     },
 
-    retrieveByUserId: function() {
+    getUsersByUserIds: function() {
         var inputs = collectFormData('feature-container'), html = '';
 
         // search for users using a list of userNames
