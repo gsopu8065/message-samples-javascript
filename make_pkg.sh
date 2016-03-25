@@ -19,6 +19,7 @@ mkdir target
 # zip the sample apps
 zip -r target/magnet-getstarted-js.zip getstarted
 zip -r target/magnet-kitchensink-js.zip kitchen-sink
+zip -r target/magnet-howto-js.zip howto
 cd messenger/www
 zip -r ../../target/magnet-messenger-mobileweb-js.zip .
 
