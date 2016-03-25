@@ -20,22 +20,25 @@ A basic web app created to demonstrate how to create channels and send/receive m
 5. From the Sandbox, try sending some messages to the `GetStarted` channel. You should receive messages from your web page.
 
 
-## [Kitchen Sink](kitchen-sink)
+## [How To](howto)
 
-A basic web app created to showcase Magnet Message JS SDK APIs.
+A basic kitchen sink web app created to demonstrate Magnet Message JS SDK APIs.
 
 ### Instructions
 1. Sign in at [Magnet Sandbox](https://sandbox.magnet.com).
 2. Create an app, and copy the `Client Id` and `Client Secret`.
-3. Place the keys into the `init` function in kitchen-sink/index.html.
+3. Place the keys into the `init` function in howto/js/app.js.
     ```
         Max.init({
             clientId: '<your client id>',
             clientSecret: '<your client secret>'
         });
     ```
-4. Open kitchen-sink/index.html in a web browser.
-5. The app will call several APIs from the SDK in succession and display them alongside the API.
+4. Open howto/index.html in a web browser.
+5. From the menu at the left, register or login with a user.
+6. After logging in, you the left menu will be populated with various Magnet Message features.
+7. Click on each feature to try a simple demonstration.
+8. You can view the documented code used for each demonstration in the files within howto/js.
 
 
 ## [Magnet Messenger - Desktop](messenger-desktop)
