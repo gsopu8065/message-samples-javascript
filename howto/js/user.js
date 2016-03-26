@@ -11,6 +11,7 @@ var User = {
             Max.User.login(inputs.userName, inputs.password).success(function() {
                 updateResults('<br />logged in!', true);
                 handleLogin(true);
+                listenForInvites();
             });
 
         }).error(function(e) {
@@ -25,6 +26,7 @@ var User = {
         Max.User.login(inputs.userName, inputs.password).success(function() {
             updateResults('logged in!');
             handleLogin(true);
+            listenForInvites();
         }).error(function(e) {
             updateResults('ERROR! ' + e);
         });

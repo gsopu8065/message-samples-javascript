@@ -152,14 +152,18 @@ var Channel = {
                 }
             });
         } else {
-            // get a private channel by channel name
-            Max.Channel.getPrivateChannel(channelName).success(function(channel) {
-                Channel.myCurrentChannel = channel;
-                registerListener();
+            // get the current channel from the list of channels the current user is subscribed to
+            Max.Channel.getAllSubscriptions().success(function(channels) {
+                for (var key in channels) {
+                    if (channels[key].name == channelName && channels[key].isPublic === channelIsPublic) {
+                        Channel.myCurrentChannel = channels[key];
+                        break;
+                    }
+                }
             });
         }
 
-        // register a listener to listen for incoming messages and invites
+        // register a listener to listen for incoming messages
         var listener = new Max.EventListener('myListener', {
 
             // listen for incoming messages
@@ -170,41 +174,6 @@ var Channel = {
                     updateResults('<b>' + message.sender.userName + '</b>: '
                         + message.messageContent.message + '<br />', 'prepend');
                 }
-            },
-
-            // listen for incoming channel invitation requests from other users
-            invite: function(invite) {
-                // invitation has been received
-                var comment = invite.comment;
-                var sender = invite.sender;
-                var channel = invite.channel;
-
-                var confirmation = confirm('You have received an invitation to join the channel "'
-                    + channel.name + '" ' + 'from user "' + sender.userName + '" with comment "' + comment + '".');
-
-                if (confirmation) {
-                    var acceptComment = 'sure, thank you!';
-                    invite.accept(acceptComment).success(function() {
-                        // invitation has been accepted. current user is now subscribed to the channel
-                    });
-                } else {
-                    var declineComment = 'no thanks, im not interested';
-                    invite.decline(declineComment).success(function() {
-                        // invitation has been declined.
-                    });
-                }
-            },
-
-            // listen for incoming responses to channel invitations the current user has sent out
-            inviteResponse: function(inviteResponse) {
-
-                var user = inviteResponse.sender; // the invitation response sender
-                var channel = inviteResponse.channel;
-                var comments = inviteResponse.comments;
-                var hasAcceptedInvite = inviteResponse.accepted; // true if invitee accepted
-
-                alert('User "' + user.userName + '" has ' + (hasAcceptedInvite ? 'accepted' : 'declined') + ' the' +
-                    ' invitation to channel "' + channel.name + '" with comment "'+comments+'".');
             }
 
         });
@@ -267,7 +236,7 @@ var Channel = {
     inviteUsers: function() {
         var inputs = collectFormData('feature-container'), html = '';
 
-        var invitees = [inputs.userName];
+        var invitees = [inputs.inviteUserName];
         Max.User.getUsersByUserNames(invitees).success(function(users) {
 
             // no users found, dont continue with invitation
@@ -289,7 +258,7 @@ var Channel = {
     addSubscribers: function() {
         var inputs = collectFormData('feature-container'), html = '';
 
-        var invitees = [inputs.userName];
+        var invitees = [inputs.subscribeUserName];
         Max.User.getUsersByUserNames(invitees).success(function(users) {
 
             // no users found, dont continue subscribing the user
