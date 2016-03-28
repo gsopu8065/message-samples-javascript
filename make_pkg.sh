@@ -27,7 +27,7 @@ zip -r ../target/magnet-kitchensink-js.zip .
 cd ../howto
 if [ -f js/libs/magnet-max-sdk.js ] ; then
 	echo "found SDK, importing into howto app"
-	sed -i -- 's/\/\/cdn.magnet.com\/downloads\/magnet-max-sdk.min.js/js\/libs\/magnet-max-sdk.js/g' app/index.html
+	sed -i -- 's/\/\/cdn.magnet.com\/downloads\/magnet-max-sdk.min.js/js\/libs\/magnet-max-sdk.js/g' index.html
 fi
 zip -r ../target/magnet-howto-js.zip .
 
