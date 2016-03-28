@@ -8,7 +8,7 @@ var Chat = {
             message: function(message) {
 
                 // handle incoming messages
-                updateResults('received message: <b>' + message.messageContent.myMessage + '</b><br />', true);
+                renderResults('received message: <b>' + message.messageContent.myMessage + '</b><br />', true);
             }
         });
         Max.registerListener(listener);
@@ -19,7 +19,7 @@ var Chat = {
 
             // no users found, dont send the message
             if (!users.length) {
-                updateResults('no users by that userName found');
+                renderResults('no users by that userName found');
                 return;
             }
 
@@ -28,13 +28,13 @@ var Chat = {
                 myMessage: inputs.message
             }, users);
 
-            updateResults('sending message... <br />');
+            renderResults('sending message... <br />');
 
             // send the message
             message.send().success(function() {
 
             }).error(function(e) {
-                updateResults('ERROR! ' + e);
+                renderResults('ERROR! ' + e);
             });
         });
     },
@@ -47,12 +47,12 @@ var Chat = {
             message: function(message) {
 
                 // handle incoming messages
-                updateResults('received message with attachment: <b>' +
+                renderResults('received message with attachment: <b>' +
                     message.messageContent.myMessage + '</b><br />', true);
 
                 // insert attachment download url into an image tag
                 if (message.attachments && message.attachments.length) {
-                    updateResults('<img src="' + message.attachments[0].downloadUrl + '" /><br />', true);
+                    renderResults('<img src="' + message.attachments[0].downloadUrl + '" /><br />', true);
                 }
             }
         });
@@ -65,7 +65,7 @@ var Chat = {
 
             // no users found, dont send the message
             if (!users.length) {
-                updateResults('no users by that userName found');
+                renderResults('no users by that userName found');
                 return;
             }
 
@@ -75,13 +75,13 @@ var Chat = {
                 myMessage: inputs.message
             }, users, files);
 
-            updateResults('sending message... <br />');
+            renderResults('sending message... <br />');
 
             // send the message
             message.send().success(function() {
 
             }).error(function(e) {
-                updateResults('ERROR! ' + e);
+                renderResults('ERROR! ' + e);
             });
         });
     },
@@ -93,7 +93,7 @@ var Chat = {
         var listener = new Max.EventListener('myListener', {
             message: function(message) {
 
-                updateResults('received message: <b>' +
+                renderResults('received message: <b>' +
                     message.messageContent.myMessage + '</b><br />', true);
 
                 // reply to any incoming messages automatically
@@ -102,10 +102,10 @@ var Chat = {
                 }).success(function() {
 
                     // reply to the recipient
-                    updateResults('sent reply: <b>' + inputs.message + '</b> <br />', true);
+                    renderResults('sent reply: <b>' + inputs.message + '</b> <br />', true);
 
                 }).error(function(e) {
-                    updateResults('ERROR! ' + e);
+                    renderResults('ERROR! ' + e);
                 });
             }
         });

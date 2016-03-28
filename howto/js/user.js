@@ -5,17 +5,17 @@ var User = {
 
         // register a new user
         Max.User.register(inputs).success(function(user) {
-            updateResults('user registered!');
+            renderResults('user registered!');
 
             // login with the newly registered user
             Max.User.login(inputs.userName, inputs.password).success(function() {
-                updateResults('<br />logged in!', true);
+                renderResults('<br />logged in!', true);
                 handleLogin(true);
                 listenForInvites();
             });
 
         }).error(function(e) {
-            updateResults('ERROR! ' + e);
+            renderResults('ERROR! ' + e);
         });
     },
 
@@ -24,11 +24,11 @@ var User = {
 
         // login with the given user
         Max.User.login(inputs.userName, inputs.password).success(function() {
-            updateResults('logged in!');
+            renderResults('logged in!');
             handleLogin(true);
             listenForInvites();
         }).error(function(e) {
-            updateResults('ERROR! ' + e);
+            renderResults('ERROR! ' + e);
         });
     },
 
@@ -36,7 +36,7 @@ var User = {
 
         // logout to clear session and disconnect
         Max.User.logout().success(function() {
-            updateResults('logged out!');
+            renderResults('logged out!');
             handleLogin();
         });
     },
@@ -46,10 +46,10 @@ var User = {
 
         // search for users using query. accepts key-value pairs like {userName: 'jane.doe'} or advanced ElasticSearch
         // query string such as: userName:*jane.doe* or firstName:*jane*%20OR%20lastName:*doe*
-        var resultsPerPage = 10, offset = 0;
+        var resultsPerPage = 1000, offset = 0;
         Max.User.search(inputs.searchQuery, resultsPerPage, offset).success(function(users) {
 
-            updateResults(userDisplayHelper(users));
+            renderResults(userDisplayHelper(users));
         });
     },
 
@@ -60,7 +60,7 @@ var User = {
         var userNameList = [inputs.userName];
         Max.User.getUsersByUserNames(userNameList).success(function(users) {
 
-            updateResults(userDisplayHelper(users));
+            renderResults(userDisplayHelper(users));
         });
     },
 
@@ -71,7 +71,7 @@ var User = {
         var userIdList = [inputs.userId];
         Max.User.getUsersByUserIds(userIdList).success(function(users) {
 
-            updateResults(userDisplayHelper(users));
+            renderResults(userDisplayHelper(users));
         });
     },
 
@@ -84,13 +84,13 @@ var User = {
 
             var updatedUser = Max.getCurrentUser();
 
-            updateResults('updated user!' +
+            renderResults('updated user!' +
                 '<br />' + 'userName: ' + updatedUser.userName +
                 ', ' + 'firstName: ' + updatedUser.firstName +
                 ', ' + 'lastName: ' + updatedUser.lastName
             );
         }).error(function(e) {
-            updateResults('ERROR! ' + e);
+            renderResults('ERROR! ' + e);
         });
     }
 };

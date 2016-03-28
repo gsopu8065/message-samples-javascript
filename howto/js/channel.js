@@ -13,21 +13,21 @@ var Channel = {
             publishPermission: inputs.publishPermission
         }).success(function(myNewChannel) {
 
-            updateResults('created new channel "' + myNewChannel.name + '"', true);
+            renderResults('created new channel "' + myNewChannel.name + '"');
 
             if (tags.length) {
                 // set tags for the newly created channel
                 myNewChannel.setTags(tags).success(function() {
 
-                    updateResults('assigned tags [' + tags.join(', ') + '] to channel "' + myNewChannel.name + '"');
+                    renderResults('assigned tags [' + tags.join(', ') + '] to channel "' + myNewChannel.name + '"', true);
 
                 }).error(function(e) {
-                    updateResults('ERROR! ' + e);
+                    renderResults('ERROR! ' + e);
                 });
             }
 
         }).error(function(e) {
-            updateResults('ERROR! ' + e);
+            renderResults('ERROR! ' + e);
         });
     },
 
@@ -37,10 +37,7 @@ var Channel = {
         // get all channels the current user is subscribed to
         Max.Channel.getAllSubscriptions().success(function(channels) {
 
-            updateResults(channelDisplayHelper(channels));
-
-        }).error(function(e) {
-            updateResults('ERROR! ' + e);
+            renderResults(channelDisplayHelper(channels));
         });
     },
 
@@ -51,10 +48,10 @@ var Channel = {
         var resultsPerPage = 100, offset = 0;
         Max.Channel.findPublicChannels(null, resultsPerPage, offset).success(function(channels) {
 
-            updateResults(channelDisplayHelper(channels));
+            renderResults(channelDisplayHelper(channels));
 
         }).error(function(e) {
-            updateResults('ERROR! ' + e);
+            renderResults('<div class="panel panel-default">ERROR! ' + e + '</div>');
         });
     },
 
@@ -65,10 +62,10 @@ var Channel = {
         var resultsPerPage = 100, offset = 0;
         Max.Channel.findPrivateChannels(null, resultsPerPage, offset).success(function(channels) {
 
-            updateResults(channelDisplayHelper(channels));
+            renderResults(channelDisplayHelper(channels));
 
         }).error(function(e) {
-            updateResults('ERROR! ' + e);
+            renderResults('<div class="panel panel-default">ERROR! ' + e + '</div>');
         });
     },
 
@@ -79,19 +76,19 @@ var Channel = {
             // find a single public channel by name
             Max.Channel.getPublicChannel(inputs.channelName).success(function(channel) {
 
-                updateResults(channelDisplayHelper(channel));
+                renderResults(channelDisplayHelper(channel));
 
             }).error(function(e) {
-                updateResults('ERROR! ' + e);
+                renderResults('<div class="panel panel-default">ERROR! ' + e + '</div>');
             });
         } else {
             // find a single private channel by name
             Max.Channel.getPrivateChannel(inputs.channelName).success(function(channel) {
 
-                updateResults(channelDisplayHelper(channel));
+                renderResults(channelDisplayHelper(channel));
 
             }).error(function(e) {
-                updateResults('ERROR! ' + e);
+                renderResults('<div class="panel panel-default">ERROR! ' + e + '</div>');
             });
         }
     },
@@ -104,19 +101,19 @@ var Channel = {
             // find public channels using channel name prefix
             Max.Channel.findPublicChannels(inputs.channelPrefix, resultsPerPage, offset).success(function(channels) {
 
-                updateResults(channelDisplayHelper(channels));
+                renderResults(channelDisplayHelper(channels));
 
             }).error(function(e) {
-                updateResults('ERROR! ' + e);
+                renderResults('<div class="panel panel-default">ERROR! ' + e + '</div>');
             });
         } else {
             // find private channels using channel name prefix. only returns private channels owned by the current user
             Max.Channel.findPrivateChannels(inputs.channelPrefix, resultsPerPage, offset).success(function(channels) {
 
-                updateResults(channelDisplayHelper(channels));
+                renderResults(channelDisplayHelper(channels));
 
             }).error(function(e) {
-                updateResults('ERROR! ' + e);
+                renderResults('<div class="panel panel-default">ERROR! ' + e + '</div>');
             });
         }
     },
@@ -129,10 +126,10 @@ var Channel = {
         // find channels by tags associated with the channel
         Max.Channel.findByTags(tags, resultsPerPage, offset).success(function(channels) {
 
-            updateResults(channelDisplayHelper(channels));
+            renderResults(channelDisplayHelper(channels));
 
         }).error(function(e) {
-            updateResults('ERROR! ' + e);
+            renderResults('<div class="panel panel-default">ERROR! ' + e + '</div>');
         });
     },
 
@@ -171,8 +168,7 @@ var Channel = {
 
                 // right now, lets just handle incoming messages published to the current channel
                 if (message.channel.name == channelName) {
-                    updateResults('<b>' + message.sender.userName + '</b>: '
-                        + message.messageContent.message + '<br />', 'prepend');
+                    renderResults(messageDisplayHelper(messages), 'prepend');
                 }
             }
 
@@ -191,8 +187,6 @@ var Channel = {
     },
 
     fetchMessages: function() {
-        var html = '';
-
         var startDate = new Date();
         startDate = startDate.setDate(startDate.getDate() - 1);
         var endDate = new Date();
@@ -204,20 +198,13 @@ var Channel = {
         Channel.myCurrentChannel.getMessages(startDate, endDate, resultsPerPage, offset, ascending).success(function(messages) {
 
             // render each of the messages returned
-            for (var i=0;i<messages.length;++i) {
-                html += '<b>' + messages[i].sender.userName + '</b>: '
-                    + messages[i].messageContent.message + '<br />';
-            }
-
-            updateResults(html);
-
-        }).error(function(err) {
-            // handle error
+            renderResults(messageDisplayHelper(messages));
+        }).error(function(e) {
+            renderResults('ERROR! ' + e);
         });
     },
 
     getAllSubscribers: function() {
-        var html = '';
         var resultsPerPage = 1000;
         var offset = 0;
 
@@ -225,7 +212,7 @@ var Channel = {
         Channel.myCurrentChannel.getAllSubscribers(resultsPerPage, offset).success(function(users) {
 
             // render each of the users returned
-            updateResults(userDisplayHelper(users), null, '#subscriber-list');
+            renderResults(userDisplayHelper(users), null, '#subscriber-list');
         });
     },
 
@@ -237,14 +224,14 @@ var Channel = {
 
             // no users found, dont continue with invitation
             if (!users.length) {
-                updateResults('no users by that userName found', null, '#subscriber-list');
+                renderResults('<div class="panel panel-default">ERROR! no users by that userName found</div>', null, '#subscriber-list');
                 return;
             }
 
             // invite users to the channel
             var comments = 'please join my channel!';
             Channel.myCurrentChannel.inviteUsers(users, comments).success(function() {
-                updateResults('user "' + users[0].userName + '" has been invited to channel "'
+                renderResults('user "' + users[0].userName + '" has been invited to channel "'
                     + Channel.myCurrentChannel.name + '".', null, '#subscriber-list');
             });
         });
@@ -254,19 +241,19 @@ var Channel = {
     addSubscribers: function() {
         var inputs = collectFormData('feature-container'), html = '';
 
-        var invitees = [inputs.subscribeUserName];
+        var invitees = [inputs.subscriberUserName];
         Max.User.getUsersByUserNames(invitees).success(function(users) {
 
             // no users found, dont continue subscribing the user
             if (!users.length) {
-                updateResults('no users by that userName found', null, '#subscriber-list');
+                renderResults('<div class="panel panel-default">ERROR! no users by that userName found</div>', null, '#subscriber-list');
                 return;
             }
 
             // subscribe users to the channel
             Channel.myCurrentChannel.addSubscribers(users).success(function() {
-                updateResults('user "' + users[0].userName + '" has been subscribed to channel "'
-                    + Channel.myCurrentChannel.name + '".', null, '#subscriber-list');
+                renderResults('<div class="panel panel-default">user "' + users[0].userName + '" has been subscribed to channel "'
+                    + Channel.myCurrentChannel.name + '".</div>', null, '#subscriber-list');
             });
         });
 

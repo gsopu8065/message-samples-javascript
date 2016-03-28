@@ -17,22 +17,29 @@ BUILD_NUMBER=$3
 mkdir target
 
 # zip the sample apps
+
 cd getstarted
+if [ -f js/libs/magnet-max-sdk.js ] ; then
+	echo "found SDK, importing into howto app"
+	sed -i -- 's/\/\/cdn.magnet.com\/downloads\/magnet-max-sdk.min.js/js\/libs\/magnet-max-sdk.js/g' app/index.html
+fi
 zip -r ../target/magnet-getstarted-js.zip .
+
 cd ../kitchen-sink
 zip -r ../target/magnet-kitchensink-js.zip .
+
 cd ../howto
 zip -r ../target/magnet-howto-js.zip .
+
 cd ../messenger/www
 zip -r ../../target/magnet-messenger-mobileweb-js.zip .
 
-# build and zip the messenger desktop app
 cd ../../messenger-desktop
 
 ### sdk location update ##
 
 if [ -f app/scripts/magnet-max-sdk.js ] ; then
-	echo "found SDK, importing into sample app"
+	echo "found SDK, importing into messenger-desktop app"
 	sed -i -- 's/\/\/cdn.magnet.com\/downloads\/magnet-max-sdk.min.js/scripts\/magnet-max-sdk.js/g' app/index.html
 fi
 

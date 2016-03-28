@@ -58,17 +58,22 @@ function collectFormData(containerId) {
     return obj;
 }
 
-function updateResults(output, insertType, target) {
+function renderResults(output, insertType, target) {
     insertType = (insertType === true || insertType === false) ? 'append' : insertType;
     resultContainer = $(target || '#results');
     resultContainer[insertType ? insertType : 'html'](output);
-    resultContainer.css('opacity', 0).css('background-color', '#dff0d8').css('border', 'solid 1px #888');
+    resultContainer.css('opacity', 0);
+    if (resultContainer.hasClass('panel')) {
+        //resultContainer.css('border', 'solid 1px #888');
+    }
     resultContainer.animate({
         opacity: 1
-    }, 1000, function() {
-        setTimeout(function() {
-            resultContainer.css('background-color', '#fff');
-        }, 3000);
+    }, 500, function() {
+        //if (resultContainer.hasClass('panel')) {
+        //    setTimeout(function() {
+        //        resultContainer.css('background-color', '#fff');
+        //    }, 3000);
+        //}
     });
 }
 
@@ -86,7 +91,7 @@ function channelDisplayHelper(channelsOrChannels) {
             + chan.ownerUserID + '\', ' + chan.isPublic + ');">'
             + chan.name + (chan.isPublic ? '' : ' <span class="glyphicon glyphicon-lock"></span>') + '</a>';
     }
-    return '<ul class="list-group">' + html + '</ul>';
+    return channelsOrChannels.length ? ('<ul class="list-group">' + html + '</ul>') : '<div class="panel panel-default">no channels found</div>';
 }
 
 function userDisplayHelper(userOrUsers) {
@@ -97,7 +102,21 @@ function userDisplayHelper(userOrUsers) {
     }
 
     for (var key in userOrUsers) {
-        html += '<li><b>' + userOrUsers[key].userName + '</b> (id: ' + userOrUsers[key].userId + ')' +  '</li>';
+        html += '<li class="list-group-item"><b>' + userOrUsers[key].userName + '</b> (id: ' + userOrUsers[key].userId + ')' +  '</li>';
     }
-    return '<ul>' + html + '</ul>';
+    return userOrUsers.length ? ('<ul class="list-group">' + html + '</ul>') : '<div class="panel panel-default">no users found</div>';
+}
+
+function messageDisplayHelper(messageOrMessages) {
+    var html = '';
+
+    if (messageOrMessages.constructor !== Array) {
+        messageOrMessages = [messageOrMessages];
+    }
+
+    for (var i=0;i<messageOrMessages.length;++i) {
+        html += '<b>' + messageOrMessages[i].sender.userName + '</b>: '
+            + messageOrMessages[i].messageContent.message + '<br />';
+    }
+    return html || 'no messages found';
 }
