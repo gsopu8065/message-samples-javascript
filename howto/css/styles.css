@@ -42,7 +42,7 @@ body,html{height:100%;background:#eee}
 #feature-container .panel{padding:10px}
 #feature-container .form-inline{padding-bottom:20px}
 #feature-container ul{margin-top:7px}
-#feature-container ul.list-group{margin-top:0}
+#feature-container ul.list-group{margin-top:0;margin-bottom:0}
 #feature-container .panel ul.list-group{border:solid 1px #ccc}
 #feature-container ul.list-group .list-group-item:hover{background:#F2FAFF;color:#333}
 #feature-container .form-group .form-inline{padding-bottom:0}
