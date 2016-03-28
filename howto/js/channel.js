@@ -166,7 +166,7 @@ var Channel = {
             // listen for incoming messages
             message: function(message) {
 
-                // right now, lets just handle incoming messages published to the current channel
+                // right now, lets only handle incoming messages published to the current channel
                 if (message.channel.name == channelName) {
                     renderResults(messageDisplayHelper(messages), 'prepend');
                 }
@@ -199,6 +199,7 @@ var Channel = {
 
             // render each of the messages returned
             renderResults(messageDisplayHelper(messages));
+
         }).error(function(e) {
             renderResults('ERROR! ' + e);
         });
@@ -211,7 +212,7 @@ var Channel = {
         // fetch all the users subscribed to the given channel
         Channel.myCurrentChannel.getAllSubscribers(resultsPerPage, offset).success(function(users) {
 
-            // render each of the users returned
+            // display each of the users returned
             renderResults(userDisplayHelper(users), null, '#subscriber-list');
         });
     },
@@ -231,6 +232,7 @@ var Channel = {
             // invite users to the channel
             var comments = 'please join my channel!';
             Channel.myCurrentChannel.inviteUsers(users, comments).success(function() {
+
                 renderResults('user "' + users[0].userName + '" has been invited to channel "'
                     + Channel.myCurrentChannel.name + '".', null, '#subscriber-list');
             });
@@ -252,6 +254,7 @@ var Channel = {
 
             // subscribe users to the channel
             Channel.myCurrentChannel.addSubscribers(users).success(function() {
+
                 renderResults('<div class="panel panel-default">user "' + users[0].userName + '" has been subscribed to channel "'
                     + Channel.myCurrentChannel.name + '".</div>', null, '#subscriber-list');
             });

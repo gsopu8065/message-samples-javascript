@@ -7,7 +7,7 @@ var Chat = {
         var listener = new Max.EventListener('myListener', {
             message: function(message) {
 
-                // handle incoming messages
+                // display incoming messages
                 renderResults('received message: <b>' + message.messageContent.myMessage + '</b><br />', true);
             }
         });

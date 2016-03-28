@@ -42,7 +42,7 @@ var User = {
     },
 
     search: function() {
-        var inputs = collectFormData('feature-container'), html = '';
+        var inputs = collectFormData('feature-container');
 
         // search for users using query. accepts key-value pairs like {userName: 'jane.doe'} or advanced ElasticSearch
         // query string such as: userName:*jane.doe* or firstName:*jane*%20OR%20lastName:*doe*
@@ -54,7 +54,7 @@ var User = {
     },
 
     getUsersByUserNames: function() {
-        var inputs = collectFormData('feature-container'), html = '';
+        var inputs = collectFormData('feature-container');
 
         // search for users using a list of userNames
         var userNameList = [inputs.userName];
@@ -65,7 +65,7 @@ var User = {
     },
 
     getUsersByUserIds: function() {
-        var inputs = collectFormData('feature-container'), html = '';
+        var inputs = collectFormData('feature-container');
 
         // search for users using a list of userNames
         var userIdList = [inputs.userId];
