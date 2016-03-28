@@ -36,7 +36,6 @@ var Channel = {
         // get all channels the current user is subscribed to
         Max.Channel.getAllSubscriptions().success(function(channels) {
 
-                console.log(channels);
             renderResults(channelDisplayHelper(channels));
         });
     },
