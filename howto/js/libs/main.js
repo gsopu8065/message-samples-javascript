@@ -88,3 +88,16 @@ function channelDisplayHelper(channelsOrChannels) {
     }
     return '<ul class="list-group">' + html + '</ul>';
 }
+
+function userDisplayHelper(userOrUsers) {
+    var html = '';
+
+    if (userOrUsers.constructor !== Array) {
+        userOrUsers = [userOrUsers];
+    }
+
+    for (var key in userOrUsers) {
+        html += '<li><b>' + userOrUsers[key].userName + '</b> (id: ' + userOrUsers[key].userId + ')' +  '</li>';
+    }
+    return '<ul>' + html + '</ul>';
+}

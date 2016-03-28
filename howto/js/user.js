@@ -48,10 +48,8 @@ var User = {
         // query string such as: userName:*jane.doe* or firstName:*jane*%20OR%20lastName:*doe*
         var resultsPerPage = 10, offset = 0;
         Max.User.search(inputs.searchQuery, resultsPerPage, offset).success(function(users) {
-            for (var key in users) {
-                html += '<li><b>' + users[key].userName + '</b> (id: ' + users[key].userId + ')' +  '</li>';
-            }
-            updateResults('<ul>' + html + '</ul>');
+
+            updateResults(userDisplayHelper(users));
         });
     },
 
@@ -61,10 +59,8 @@ var User = {
         // search for users using a list of userNames
         var userNameList = [inputs.userName];
         Max.User.getUsersByUserNames(userNameList).success(function(users) {
-            for (var key in users) {
-                html += '<li><b>' + users[key].userName + '</b> (id: ' + users[key].userId + ')' +  '</li>';
-            }
-            updateResults('<ul>' + html + '</ul>');
+
+            updateResults(userDisplayHelper(users));
         });
     },
 
@@ -74,10 +70,8 @@ var User = {
         // search for users using a list of userNames
         var userIdList = [inputs.userId];
         Max.User.getUsersByUserIds(userIdList).success(function(users) {
-            for (var key in users) {
-                html += '<li><b>' + users[key].userName + '</b> (id: ' + users[key].userId + ')' +  '</li>';
-            }
-            updateResults('<ul>' + html + '</ul>');
+
+            updateResults(userDisplayHelper(users));
         });
     },
 

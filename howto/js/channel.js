@@ -225,11 +225,7 @@ var Channel = {
         Channel.myCurrentChannel.getAllSubscribers(resultsPerPage, offset).success(function(users) {
 
             // render each of the users returned
-            for (var key in users) {
-                html += '<li><b>' + users[key].userName + '</b> (id: ' + users[key].userId + ')' +  '</li>';
-            }
-
-            updateResults('<ul>' + html + '</ul>', null, '#subscriber-list');
+            updateResults(userDisplayHelper(users), null, '#subscriber-list');
         });
     },
 
