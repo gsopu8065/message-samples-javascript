@@ -36,6 +36,7 @@ var Channel = {
         // get all channels the current user is subscribed to
         Max.Channel.getAllSubscriptions().success(function(channels) {
 
+                console.log(channels);
             renderResults(channelDisplayHelper(channels));
         });
     },
@@ -130,31 +131,16 @@ var Channel = {
         });
     },
 
-    goToChannel: function(e, channelName, channelOwnerId, channelIsPublic) {
+    goToChannel: function(e, channel) {
         e.preventDefault();
 
-        renderTmpl('Channel-Chat', channelName);
+        renderTmpl('Channel-Chat', channel.name);
 
-        if (channelIsPublic) {
-            // get a public channel by channel name
-            Max.Channel.getPublicChannel(channelName).success(function(channel) {
-                Channel.myCurrentChannel = channel;
+        Channel.myCurrentChannel = channel;
 
-                // not subscribed to this channel, subscribe to it
-                if (!Channel.myCurrentChannel.isSubscribed) {
-                    Channel.myCurrentChannel.subscribe();
-                }
-            });
-        } else {
-            // get the current channel from the list of channels the current user is subscribed to
-            Max.Channel.getAllSubscriptions().success(function(channels) {
-                for (var key in channels) {
-                    if (channels[key].name == channelName && channels[key].isPublic === channelIsPublic) {
-                        Channel.myCurrentChannel = channels[key];
-                        break;
-                    }
-                }
-            });
+        // not subscribed to this channel, subscribe to it
+        if (!Channel.myCurrentChannel.isSubscribed) {
+            Channel.myCurrentChannel.subscribe();
         }
 
         // register a listener to listen for incoming messages
@@ -164,7 +150,7 @@ var Channel = {
             message: function(message) {
 
                 // right now, lets only handle incoming messages published to the current channel
-                if (message.channel.name == channelName) {
+                if (message.channel.name == channel.name) {
                     renderResults(messageDisplayHelper(message), 'prepend');
                 }
             }

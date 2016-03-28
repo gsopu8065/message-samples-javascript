@@ -63,35 +63,30 @@ function renderResults(output, insertType, target) {
     resultContainer = $(target || '#results');
     resultContainer[insertType ? insertType : 'html'](output);
     resultContainer.css('opacity', 0);
-    if (resultContainer.hasClass('panel')) {
-        //resultContainer.css('border', 'solid 1px #888');
-    }
     resultContainer.animate({
         opacity: 1
-    }, 500, function() {
-        //if (resultContainer.hasClass('panel')) {
-        //    setTimeout(function() {
-        //        resultContainer.css('background-color', '#fff');
-        //    }, 3000);
-        //}
-    });
+    }, 500);
 }
 
 function channelDisplayHelper(channelsOrChannels) {
-    var html = '';
+    var parent = $('<ul class="list-group"></ul>');
 
     if (channelsOrChannels.constructor !== Array) {
         channelsOrChannels = [channelsOrChannels];
     }
 
     for (var key in channelsOrChannels) {
-        var chan = channelsOrChannels[key];
-        html += '<a href="#" class="list-group-item" ' +
-            'onclick="Channel.goToChannel(event, \'' + chan.name + '\', \''
-            + chan.ownerUserID + '\', ' + chan.isPublic + ');">'
-            + chan.name + (chan.isPublic ? '' : ' <span class="glyphicon glyphicon-lock"></span>') + '</a>';
+        var channel = channelsOrChannels[key];
+        var row = $('<a href="#" class="list-group-item">' + channel.name
+            + (channel.isPublic ? '' : ' <span class="glyphicon glyphicon-lock"></span>') + '</a>');
+
+        row.click(function(event) {
+            Channel.goToChannel(event, channel);
+        });
+
+        parent.append(row);
     }
-    return channelsOrChannels.length ? ('<ul class="list-group">' + html + '</ul>') : '<div class="panel panel-default">no channels found</div>';
+    return channelsOrChannels.length ? (parent) : '<div class="panel panel-default">no channels found</div>';
 }
 
 function userDisplayHelper(userOrUsers) {
