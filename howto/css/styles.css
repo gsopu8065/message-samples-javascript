@@ -38,7 +38,8 @@ body,html{height:100%;background:#eee}
 #feature-container > .btn{margin-top:15px}
 
 /* features */
-#feature-container .panel{padding:10px;max-height:200px;overflow-y:auto}
+#feature-container #results{max-height:200px;overflow-y:auto}
+#feature-container .panel{padding:10px}
 #feature-container .form-inline{padding-bottom:20px}
 #feature-container ul{margin-top:7px}
 #feature-container ul.list-group{margin-top:0}

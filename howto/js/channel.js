@@ -91,7 +91,7 @@ var Channel = {
     },
 
     findByPrefix: function() {
-        var inputs = collectFormData('feature-container'), html = '';
+        var inputs = collectFormData('feature-container');
         var resultsPerPage = 100, offset = 0;
 
         if (inputs.isPublic) {
@@ -116,7 +116,7 @@ var Channel = {
     },
 
     findByTags: function() {
-        var inputs = collectFormData('feature-container'), html = '';
+        var inputs = collectFormData('feature-container');
         var tags = inputs.tags.length ? inputs.tags.split(' ') : [];
         var resultsPerPage = 100, offset = 0;
 
@@ -165,7 +165,7 @@ var Channel = {
 
                 // right now, lets only handle incoming messages published to the current channel
                 if (message.channel.name == channelName) {
-                    renderResults(messageDisplayHelper(messages), 'prepend');
+                    renderResults(messageDisplayHelper(message), 'prepend');
                 }
             }
 
@@ -215,7 +215,7 @@ var Channel = {
     },
 
     inviteUsers: function() {
-        var inputs = collectFormData('feature-container'), html = '';
+        var inputs = collectFormData('feature-container');
 
         var invitees = [inputs.inviteUserName];
         Max.User.getUsersByUserNames(invitees).success(function(users) {
@@ -238,7 +238,7 @@ var Channel = {
     },
 
     addSubscribers: function() {
-        var inputs = collectFormData('feature-container'), html = '';
+        var inputs = collectFormData('feature-container');
 
         var invitees = [inputs.subscriberUserName];
         Max.User.getUsersByUserNames(invitees).success(function(users) {
