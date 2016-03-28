@@ -32,7 +32,6 @@ var Channel = {
     },
 
     getSubscriptions: function() {
-        var html = '';
 
         // get all channels the current user is subscribed to
         Max.Channel.getAllSubscriptions().success(function(channels) {
@@ -42,7 +41,6 @@ var Channel = {
     },
 
     getPublicChannels: function() {
-        var html = '';
 
         // get a list of all public channels
         var resultsPerPage = 100, offset = 0;
@@ -56,7 +54,6 @@ var Channel = {
     },
 
     getPrivateChannels: function() {
-        var html = '';
 
         // get a list of all private channels the current user owns
         var resultsPerPage = 100, offset = 0;
@@ -223,7 +220,7 @@ var Channel = {
         var invitees = [inputs.inviteUserName];
         Max.User.getUsersByUserNames(invitees).success(function(users) {
 
-            // no users found, dont continue with invitation
+            // no users found, don't continue with invitation
             if (!users.length) {
                 renderResults('<div class="panel panel-default">ERROR! no users by that userName found</div>', null, '#subscriber-list');
                 return;
@@ -246,7 +243,7 @@ var Channel = {
         var invitees = [inputs.subscriberUserName];
         Max.User.getUsersByUserNames(invitees).success(function(users) {
 
-            // no users found, dont continue subscribing the user
+            // no users found, don't continue subscribing the user
             if (!users.length) {
                 renderResults('<div class="panel panel-default">ERROR! no users by that userName found</div>', null, '#subscriber-list');
                 return;
