@@ -15,7 +15,10 @@ angular.module('messengerApp')
     $scope.navService = navService;
     $scope.authService = authService;
     $scope.showDrawer = false;
-    $scope.data = {};
+
+    $scope.data = {
+      extras: authService.currentUser.extras || {}
+    };
 
     $scope.logout = function() {
       Alerts.Confirm({
@@ -153,6 +156,10 @@ angular.module('messengerApp')
         $scope.authService.userAvatar = authService.userAvatar;
         $scope.authService.initials = authService.initials;
       });
+
+      Audio.enabled = (authService.currentUser.extras &&
+        (authService.currentUser.extras.audioNotify === true || authService.currentUser.extras.audioNotify === 'true'));
+
     }
 
     refreshUserData();

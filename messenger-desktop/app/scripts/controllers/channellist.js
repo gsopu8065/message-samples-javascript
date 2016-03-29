@@ -17,6 +17,7 @@ angular.module('messengerApp')
     $scope.data.developerWeekChannel = null;
     $scope.data.channelSummaries = channelService.channelSummaries;
     $scope.data.unreads = {};
+    $scope.data.searchFilter = '';
     navService.list = $scope;
 
     // register a listener to listen for messages and update the channel summaries
@@ -63,7 +64,7 @@ angular.module('messengerApp')
         $scope.data.channels = supportedChannels;
 
         // retrieve detailed channel information, including subscribers and past messages
-        Max.Channel.getChannelSummary(supportedChannels, 5, 1).success(function(channelSummaries) {
+        Max.Channel.getChannelSummary(supportedChannels, 10, 1).success(function(channelSummaries) {
 
           for(var i = 0; i < channelSummaries.length; ++i) {
             var subscriberNames = [];
@@ -201,6 +202,10 @@ angular.module('messengerApp')
           ? 1 : ((b.lastPublishedTime > a.lastPublishedTime) ? -1 : 0);
       });
     }
+
+    $scope.userFilter = function(channelSummary) {
+      return channelSummary.subscriberNames.toLowerCase().indexOf($scope.data.searchFilter.toLowerCase()) != -1;
+    };
 
     $scope.refreshChannelList();
 

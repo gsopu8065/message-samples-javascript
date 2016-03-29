@@ -9,7 +9,7 @@ body,html{height:100%;background:#eee}
 
 /* reusable */
 .header{height:50px;background:#fff;border-bottom:solid 1px #aaa;position:absolute;top:0;left:0;width:100%}
-.header img{width:36px;margin:6px 9px;cursor:pointer}
+.header img{width:36px;height:36px;margin:6px 9px;cursor:pointer}
 .header .fa{margin:10px;float:right;cursor:pointer;color:#037dff}
 .fullpos{height:auto;position:absolute;top:0;left:0;right:0;bottom:0}
 .overflowable{width:10em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -49,13 +49,18 @@ body,html{height:100%;background:#eee}
 .sidebar-scroll{margin-top:50px;margin-bottom:100px;padding:0;overflow-y:auto}
 .sidebar-title{font-size:16px;color:#aaa;margin:10px 10px 1px 10px}
 .sidebar-list .list-group-item{padding:7px 2px;background:none;border:none;color:#555;opacity:.9;min-height:51px;overflow:hidden}
-.sidebar-list .list-group-item b{display:block;font-weight:normal;overflow-x:hidden;font-size:14px;position:absolute;top:11px;left:0;width:64%;padding-left:58px;padding-right:65px}
+.sidebar-list .list-group-item b{display:block;font-weight:normal;overflow-x:hidden;font-size:14px;position:absolute;top:11px;left:0;width:90%;padding-left:58px;padding-right:65px}
 .sidebar-list .list-group-item .last-message{display:block;position:absolute;top:28px;left:0;padding-left:58px;color:#999;font-size:13px;font-weight:normal !important}
 .sidebar-list .list-group-item .timestamp{color:#999;position:absolute;top:12px;right:7px;font-size:11px;font-weight:normal !important}
 .sidebar-list .list-group-item:hover{background:#fafafa;color:#333}
 .sidebar-list .list-group-item.active{background:#eee}
 .sidebar-list .list-group-item.active b{font-weight:bold;color:#333}
 
+.flex-input{margin:10px 13px 0;position:relative}
+.flex-input .search{position:absolute;top:-1px;left:2px}
+.flex-input input{width:100%;background:none !important;border:none;outline:none;border-bottom:solid 1px #9ea2a2;text-indent:30px;padding-bottom:6px}
+.flex-input .left{position:absolute;bottom:0;left:0}
+.flex-input .right{position:absolute;bottom:0;right:0}
 #channel-list img, #channel-list .icon-initials{width:30px;height:30px;border-radius:50%;float:left;margin:5px 10px 5px 17px}
 #channel-list .icon-initials img{width:100%;margin:0}
 #channel-list .icon-initials span{font-size:13px;top:7px}
@@ -214,4 +219,8 @@ label.action-icon-label input[type="file"]{position:fixed;top:-1000px}
 @keyframes sk-circleBounceDelay {
     0%,80%,100%{-webkit-transform:scale(0);transform:scale(0)}
     40%{-webkit-transform:scale(1);transform:scale(1)}
+}
+
+@media (max-width: 991px) {
+  .sidebar-list .list-group-item b{width:100%}
 }

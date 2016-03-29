@@ -207,6 +207,7 @@ moment.locale('en', {
 });
 
 var Audio = {
+  enabled: false,
   receive: new Howl({
     urls: ['sounds/whistle.mp3', 'sounds/whistle.ogg']
   }),
@@ -214,9 +215,11 @@ var Audio = {
     urls: ['sounds/click.mp3', 'sounds/click.ogg']
   }),
   onReceive: function() {
-    this.receive.play();
+    if (this.enabled)
+      this.receive.play();
   },
   onSend: function() {
-    this.send.play();
+    if (this.enabled)
+      this.send.play();
   }
 };

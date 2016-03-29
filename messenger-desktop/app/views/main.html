@@ -35,6 +35,18 @@
                   <input type="text" ng-model="data.lastName" class="form-control" placeholder="Last Name" required>
                 </div>
                 <div class="col-sm-12">
+                  <label>Audio Notifications</label>
+                  <br />
+                  <div class="btn-group clearfix">
+                      <label class="btn btn-default btn-sm"
+                             ng-class="{'btn-primary' : data.extras.audioNotify == 'true' || data.extras.audioNotify === true}"
+                             ng-model="data.extras.audioNotify" uib-btn-radio="true">ON</label>
+                      <label class="btn btn-default btn-sm"
+                             ng-class="{'btn-primary' : data.extras.audioNotify == 'false' || data.extras.audioNotify === false}"
+                             ng-model="data.extras.audioNotify" uib-btn-radio="false">OFF</label>
+                  </div>
+                </div>
+                <div class="col-sm-12">
                   <button class="btn btn-primary btn-sm" ng-click="updateProfile()">Update Profile</button>
                 </div>
               </div>
@@ -63,6 +75,13 @@
 
           <div ng-controller="ChannellistCtrl" class="sidebar-scroll fullpos">
 
+            <div class="flex-input">
+              <img class="search" src="images/search_icon.png" />
+              <img class="left" src="images/input_msg_left.png" />
+              <input type="text" placeholder="Search messages by user" ng-model="data.searchFilter" ng-change="filterChannelList()" />
+              <img class="right" src="images/input_msg_right.png" />
+            </div>
+
             <div class="sidebar-title">
               Messages
             </div>
@@ -70,7 +89,7 @@
             <div id="channel-list" class="sidebar-list">
               <div class="list-group">
                 <a ng-if="channelSummary.latestMessage"
-                   ng-repeat="channelSummary in data.channelSummaries | orderBy:lastPublishedTime:true"
+                   ng-repeat="channelSummary in data.channelSummaries | orderBy:lastPublishedTime:true | filter:userFilter"
                    href="#/chat/{{channelSummary.channelName}}/{{channelSummary.ownerId}}"
                    ng-click="clearUnread(channelSummary.channelName)"
                    on-hold="leaveConversation(channelSummary)"
