@@ -28,7 +28,7 @@
                 <br />
                 <span>Update Avatar</span>
               </label>
-              <!--<i class="fa fa-trash-o" ng-if="authService.userAvatar" ng-click="deleteAvatar()"></i>-->
+              <i class="fa fa-trash-o" ng-if="authService.userAvatar" ng-click="deleteAvatar()"></i>
 
               <hr />
 
@@ -45,10 +45,10 @@
                   <label>Audio Notifications</label>
                   <br />
                   <div class="btn-group clearfix">
-                      <label class="btn btn-default btn-sm"
+                      <label class="btn btn-default btn-xs"
                              ng-class="{'btn-primary' : data.extras.audioNotify == 'true' || data.extras.audioNotify === true}"
                              ng-model="data.extras.audioNotify" uib-btn-radio="true">ON</label>
-                      <label class="btn btn-default btn-sm"
+                      <label class="btn btn-default btn-xs"
                              ng-class="{'btn-primary' : data.extras.audioNotify == 'false' || data.extras.audioNotify === false}"
                              ng-model="data.extras.audioNotify" uib-btn-radio="false">OFF</label>
                   </div>

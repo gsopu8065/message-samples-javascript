@@ -20,7 +20,7 @@ body,html{height:100%;background:#eee}
 .light{color:#999;padding:3px}
 
 .icon-initials{display:inline-block;color:#fff;text-align:center;position:relative}
-.icon-initials span{font-size:17px;z-index:10;position:absolute;top:11px;letter-spacing:2px;font-weight:normal;left:1px;width:100%;display:block;color:#fff !important}
+.icon-initials span{font-size:17px;z-index:10;position:absolute;top:13px;letter-spacing:2px;font-weight:normal;left:1px;width:100%;display:block;color:#fff !important}
 .icon-initials img{z-index:0}
 
 /* sidebar */
@@ -33,7 +33,9 @@ body,html{height:100%;background:#eee}
 #profile-drawer .drawer-body{text-align:center;padding:40px 15px}
 #profile-drawer .drawer-heading{display:none;padding:12px 15px 11px}
 #profile-drawer .drawer-body .btn{margin-top:7px}
-#profile-drawer .drawer-body i.fa-trash-o{position:absolute;top:48px;right:38%;cursor:pointer}
+#profile-drawer .drawer-body i.fa-trash-o{display:none}
+#profile-drawer .drawer-body:hover i.fa-trash-o{display:inline-block;position:absolute;top:47px;right:38%;font-size:18px;cursor:pointer}
+#profile-drawer .drawer-body:hover i.fa-trash-o:hover{color:#3b88c3}
 #profile-drawer .drawer-nav li{cursor:pointer}
 #profile-drawer .drawer-footer{border-top:solid 1px #ccc;position:absolute;bottom:0;left:0;width:100%;cursor:pointer}
 #profile-drawer .drawer-footer i{float:left}

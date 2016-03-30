@@ -15,6 +15,7 @@ angular.module('messengerApp')
     $scope.navService = navService;
     $scope.authService = authService;
     $scope.showDrawer = false;
+    $scope.shownDeleteAvatar = false;
 
     $scope.data = {
       extras: authService.currentUser.extras || {}
@@ -112,7 +113,18 @@ angular.module('messengerApp')
 
     $scope.deleteAvatar = function() {
       // delete avatar of the current user
-      Max.getCurrentUser().deleteAvatar();
+      Max.getCurrentUser().deleteAvatar().success(function() {
+
+        refreshUserData(true);
+      });
+    };
+
+    $scope.showDeleteAvatar = function() {
+      $scope.shownDeleteAvatar = true;
+    };
+
+    $scope.hideDeleteAvatar = function() {
+      $scope.shownDeleteAvatar = false;
     };
 
     $scope.toggleDrawer = function(forceClose) {
@@ -156,7 +168,8 @@ angular.module('messengerApp')
       authService.initials = authService.getInitials(authService.currentUser);
       // get avatar from url, appending timestamp to bust browser cache
       if (isAvatarUpdate) {
-        authService.userAvatar = authService.currentUser.getAvatarUrl()+'&'+new Date().getTime();
+        authService.userAvatar = (authService.currentUser.extras && authService.currentUser.extras.hasAvatar)
+          ? authService.currentUser.getAvatarUrl() : null;
       }
 
       $scope.safeApply(function() {
