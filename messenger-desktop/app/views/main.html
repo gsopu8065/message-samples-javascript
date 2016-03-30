@@ -100,11 +100,11 @@
                 <a ng-if="channelSummary.latestMessage"
                    ng-repeat="channelSummary in data.channelSummaries | orderBy:lastPublishedTime:true | filter:userFilter"
                    href="#/chat/{{channelSummary.channelName}}/{{channelSummary.ownerId}}"
-                   ng-click="clearUnread(channelSummary.channelName);toggleMessageList(true);toggleDrawer(true)"
+                   ng-click="clearUnread(channelSummary);toggleMessageList(true);toggleDrawer(true)"
                    on-hold="leaveConversation(channelSummary)"
                    class="list-group-item"
                    ng-class="{'active': navService.currentChannel.name == channelSummary.channelName}">
-                  <i class="fa fa-circle is-unread" ng-if="data.unreads[channelSummary.channelName]"></i>
+                  <i class="fa fa-circle is-unread" ng-if="data.unreads[channelSummary.channelName] != channelSummary.latestMsgTime.getTime()"></i>
                   <i class="fa fa-trash" ng-click="leaveConversation(channelSummary)"></i>
                   <img ng-if="channelSummary.subscribers.length > 2" src="images/user_group.png" />
                   <img ng-if="channelSummary.subscribers.length < 3"
