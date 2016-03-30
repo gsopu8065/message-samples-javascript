@@ -1,5 +1,11 @@
 <div class="container has-inner-drawer">
 
+    <img id="message-list-open-btn" ng-class="{'shown': showMessageList}" class="hidden-sm hidden-md hidden-lg hidden-xl"
+          ng-click="toggleMessageList()" src="images/btn_msg_list.png" />
+
+    <i id="message-list-close-btn"  ng-click="toggleMessageList(true);toggleDrawer(true)" ng-class="{'shown': showMessageList || showDrawer}"
+       class="fa fa-2x fa-times-circle hidden-sm hidden-md hidden-lg hidden-xl"></i>
+
     <div id="profile-drawer" class="drawer drawer-inside dw-xs-4 fold"
          ng-class="{'open' : showDrawer}" aria-labelledby="profile-drawer">
         <div class="drawer-controls" ng-click="toggleDrawer()">
@@ -59,8 +65,10 @@
         </div>
     </div>
 
+    <div id="inactive-bgk" ng-click="toggleMessageList(true);toggleDrawer(true)" ng-class="{'shown': showMessageList || showDrawer}"></div>
+
     <div class="row">
-        <div id="sidebar" class="col-lg-4 col-md-4 col-sm-4 col-xs-4 no-float">
+        <div id="sidebar" ng-class="{'active': showMessageList}" class="col-lg-4 col-md-4 col-sm-4 col-xs-4 no-float">
 
           <div class="header">
             <label class="action-icon-label">
@@ -91,7 +99,7 @@
                 <a ng-if="channelSummary.latestMessage"
                    ng-repeat="channelSummary in data.channelSummaries | orderBy:lastPublishedTime:true | filter:userFilter"
                    href="#/chat/{{channelSummary.channelName}}/{{channelSummary.ownerId}}"
-                   ng-click="clearUnread(channelSummary.channelName)"
+                   ng-click="clearUnread(channelSummary.channelName);toggleMessageList(true);toggleDrawer(true)"
                    on-hold="leaveConversation(channelSummary)"
                    class="list-group-item"
                    ng-class="{'active': navService.currentChannel.name == channelSummary.channelName}">
@@ -125,7 +133,7 @@
               <uib-carousel active="active" interval="slideInterval" no-wrap="noWrapSlides">
                 <uib-slide ng-repeat="slide in slides track by slide.id"
                            index="slide.id"
-                           ng-click="goToConversation(slide.channel)">
+                           ng-click="goToConversation(slide.channel);toggleMessageList(true);toggleDrawer(true)">
                   <img ng-src="{{slide.image}}" style="margin:auto;">
                   <div class="carousel-caption">
                     <p>{{slide.text}}</p>

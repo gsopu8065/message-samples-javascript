@@ -20,6 +20,9 @@ angular.module('messengerApp')
       extras: authService.currentUser.extras || {}
     };
 
+    Audio.enabled = (authService.currentUser.extras &&
+      (authService.currentUser.extras.audioNotify === true || authService.currentUser.extras.audioNotify === 'true'));
+
     $scope.logout = function() {
       Alerts.Confirm({
           title       : 'Sign Out?',
@@ -107,8 +110,12 @@ angular.module('messengerApp')
       })
     };
 
-    $scope.toggleDrawer = function() {
-      $scope.showDrawer = !$scope.showDrawer;
+    $scope.toggleDrawer = function(forceClose) {
+      $scope.showDrawer = forceClose === true ? false : !$scope.showDrawer;
+    };
+
+    $scope.toggleMessageList = function(forceClose) {
+      $scope.showMessageList = forceClose === true ? false : !$scope.showMessageList;
     };
 
     $scope.$watch(function () {

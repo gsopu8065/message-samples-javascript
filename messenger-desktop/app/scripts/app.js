@@ -38,6 +38,7 @@ angular
       authService.userAvatar = (authService.currentUser.extras && authService.currentUser.extras.hasAvatar)
         ? authService.currentUser.getAvatarUrl() : null;
       bootstrapPublicChannels();
+      setConfigDefaults();
       $state.go('app');
     });
 
@@ -77,6 +78,16 @@ angular
           createIfNotExist(channels, ++index);
         });
       });
+    }
+
+    function setConfigDefaults() {
+      if (!authService.currentUser.extras || typeof authService.currentUser.extras.audioNotify === 'undefined') {
+
+        // set some custom configuration associated with the current user
+        authService.currentUser.extras = authService.currentUser.extras || {};
+        authService.currentUser.extras.audioNotify = false;
+        Max.User.updateProfile(authService.currentUser);
+      }
     }
 
     // shim for trim

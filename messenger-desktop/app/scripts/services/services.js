@@ -46,7 +46,34 @@ angular.module('messengerApp')
       currentPage: null,
       $currentScope: null,
       currentChannel: null,
-      list: null
+      list: null,
+      setUnreads: function(unreads) {
+        if (window.localStorage && Max.getCurrentUser()) {
+          setTimeout(function() {
+            var user = Max.getCurrentUser();
+            localStorage.setItem(user.userId + '_unreads', JSON.stringify(unreads));
+          }, 0);
+        }
+      },
+      getUnreads: function(cb) {
+        var unreads = {};
+        if (!window.localStorage || !Max.getCurrentUser()) return cb(unreads);
+
+        setTimeout(function() {
+          var user = Max.getCurrentUser();
+          var stored = localStorage.getItem(user.userId + '_unreads');
+          if (stored) {
+            unreads = JSON.parse(stored);
+          }
+          cb(unreads);
+        }, 0);
+      },
+      resetUnreads: function() {
+        if (window.localStorage && Max.getCurrentUser()) {
+          var user = Max.getCurrentUser();
+          localStorage.removeItem(user.userId + '_unreads');
+        }
+      }
     }
   })
 
@@ -222,4 +249,33 @@ var Audio = {
     if (this.enabled)
       this.send.play();
   }
+};
+
+var Cookie = {
+    create : function(name, val, days) {
+        var expires = '';
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = '; expires=' + date.toGMTString();
+        }
+        document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(val) + expires + '; path=/';
+    },
+    get : function(name) {
+        var nameEQ = encodeURIComponent(name) + '=';
+        var ca = document.cookie.split(';');
+        for (var i=0;i<ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1, c.length)
+            };
+            if (c.indexOf(nameEQ) == 0) {
+                return decodeURIComponent(c.substring(nameEQ.length, c.length))
+            }
+        }
+        return null;
+    },
+    remove : function(name) {
+        this.create(name, "", -1);
+    }
 };

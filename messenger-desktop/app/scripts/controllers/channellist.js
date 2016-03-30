@@ -20,6 +20,10 @@ angular.module('messengerApp')
     $scope.data.searchFilter = '';
     navService.list = $scope;
 
+    navService.getUnreads(function(unreads) {
+      $scope.data.unreads = unreads;
+    });
+
     // register a listener to listen for messages and update the channel summaries
     var listener = new Max.MessageListener('receivedMessageListener', function(mmxMessage) {
       Audio.onReceive();
@@ -35,6 +39,7 @@ angular.module('messengerApp')
               $scope.data.channelSummaries[i].latestMessage = getLatestMessage(mmxMessage);
               if (!navService.currentChannel || mmxMessage.channel.name != navService.currentChannel.name) {
                 $scope.data.unreads[mmxMessage.channel.name] = true;
+                navService.setUnreads($scope.data.unreads);
               }
               sortChannelSummary();
             });
@@ -93,6 +98,7 @@ angular.module('messengerApp')
                   || (navService.currentChannel
                   && newChannelName != navService.currentChannel.name))) {
               $scope.data.unreads[channelSummaries[i].channel.name] = true;
+              navService.setUnreads($scope.data.unreads);
             }
 
             if (!chatPhotoUser) {
@@ -194,6 +200,7 @@ angular.module('messengerApp')
 
     $scope.clearUnread = function(channelName) {
       delete $scope.data.unreads[channelName];
+      navService.setUnreads($scope.data.unreads);
     };
 
     function sortChannelSummary() {
