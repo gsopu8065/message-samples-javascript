@@ -86,7 +86,7 @@ angular
         // set some custom configuration associated with the current user
         authService.currentUser.extras = authService.currentUser.extras || {};
         authService.currentUser.extras.audioNotify = false;
-        Max.User.updateProfile(authService.currentUser);
+        Max.getCurrentUser().updateProfile(authService.currentUser);
       }
     }
 
