@@ -28,7 +28,8 @@ body,html{height:100%;background:#eee}
 
 #profile-drawer .drawer-controls{height:44px;width:38px;margin:4px;cursor:pointer;padding:0;background:#fff;position:absolute;top:0;right:-50px}
 #profile-drawer.open{box-shadow:1px 0 7px #aaa;border-right:solid 1px #aaa}
-#profile-drawer .drawer-contents{overflow:visible}
+#profile-drawer .drawer-contents{overflow:visible;display:none}
+#profile-drawer.open .drawer-contents{display:inherit}
 #profile-drawer .drawer-body{text-align:center;padding:40px 15px}
 #profile-drawer .drawer-heading{display:none;padding:12px 15px 11px}
 #profile-drawer .drawer-body .btn{margin-top:7px}
@@ -233,10 +234,10 @@ label.action-icon-label input[type="file"]{position:fixed;top:-1000px}
   #message-list-open-btn.shown{display:none}
   #message-list-open-btn{position:absolute;top:7px;left:56px;width:32px;z-index:200;cursor:pointer;color:#037dff;background:#fff}
   #message-list-close-btn{display:none}
-  #message-list-close-btn.shown{display:block;position:absolute;top:10px;left:310px;width:32px;z-index:200;cursor:pointer;color:#fff}
-  #profile-drawer.open{min-width:300px}
+  #message-list-close-btn.shown{display:block;position:absolute;top:10px;left:295px;width:32px;z-index:200;cursor:pointer;color:#fff}
+  #profile-drawer.open{min-width:280px}
   .container > .row{display:block}
-  .col-md-4.no-float{width:300px;height:100%;display:none;position:absolute;top:0;left:0;background:#fff;z-index:120;box-shadow:1px 0 7px #000;border-right:solid 1px #000}
+  .col-md-4.no-float{width:280px;height:100%;display:none;position:absolute;top:0;left:0;background:#fff;z-index:120;box-shadow:1px 0 7px #000;border-right:solid 1px #000}
   .col-md-4.no-float.active{display:block}
   .col-md-8, .col-md-8.no-float{width:100%;height:100%;display:block;position:absolute;top:0;left:0}
   .chat-bubble{max-width:260px}
