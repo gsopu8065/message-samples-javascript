@@ -165,7 +165,9 @@ var Channel = {
         var channelMsg = new Max.Message({
             message: inputs.message
         });
-        Channel.myCurrentChannel.publish(channelMsg);
+        Channel.myCurrentChannel.publish(channelMsg).error(function(e) {
+            renderResults('ERROR! ' + e);
+        });
     },
 
     fetchMessages: function() {

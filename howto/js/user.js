@@ -10,6 +10,7 @@ var User = {
             // login with the newly registered user
             Max.User.login(inputs.userName, inputs.password).success(function() {
                 renderResults('<br />logged in!', true);
+                clearFormData('feature-container');
                 handleLogin(true);
                 listenForInvites();
             });
@@ -25,6 +26,7 @@ var User = {
         // login with the given user
         Max.User.login(inputs.userName, inputs.password).success(function() {
             renderResults('logged in!');
+            clearFormData('feature-container');
             handleLogin(true);
             listenForInvites();
         }).error(function(e) {
@@ -79,8 +81,7 @@ var User = {
         var inputs = collectFormData('feature-container');
 
         // update user profile
-        var currentUser = Max.getCurrentUser();
-        currentUser.updateProfile(inputs).success(function() {
+        Max.getCurrentUser().updateProfile(inputs).success(function() {
 
             var updatedUser = Max.getCurrentUser();
 

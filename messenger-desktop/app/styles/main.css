@@ -33,6 +33,7 @@ body,html{height:100%;background:#eee}
 #profile-drawer .drawer-body{text-align:center;padding:40px 15px}
 #profile-drawer .drawer-heading{display:none;padding:12px 15px 11px}
 #profile-drawer .drawer-body .btn{margin-top:7px}
+#profile-drawer .drawer-body i.fa-trash-o{position:absolute;top:48px;right:38%;cursor:pointer}
 #profile-drawer .drawer-nav li{cursor:pointer}
 #profile-drawer .drawer-footer{border-top:solid 1px #ccc;position:absolute;bottom:0;left:0;width:100%;cursor:pointer}
 #profile-drawer .drawer-footer i{float:left}

@@ -18,8 +18,10 @@ body,html{height:100%;background:#eee}
 .hspacing{padding:0 15px}
 .note{font-size:11px;color:#888;padding:3px 0}
 
+input[type="file"]{min-height:34px;height:auto}
+
 /* sidebar */
-.sidebar-scroll{top:50px;padding:0;overflow-y:auto}
+.sidebar-scroll{top:50px;padding:0;overflow-y:auto;border-bottom:solid 1px #aaa}
 .sidebar-title{font-size:16px;color:#aaa;margin:10px 10px 1px 10px}
 #sidebar .list-group{border:none}
 #sidebar .list-group-item{padding:7px 15px;background:none;border:none;color:#555;opacity:.9;cursor:pointer}
@@ -38,12 +40,12 @@ body,html{height:100%;background:#eee}
 #feature-container > .btn{margin-top:15px}
 
 /* features */
-#feature-container #results{max-height:200px;overflow-y:auto}
-#feature-container .panel{padding:10px}
+#feature-container .panel{padding-top:10px}
+#feature-container .panel-default{padding:10px;max-height:200px;overflow-y:auto}
 #feature-container .form-inline{padding-bottom:20px}
 #feature-container ul{margin-top:7px}
-#feature-container ul.list-group{margin-top:0;margin-bottom:0}
-#feature-container .panel ul.list-group{border:solid 1px #ccc}
+#feature-container ul.list-group{margin-top:0}
+#feature-container .panel-default ul.list-group{border:solid 1px #ccc}
 #feature-container ul.list-group .list-group-item:hover{background:#F2FAFF;color:#333}
 #feature-container .form-group .form-inline{padding-bottom:0}
 #feature-container .tab-content{padding:30px 15px 0 15px;border:solid 1px #ccc;background:#fff;border-top:0}

@@ -58,6 +58,12 @@ function collectFormData(containerId) {
     return obj;
 }
 
+function clearFormData(containerId) {
+    $('#' + containerId).find('input, textarea, select').each(function() {
+        $(this).val('');
+    });
+}
+
 function renderResults(output, insertType, target) {
     insertType = (insertType === true || insertType === false) ? 'append' : insertType;
     resultContainer = $(target || '#results');
@@ -77,11 +83,11 @@ function channelDisplayHelper(channelsOrChannels) {
 
     for (var key in channelsOrChannels) {
         var channel = channelsOrChannels[key];
-        var row = $('<a href="#" class="list-group-item">' + channel.name
+        var row = $('<a href="#" class="list-group-item" index="' + key + '">' + channel.name
             + (channel.isPublic ? '' : ' <span class="glyphicon glyphicon-lock"></span>') + '</a>');
 
         row.click(function(event) {
-            Channel.goToChannel(event, channel);
+            Channel.goToChannel(event, channelsOrChannels[parseInt($(this).attr('index'))]);
         });
 
         parent.append(row);

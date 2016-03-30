@@ -45,7 +45,7 @@ angular.module('messengerApp')
 
       var updatedUser = angular.merge(authService.currentUser, $scope.data);
 
-      Max.User.updateProfile(updatedUser).success(function() {
+      Max.getCurrentUser().updateProfile(updatedUser).success(function() {
         Alerts.Success({
             title       : 'Profile Updated',
             description : 'Your profile has been updated successfully.'
@@ -108,6 +108,11 @@ angular.module('messengerApp')
       }).error(function(e) {
         alert(e);
       })
+    };
+
+    $scope.deleteAvatar = function() {
+      // delete avatar of the current user
+      Max.getCurrentUser().deleteAvatar();
     };
 
     $scope.toggleDrawer = function(forceClose) {

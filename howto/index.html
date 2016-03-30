@@ -169,12 +169,6 @@
           <input type="text" name="lastName" class="form-control" placeholder="Last Name" value="{%=o.lastName%}">
         </div>
       </div>
-      <div class="form-group">
-        <label class="col-sm-3 control-label">Username</label>
-        <div class="col-sm-9">
-          <input type="text" name="userName" class="form-control" placeholder="Username" value="{%=o.userName%}">
-        </div>
-      </div>
       <div class="col-sm-offset-3">
         <a class="btn btn-primary" onclick="User.updateProfile()">Update</a>
       </div>
@@ -357,45 +351,51 @@
 </script>
 
 <script type="text/x-tmpl" id="Channel-findChannels">
-    <form class="form-horizontal clearfix">
-      <div class="form-group">
-        <label class="col-sm-3 control-label">Find By Name</label>
-        <div class="col-sm-9">
-          <div class="form-inline">
-            <input type="text" name="channelName" class="form-control" placeholder="Channel Name">
-            <a class="btn btn-primary" onclick="Channel.findByName()">Search</a>
+    <div class="panel">
+        <form class="form-horizontal clearfix">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">Find By Name</label>
+            <div class="col-sm-9">
+              <div class="form-inline">
+                <input type="text" name="channelName" class="form-control" placeholder="Channel Name">
+                <a class="btn btn-primary" onclick="Channel.findByName()">Search</a>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-3 control-label">Starting With</label>
-        <div class="col-sm-9">
-          <div class="form-inline">
-            <input type="text" name="channelPrefix" class="form-control" placeholder="Channel Prefix">
-            <a class="btn btn-primary" onclick="Channel.findByPrefix()">Search</a>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">Starting With</label>
+            <div class="col-sm-9">
+              <div class="form-inline">
+                <input type="text" name="channelPrefix" class="form-control" placeholder="Channel Prefix">
+                <a class="btn btn-primary" onclick="Channel.findByPrefix()">Search</a>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-3 control-label">Find By Tags</label>
-        <div class="col-sm-9">
-          <div class="form-inline">
-            <input type="text" name="tags" class="form-control" placeholder="Tags">
-            <a class="btn btn-primary" onclick="Channel.findByTags()">Search</a>
-            <p class="note">a space-separated list of tags</p>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">is Public</label>
+            <div class="col-sm-4">
+              <select name="isPublic" class="form-control">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-3 control-label">is Public</label>
-        <div class="col-sm-4">
-          <select name="isPublic" class="form-control">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-          </select>
-        </div>
-      </div>
-    </form>
+        </form>
+    </div>
+    <div class="panel">
+        <form class="form-horizontal clearfix">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">Find By Tags</label>
+            <div class="col-sm-9">
+              <div class="form-inline">
+                <input type="text" name="tags" class="form-control" placeholder="Tags">
+                <a class="btn btn-primary" onclick="Channel.findByTags()">Search</a>
+                <p class="note">a space-separated list of tags</p>
+              </div>
+            </div>
+          </div>
+        </form>
+    </div>
     <div class="vspacing">
       <label>Results</label>
       <div id="results"></div>

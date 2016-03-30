@@ -2,6 +2,7 @@ var Chat = {
 
     sendMessage: function() {
         var inputs = collectFormData('feature-container');
+        if (!$.trim(inputs.message).length) return renderResults('ERROR! message field left blank');
 
         // register a listener to listen for incoming messages
         var listener = new Max.EventListener('myListener', {
@@ -41,6 +42,7 @@ var Chat = {
 
     sendAttachment: function() {
         var inputs = collectFormData('feature-container');
+        if (!$.trim(inputs.message).length) return renderResults('ERROR! message field left blank');
 
         // register a listener to listen for incoming messages
         var listener = new Max.EventListener('myListener', {
