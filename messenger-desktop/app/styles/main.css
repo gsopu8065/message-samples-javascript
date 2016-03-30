@@ -20,7 +20,7 @@ body,html{height:100%;background:#eee}
 .light{color:#999;padding:3px}
 
 .icon-initials{display:inline-block;color:#fff;text-align:center;position:relative}
-.icon-initials span{font-size:17px;z-index:10;position:absolute;top:13px;letter-spacing:2px;font-weight:normal;left:1px;width:100%;display:block;color:#fff !important}
+.icon-initials span{font-size:17px;z-index:10;position:absolute;top:11px;letter-spacing:2px;font-weight:normal;left:1px;width:100%;display:block;color:#fff !important}
 .icon-initials img{z-index:0}
 
 /* sidebar */
@@ -94,7 +94,7 @@ button.ion-android-send{padding-top:2px}
 .profile-pic{width:40px;height:40px;border-radius:50%;position:absolute;bottom:0}
 .profile-pic.left{left:10px}
 .profile-pic.right{right:10px}
-.profile-pic.icon-initials span{top:8px}
+.profile-pic.icon-initials span{top:7px}
 .ion-email{float:right;font-size:32px;vertical-align:middle}
 .message{font-size:14px;word-wrap:break-word;max-width:340px}
 .message.code-block{width:100%;cursor:pointer}
