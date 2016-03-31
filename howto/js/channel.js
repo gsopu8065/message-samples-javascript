@@ -10,7 +10,7 @@ var Channel = {
             name: inputs.name,
             summary: inputs.summary,
             isPublic: inputs.isPublic,
-            publishPermission: inputs.publishPermission
+            publishPermissions: inputs.publishPermissions
         }).success(function(myNewChannel) {
 
             renderResults('created new channel "' + myNewChannel.name + '"');

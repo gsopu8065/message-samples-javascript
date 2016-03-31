@@ -73,7 +73,7 @@ angular
           name: channels[index],
           summary: channels[index],
           isPublic: true,
-          publishPermission: 'subscribers'
+          publishPermissions: 'subscribers'
         }).success(function() {
           createIfNotExist(channels, ++index);
         });
