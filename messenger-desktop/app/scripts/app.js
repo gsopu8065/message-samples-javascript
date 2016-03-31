@@ -36,7 +36,7 @@ angular
       authService.currentUser = Max.getCurrentUser();
       authService.initials = authService.getInitials(authService.currentUser);
       authService.userAvatar = (authService.currentUser.extras && authService.currentUser.extras.hasAvatar)
-        ? authService.currentUser.getAvatarUrl() : null;
+        ? Max.User.getAvatarUrl() : null;
       bootstrapPublicChannels();
       setConfigDefaults();
       $state.go('app');
@@ -86,7 +86,7 @@ angular
         // set some custom configuration associated with the current user
         authService.currentUser.extras = authService.currentUser.extras || {};
         authService.currentUser.extras.audioNotify = false;
-        Max.getCurrentUser().updateProfile(authService.currentUser);
+        Max.User.updateProfile(authService.currentUser);
       }
     }
 

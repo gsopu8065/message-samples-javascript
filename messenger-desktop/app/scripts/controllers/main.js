@@ -46,7 +46,7 @@ angular.module('messengerApp')
 
       var updatedUser = angular.merge(authService.currentUser, $scope.data);
 
-      Max.getCurrentUser().updateProfile(updatedUser).success(function() {
+      Max.User.updateProfile(updatedUser).success(function() {
         Alerts.Success({
             title       : 'Profile Updated',
             description : 'Your profile has been updated successfully.'
@@ -94,10 +94,8 @@ angular.module('messengerApp')
     };
 
     $scope.updateAvatar = function(el) {
-      var user = Max.getCurrentUser();
-
       // upload avatar for current user
-      user.setAvatar(el.files[0]).success(function() {
+      Max.User.setAvatar(el.files[0]).success(function() {
         try {
           el.value = null;
         } catch(ex) { }
@@ -113,7 +111,7 @@ angular.module('messengerApp')
 
     $scope.deleteAvatar = function() {
       // delete avatar of the current user
-      Max.getCurrentUser().deleteAvatar().success(function() {
+      Max.User.deleteAvatar().success(function() {
 
         refreshUserData(true);
       });
@@ -169,7 +167,7 @@ angular.module('messengerApp')
       // get avatar from url, appending timestamp to bust browser cache
       if (isAvatarUpdate) {
         authService.userAvatar = (authService.currentUser.extras && authService.currentUser.extras.hasAvatar)
-          ? authService.currentUser.getAvatarUrl() : null;
+          ? Max.User.getAvatarUrl() : null;
       }
 
       $scope.safeApply(function() {

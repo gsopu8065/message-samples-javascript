@@ -81,7 +81,7 @@ var User = {
         var inputs = collectFormData('feature-container');
 
         // update user profile
-        Max.getCurrentUser().updateProfile(inputs).success(function() {
+        Max.User.updateProfile(inputs).success(function() {
 
             var updatedUser = Max.getCurrentUser();
 
