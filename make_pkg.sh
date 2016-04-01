@@ -50,9 +50,6 @@ cd dist
 zip -r ../../target/magnet-messenger-web-js-build.zip .
 
 # package messenger desktop
-cp ./* ../../messenger-desktop/app
+cp -r . ../../messenger-desktop/app
 cd ../../messenger-desktop
 zip -r ../target/magnet-messenger-desktop-js.zip .
-
-#npm run release
-#zip -r releases/* ../target/magnet-messenger-desktop-js-osx.zip .
