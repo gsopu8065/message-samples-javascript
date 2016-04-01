@@ -54,6 +54,14 @@
       });
     </script>
 
+    <script type="text/javascript">
+      if (typeof require === typeof Function) {
+        require('electron-cookies');
+
+        window.$ = window.jQuery = require(__dirname + '/scripts/jquery.min.js');
+      }
+    </script>
+
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>

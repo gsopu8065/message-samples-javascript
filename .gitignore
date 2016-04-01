@@ -4,3 +4,6 @@ node_modules
 .DS_Store
 magnet-max-sdk.js
 magnet-max-sdk-min.js
+
+messenger-desktop/build
+messenger-desktop/releases

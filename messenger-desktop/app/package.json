@@ -1,0 +1,15 @@
+{
+  "name": "magnet-messenger",
+  "productName": "Magnet Messenger",
+  "identifier": "com.magnet.messenger",
+  "description": "Your favorite messenger app!",
+  "version": "1.0.0",
+  "author": "Edward Yang",
+  "copyright": "© 2016, Magnet Systems, Inc",
+  "main": "background.js",
+  "dependencies": {
+    "electron-cookies": "^1.1.0",
+    "fs-jetpack": "^0.7.0",
+    "moment": "^2.12.0"
+  }
+}
