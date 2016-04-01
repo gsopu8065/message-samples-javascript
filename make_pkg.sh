@@ -31,15 +31,15 @@ if [ -f js/libs/magnet-max-sdk.js ] ; then
 fi
 zip -r ../target/magnet-howto-js.zip .
 
-cd ../messenger/www
+cd ../messenger-mobileweb/www
 zip -r ../../target/magnet-messenger-mobileweb-js.zip .
 
-cd ../../messenger-desktop
+cd ../../messenger-web
 
 ### sdk location update ##
 
 if [ -f app/scripts/magnet-max-sdk.js ] ; then
-	echo "found SDK, importing into messenger-desktop app"
+	echo "found SDK, importing into messenger-web app"
 	sed -i -- 's/\/\/cdn.magnet.com\/downloads\/magnet-max-sdk.min.js/scripts\/magnet-max-sdk.js/g' app/index.html
 fi
 
@@ -47,4 +47,4 @@ npm install
 bower install
 grunt build
 cd dist
-zip -r ../../target/magnet-messenger-desktop-js-build.zip .
+zip -r ../../target/magnet-messenger-web-js-build.zip .
