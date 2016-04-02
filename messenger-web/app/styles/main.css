@@ -49,9 +49,10 @@ body,html{height:100%;background:#eee}
 #profile-drawer .col-sm-12{margin-top:10px}
 #sidebar .action-icon-label{margin-left:45px}
 
+#sidebar-wrapper{margin-top:50px}
 #sidebar .header .action-icon-label, #sidebar .header .action-icon-label img{cursor:default}
-.sidebar-scroll{margin-top:50px;margin-bottom:100px;padding:0;overflow-y:auto}
-.sidebar-title{font-size:16px;color:#aaa;margin:10px 10px 1px 10px}
+.sidebar-scroll{position:absolute;top:0;left:0;padding:0;overflow-y:auto}
+.sidebar-title{font-size:15px;color:#aaa;margin:5px 5px 1px 5px}
 .sidebar-list .list-group-item{padding:7px 2px;background:none;border:none;color:#555;opacity:.9;min-height:51px;overflow:hidden}
 .sidebar-list .list-group-item b{display:block;font-weight:normal;overflow-x:hidden;font-size:14px;position:absolute;top:11px;left:0;width:90%;padding-left:58px;padding-right:65px}
 .sidebar-list .list-group-item .last-message{display:block;position:absolute;top:28px;left:0;padding-left:58px;color:#999;font-size:13px;font-weight:normal !important}
@@ -59,27 +60,34 @@ body,html{height:100%;background:#eee}
 .sidebar-list .list-group-item:hover{background:#fafafa;color:#333}
 .sidebar-list .list-group-item.active{background:#eee}
 .sidebar-list .list-group-item.active b{font-weight:bold;color:#333}
+.sidebar-list img, .sidebar-list .icon-initials{width:30px;height:30px;border-radius:50%;float:left;margin:5px 10px 5px 17px}
+.sidebar-list .icon-initials img{width:100%;margin:0}
+.sidebar-list .icon-initials span{font-size:13px;top:7px}
+.sidebar-list .fa-circle{position:absolute;left:7px;top:17px;color:#999;font-size:.7em}
+.sidebar-list .fa-circle.is-unread{color:#037dff}
+.sidebar-list .fa-trash{position:absolute;bottom:7px;right:7px;color:#037dff;display:none;font-size:1.2em}
+.sidebar-list .list-group-item:hover .fa-trash{display:inline-block}
 
 .flex-input{margin:10px 13px 0;position:relative}
 .flex-input .search{position:absolute;top:-1px;left:2px}
 .flex-input input{width:100%;background:none !important;border:none;outline:none;border-bottom:solid 1px #9ea2a2;text-indent:30px;padding-bottom:6px}
 .flex-input .left{position:absolute;bottom:0;left:0}
 .flex-input .right{position:absolute;bottom:0;right:0}
-#channel-list img, #channel-list .icon-initials{width:30px;height:30px;border-radius:50%;float:left;margin:5px 10px 5px 17px}
-#channel-list .icon-initials img{width:100%;margin:0}
-#channel-list .icon-initials span{font-size:13px;top:7px}
-#channel-list .fa-circle{position:absolute;left:7px;top:17px;color:#999;font-size:.7em}
-#channel-list .fa-circle.is-unread{color:#037dff}
-#channel-list .fa-trash{position:absolute;bottom:7px;right:7px;color:#037dff;display:none;font-size:1.2em}
-#channel-list .list-group-item:hover .fa-trash{display:inline-block}
 
-#forum-carousel{position:absolute;bottom:0;left:0;width:100%;height:100px}
-#forum-container{position:absolute;bottom:0;left:0;width:100%;height:60px}
-#forum-container img{height:60px !important;cursor:pointer}
-#forum-container .carousel-indicators{display:none}
-#forum-container .carousel-control .glyphicon{margin-top:-16px}
-#forum-container .carousel-caption{padding:0;bottom:10px;right:auto;left:90px;cursor:pointer}
-#forum-container .carousel-caption p{font-size:16px;cursor:pointer}
+#private-channels{height:55%;overflow-y:hidden;width:100%}
+#channel-list{margin-top:70px;overflow-y:auto}
+
+#forum-carousel{position:absolute;bottom:0;left:0;width:100%;height:45%}
+#forum-container{margin-top:30px;overflow-y:auto}
+#forum-container .list-group{margin-bottom:0}
+#forum-container img{width:20px;height:20px;margin:5px 11px 5px 27px}
+#forum-container .list-group-item{min-height:0;padding:5px 2px}
+/*#forum-container .list-group-item b{position:relative;top:0;left:0}*/
+
+/*#forum-container .carousel-indicators{display:none}*/
+/*#forum-container .carousel-control .glyphicon{margin-top:-16px}*/
+/*#forum-container .carousel-caption{padding:0;bottom:10px;right:auto;left:90px;cursor:pointer}*/
+/*#forum-container .carousel-caption p{font-size:16px;cursor:pointer}*/
 
 /* chat */
 .header .members{float:left}
@@ -167,7 +175,7 @@ label.action-icon-label input[type="file"]{position:fixed;top:-1000px}
 .form-signin input[type="password"]{margin-bottom:10px;border-top-left-radius:0;border-top-right-radius:0}
 
 /* modals */
-.user-list-container{overflow-y:scroll;max-height:300px}
+.user-list-container{overflow-y:scroll;max-height:395px}
 .user-list-container img{width:30px;margin-right:6px}
 .user-list-container .list-group{margin-bottom:0;height:100%}
 .user-list-container .list-group-item{padding:2px;border-radius:0;border:0}

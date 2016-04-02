@@ -69,7 +69,7 @@
     <div id="inactive-bgk" ng-click="toggleMessageList(true);toggleDrawer(true)" ng-class="{'shown': showMessageList || showDrawer}"></div>
 
     <div class="row">
-        <div id="sidebar" ng-class="{'active': showMessageList}" class="col-lg-4 col-md-4 col-sm-4 col-xs-4 no-float">
+        <div id="sidebar" ng-controller="ChannellistCtrl" ng-class="{'active': showMessageList}" class="col-lg-4 col-md-4 col-sm-4 col-xs-4 no-float">
 
           <div class="header">
             <label class="action-icon-label">
@@ -82,66 +82,83 @@
             <img src="images/btn_newmsg.png" class="pull-right" ng-click="createConversation()" />
           </div>
 
-          <div ng-controller="ChannellistCtrl" class="sidebar-scroll fullpos">
+          <div id="sidebar-wrapper" class="fullpos">
 
-            <div class="flex-input">
-              <img class="search" src="images/search_icon.png" />
-              <img class="left" src="images/input_msg_left.png" />
-              <input type="text" placeholder="Search messages by user" ng-model="data.searchFilter" ng-change="filterChannelList()" />
-              <img class="right" src="images/input_msg_right.png" />
-            </div>
+            <div id="private-channels" ng-controller="ChannellistCtrl" class="sidebar-scroll">
 
-            <div class="sidebar-title">
-              Messages
-            </div>
-
-            <div id="channel-list" class="sidebar-list">
-              <div class="list-group">
-                <a ng-if="channelSummary.latestMessage"
-                   ng-repeat="channelSummary in data.channelSummaries | orderBy:lastPublishedTime:true | filter:userFilter"
-                   href="#/chat/{{channelSummary.channelName}}/{{channelSummary.ownerId}}"
-                   ng-click="clearUnread(channelSummary);toggleMessageList(true);toggleDrawer(true)"
-                   on-hold="leaveConversation(channelSummary)"
-                   class="list-group-item"
-                   ng-class="{'active': navService.currentChannel.name == channelSummary.channelName}">
-                  <i class="fa fa-circle is-unread" ng-if="data.unreads[channelSummary.channelName] != channelSummary.latestMsgTime.getTime()"></i>
-                  <i class="fa fa-trash" ng-click="leaveConversation(channelSummary)"></i>
-                  <img ng-if="channelSummary.subscribers.length > 2" src="images/user_group.png" />
-                  <img ng-if="channelSummary.subscribers.length < 3"
-                       ng-src="{{channelSummary.chatPhoto.url}}"
-                       ng-show="channelSummary.showPhoto"
-                       imageload="onLoadAttempt" item="channelSummary" />
-                  <div class="icon-initials" ng-if="channelSummary.subscribers.length < 3 && !channelSummary.showPhoto">
-                    <span>{{channelSummary.chatPhoto.initials}}</span>
-                    <img src="images/icon_empty.png" />
-                  </div>
-                  <b class="overflowable">{{channelSummary.subscriberNames}}</b>
-                  <div class="hidden-sm hidden-xs timestamp pull-right" am-time-ago="channelSummary.latestMsgTime"></div>
-                  <br />  <span class="last-message overflowable-no-dots">{{channelSummary.latestMessage || 'no messages yet!'}}</span>
-                </a>
+              <div class="flex-input">
+                <img class="search" src="images/search_icon.png" />
+                <img class="left" src="images/input_msg_left.png" />
+                <input type="text" placeholder="Search messages by user" ng-model="data.searchFilter" ng-change="filterChannelList()" />
+                <img class="right" src="images/input_msg_right.png" />
               </div>
+
+              <div class="sidebar-title">
+                Messages
+              </div>
+
+              <div id="channel-list" class="sidebar-list fullpos">
+                <div class="list-group">
+                  <a ng-if="channelSummary.latestMessage"
+                     ng-repeat="channelSummary in data.channelSummaries | orderBy:lastPublishedTime:true | filter:userFilter"
+                     href="#/chat/{{channelSummary.channelName}}/{{channelSummary.ownerId}}"
+                     ng-click="clearUnread(channelSummary);toggleMessageList(true);toggleDrawer(true)"
+                     on-hold="leaveConversation(channelSummary)"
+                     class="list-group-item"
+                     ng-class="{'active': navService.currentChannel.name == channelSummary.channelName}">
+                    <i class="fa fa-circle is-unread" ng-if="data.unreads[channelSummary.channelName] != channelSummary.latestMsgTime.getTime()"></i>
+                    <i class="fa fa-trash" ng-click="leaveConversation(channelSummary)"></i>
+                    <img ng-if="channelSummary.subscribers.length > 2" src="images/user_group.png" />
+                    <img ng-if="channelSummary.subscribers.length < 3"
+                         ng-src="{{channelSummary.chatPhoto.url}}"
+                         ng-show="channelSummary.showPhoto"
+                         imageload="onLoadAttempt" item="channelSummary" />
+                    <div class="icon-initials" ng-if="channelSummary.subscribers.length < 3 && !channelSummary.showPhoto">
+                      <span>{{channelSummary.chatPhoto.initials}}</span>
+                      <img src="images/icon_empty.png" />
+                    </div>
+                    <b class="overflowable">{{channelSummary.subscriberNames}}</b>
+                    <div class="hidden-sm hidden-xs timestamp pull-right" am-time-ago="channelSummary.latestMsgTime"></div>
+                    <br />  <span class="last-message overflowable-no-dots">{{channelSummary.latestMessage || 'no messages yet!'}}</span>
+                  </a>
+                </div>
+              </div>
+
             </div>
 
-          </div>
+            <div id="forum-carousel">
 
-          <div id="forum-carousel" ng-controller="ForumcarouselCtrl">
+              <div class="sidebar-title">
+                Public Forums
+              </div>
 
-            <div class="sidebar-title">
-              Forums
+              <div id="forum-container" class="sidebar-list fullpos">
+                <div class="list-group">
+                  <a ng-repeat="channel in data.forums"
+                     href="#"
+                     ng-click="goToConversation($event, channel);toggleMessageList(true);toggleDrawer(true)"
+                     class="list-group-item"
+                     ng-class="{'active': navService.currentChannel.name == channel.name}">
+                    <img src="images/user_group.png" />
+                    <b class="overflowable"># {{channel.name}}</b>
+                  </a>
+                </div>
+              </div>
+
+              <!--<div id="forum-container">-->
+                <!--<uib-carousel active="active" interval="slideInterval" no-wrap="noWrapSlides">-->
+                  <!--<uib-slide ng-repeat="slide in slides track by slide.id"-->
+                             <!--index="slide.id"-->
+                             <!--ng-click="goToConversation(slide.channel);toggleMessageList(true);toggleDrawer(true)">-->
+                    <!--<img ng-src="{{slide.image}}" style="margin:auto;">-->
+                    <!--<div class="carousel-caption">-->
+                      <!--<p>{{slide.text}}</p>-->
+                    <!--</div>-->
+                  <!--</uib-slide>-->
+                <!--</uib-carousel>-->
+              <!--</div>-->
             </div>
 
-            <div id="forum-container">
-              <uib-carousel active="active" interval="slideInterval" no-wrap="noWrapSlides">
-                <uib-slide ng-repeat="slide in slides track by slide.id"
-                           index="slide.id"
-                           ng-click="goToConversation(slide.channel);toggleMessageList(true);toggleDrawer(true)">
-                  <img ng-src="{{slide.image}}" style="margin:auto;">
-                  <div class="carousel-caption">
-                    <p>{{slide.text}}</p>
-                  </div>
-                </uib-slide>
-              </uib-carousel>
-            </div>
           </div>
 
         </div>
@@ -166,11 +183,28 @@
 <script type="text/ng-template" id="InviteUsers.html">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
-    <h4 class="modal-title">{{data.channelState == 'new' ? 'Select users to invite to your new chat' : 'Select users to invite to your chat'}}</h4>
+    <h4 class="modal-title">{{data.channelState == 'new' ? 'Create a chat' : 'Select users to invite to your chat'}}</h4>
   </div>
   <div class="modal-body user-list-container">
 
-    <input type="text" ng-model="data.search" ng-change="searchUsers()" name="search" class="form-control" placeholder="Search for users" />
+    <div ng-if="data.channelState == 'new'" class="row-fluid clearfix">
+      <div class="col-sm-6">
+        <label>Private Chat</label>
+        <select ng-model="data.newChannelIsPrivate" class="form-control">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+      </div>
+      <div ng-if="data.newChannelIsPrivate === 'false'" class="col-sm-6">
+        <label>Channel name</label>
+        <input type="text" ng-model="data.newChannelName"
+               class="form-control" placeholder="name of your new channel" />
+      </div>
+    </div>
+
+    <label ng-if="data.channelState == 'new'">Select users to add to your chat</label>
+    <input type="text" ng-model="data.search" ng-change="searchUsers()" name="search"
+           class="form-control" placeholder="Search for users" />
 
     <div class="row-fluid hidden-xs">
       <div class="col-sm-6">
@@ -213,7 +247,7 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
     <button type="button" class="btn btn-primary"
-        ng-disabled="data.selectCount < 1"
+        ng-disabled="data.selectCount < 1 || (data.newChannelIsPrivate === 'false' && !data.newChannelName.length)"
         ng-click="startConversation()">{{data.channelState == 'new' ? 'Start Chat' : 'Invite Users'}}</button>
   </div>
 </script>

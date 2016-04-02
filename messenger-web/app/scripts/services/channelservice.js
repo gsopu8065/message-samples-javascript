@@ -12,8 +12,10 @@ angular.module('messengerApp')
 
     return {
       channelSummaries: [],
+      forums: [],
       reset: function() {
         this.channelSummaries = [];
+        this.forums = [];
       }
     };
 

@@ -16,6 +16,7 @@ angular.module('messengerApp')
     $scope.data = {};
     $scope.data.developerWeekChannel = null;
     $scope.data.channelSummaries = channelService.channelSummaries;
+    $scope.data.forums = channelService.forums;
     $scope.data.unreads = {};
     $scope.data.searchFilter = '';
     navService.list = $scope;
@@ -29,7 +30,10 @@ angular.module('messengerApp')
       Audio.onReceive();
 
       var isExistingChannel = false;
-      if (mmxMessage.channel && mmxMessage.channel.name && mmxMessage.channel.name != 'askMagnet') {
+      if (mmxMessage.channel
+        && mmxMessage.channel.name
+        && mmxMessage.channel.name != 'askMagnet'
+        && !mmxMessage.channel.isPublic) {
         for (var i=0;i<$scope.data.channelSummaries.length;++i) {
           if ($scope.data.channelSummaries[i].channelName == mmxMessage.channel.name) {
             isExistingChannel = true;
@@ -113,17 +117,44 @@ angular.module('messengerApp')
       });
     };
 
+    $scope.refreshForumList = function() {
+      // get all the public channels
+      Max.Channel.findPublicChannels(null, 1000).success(function(channels) {
+          channelService.forums = channels;
+      });
+    };
+
+    $scope.goToConversation = function(e, channel) {
+      e.preventDefault();
+      $state.go('app.chat', {
+        channelName: channel.name,
+        userId: '*'
+      });
+      // subscribe to the public channel if not already subscribed
+      if (!channel.isSubscribed) {
+        channel.subscribe();
+      }
+    };
+
     $scope.$watch(function() {
       return channelService.channelSummaries
-    }, function(newVal, oldVal) {
+    }, function(newVal) {
         if (typeof newVal !== 'undefined') {
             $scope.data.channelSummaries = channelService.channelSummaries;
         }
     });
 
+    $scope.$watch(function() {
+      return channelService.forums
+    }, function(newVal) {
+        if (typeof newVal !== 'undefined') {
+            $scope.data.forums = channelService.forums;
+        }
+    });
+
     $scope.$watch(function () {
       return navService.currentChannel
-    }, function(newVal, oldVal) {
+    }, function(newVal) {
         if (typeof newVal !== 'undefined') {
           for (var i = 0; i < $scope.data.channelSummaries.length; ++i) {
             if (navService.currentChannel
@@ -210,5 +241,6 @@ angular.module('messengerApp')
     };
 
     $scope.refreshChannelList();
+    $scope.refreshForumList();
 
   });
