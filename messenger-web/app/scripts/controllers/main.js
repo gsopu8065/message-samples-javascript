@@ -8,7 +8,7 @@
  * Controller of the messengerApp
  */
 angular.module('messengerApp')
-  .controller('MainCtrl', function ($scope, authService, navService, $uibModal, Alerts) {
+  .controller('MainCtrl', function ($scope, authService, navService, $uibModal, Alerts, notify) {
 
     if (!authService.isAuthenticated) return;
 
@@ -23,6 +23,11 @@ angular.module('messengerApp')
 
     Audio.enabled = (authService.currentUser.extras &&
       (authService.currentUser.extras.audioNotify === true || authService.currentUser.extras.audioNotify === 'true'));
+
+    notify.enabled = !authService.currentUser.extras
+      || typeof authService.currentUser.extras.visualNotify === 'undefined'
+      || (authService.currentUser.extras &&
+      (authService.currentUser.extras.visualNotify === true || authService.currentUser.extras.visualNotify === 'true'));
 
     $scope.logout = function() {
       Alerts.Confirm({
@@ -182,6 +187,11 @@ angular.module('messengerApp')
 
       Audio.enabled = (authService.currentUser.extras &&
         (authService.currentUser.extras.audioNotify === true || authService.currentUser.extras.audioNotify === 'true'));
+
+      notify.enabled = !authService.currentUser.extras
+        || typeof authService.currentUser.extras.visualNotify === 'undefined'
+        || (authService.currentUser.extras &&
+        (authService.currentUser.extras.visualNotify === true || authService.currentUser.extras.visualNotify === 'true'));
 
     }
 

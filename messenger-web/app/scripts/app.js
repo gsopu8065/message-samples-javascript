@@ -81,11 +81,16 @@ angular
     }
 
     function setConfigDefaults() {
-      if (!authService.currentUser.extras || typeof authService.currentUser.extras.audioNotify === 'undefined') {
+      if (!authService.currentUser.extras || typeof authService.currentUser.extras.visualNotify === 'undefined') {
 
         // set some custom configuration associated with the current user
         authService.currentUser.extras = authService.currentUser.extras || {};
-        authService.currentUser.extras.audioNotify = false;
+        if (typeof authService.currentUser.extras.audioNotify === 'undefined') {
+          authService.currentUser.extras.audioNotify = false;
+        }
+        if (typeof authService.currentUser.extras.visualNotify === 'undefined') {
+          authService.currentUser.extras.visualNotify = true;
+        }
         Max.User.updateProfile(authService.currentUser);
       }
     }

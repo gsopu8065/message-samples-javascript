@@ -8,7 +8,7 @@
  * Controller of the messengerApp
  */
 angular.module('messengerApp')
-  .controller('ChannellistCtrl', function ($scope, authService, navService, channelService, $state, Alerts) {
+  .controller('ChannellistCtrl', function ($scope, authService, navService, channelService, $state, Alerts, notify) {
 
     if (!authService.isAuthenticated) return $state.go('login');
     channelService.reset();
@@ -25,8 +25,19 @@ angular.module('messengerApp')
     });
 
     // register a listener to listen for messages and update the channel summaries
-    var listener = new Max.MessageListener('receivedMessageListener', function(mmxMessage) {
+    var listener = new Max.EventListener('receivedMessageListener', function(mmxMessage) {
       Audio.onReceive();
+
+      if (mmxMessage.sender.userId != Max.getCurrentUser().userId
+        && (!navService.currentChannel
+        || (navService.currentChannel && navService.currentChannel.name != mmxMessage.channel.name))) {
+
+        var title = mmxMessage.sender.displayName
+          || authService.getDisplayName(mmxMessage.sender)
+          || mmxMessage.sender.userName;
+
+        notify.show(title, getLatestMessage(mmxMessage));
+      }
 
       var isExistingChannel = false;
       if (mmxMessage.channel && mmxMessage.channel.name && mmxMessage.channel.name != 'askMagnet') {
