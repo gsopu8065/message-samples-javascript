@@ -1,10 +1,11 @@
 <div class="container has-inner-drawer">
 
-    <img id="message-list-open-btn" ng-class="{'shown': showMessageList}" class="hidden-sm hidden-md hidden-lg hidden-xl"
+    <img id="message-list-open-btn" ng-class="{'shown': !showMessageList && !showDrawer}" class="hidden-sm hidden-md hidden-lg"
           ng-click="toggleMessageList()" src="images/btn_msg_list.png" />
 
-    <i id="message-list-close-btn"  ng-click="toggleMessageList(true);toggleDrawer(true)" ng-class="{'shown': showMessageList || showDrawer}"
-       class="fa fa-2x fa-times-circle hidden-sm hidden-md hidden-lg hidden-xl"></i>
+    <span id="message-list-close-btn"  ng-click="toggleMessageList(true);toggleDrawer(true)"
+        ng-class="{'shown': showMessageList || showDrawer}"
+          class="fa fa-2x fa-times-circle hidden-sm hidden-md hidden-lg"></span>
 
     <div id="profile-drawer" class="drawer drawer-inside dw-xs-4 fold"
          ng-class="{'open' : showDrawer}" aria-labelledby="profile-drawer">
