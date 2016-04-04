@@ -160,8 +160,9 @@ label.action-icon-label input[type="file"]{position:fixed;top:-1000px}
 #add-attachment-btn{cursor:pointer}
 .ace-tm{border:solid 1px #ccc;height:180px}
 .end-of-messages-alert{text-align:center;font-size:25px;color:#ccc;font-weight:800;padding:20px 0}
-.delete-message-btn{position:absolute;top:30%;border-radius:50%;background:#fff;color:#037dff;padding:6px;cursor:pointer;width:27px;text-align:center;opacity:.8}
+.delete-message-btn{display:none;position:absolute;top:30%;border-radius:50%;background:#fff;color:#037dff;padding:6px;cursor:pointer;width:27px;text-align:center;opacity:.8}
 .delete-message-btn:hover{background:#037dff;color:#fff}
+.message-wrapper:hover .delete-message-btn{display:inline-block}
 .chat-bubble.left .delete-message-btn{right:-38px}
 .chat-bubble.right .delete-message-btn{left:-38px}
 
