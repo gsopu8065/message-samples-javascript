@@ -35,7 +35,9 @@ var packageBuiltApp = function () {
     var deferred = Q.defer();
 
     asar.createPackageWithOptions(projectDir.path('build'), readyAppDir.path('resources/app.asar'), {
-        dot: true
+        dot: true,
+        unpackDir: '**/node_modules/node-notifier/vendor/**',
+        unpack: '**/images/messenger-icon.png'
     }, function () {
         deferred.resolve();
     });
