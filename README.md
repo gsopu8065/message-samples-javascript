@@ -20,30 +20,35 @@ A basic web app created to demonstrate how to create channels and send/receive m
 5. From the Sandbox, try sending some messages to the `GetStarted` channel. You should receive messages from your web page.
 
 
-## [Kitchen Sink](kitchen-sink)
+## [How To](howto)
 
-A basic web app created to showcase Magnet Message JS SDK APIs.
+A basic kitchen sink web app created to demonstrate Magnet Message JS SDK APIs.
+
+![How To](/images/howto.png)
 
 ### Instructions
 1. Sign in at [Magnet Sandbox](https://sandbox.magnet.com).
 2. Create an app, and copy the `Client Id` and `Client Secret`.
-3. Place the keys into the `init` function in kitchen-sink/index.html.
+3. Place the keys into the `init` function in howto/js/app.js.
     ```
         Max.init({
             clientId: '<your client id>',
             clientSecret: '<your client secret>'
         });
     ```
-4. Open kitchen-sink/index.html in a web browser.
-5. The app will call several APIs from the SDK in succession and display them alongside the API.
+4. Open howto/index.html in a web browser.
+5. From the menu at the left, register or login with a user.
+6. After logging in, you the left menu will be populated with various Magnet Message features.
+7. Click on each feature to try a simple demonstration.
+8. You can view the documented code used for each demonstration in the files within howto/js.
 
 
-## [Magnet Messenger - Desktop](messenger-desktop)
+## [Magnet Messenger - Web](messenger-web)
 
 A full-featured chat app created with Magnet Message on top of the of [AngularJS](https://angularjs.org/). Demonstrates
 how to create public and private channels, and invite/chat with members of the channels.
 
-![Magnet Messenger - Desktop](/images/messenger-desktop.png)
+![Magnet Messenger - Web](/images/messenger-web.png)
 
 ### Prerequisites
 
@@ -53,33 +58,33 @@ how to create public and private channels, and invite/chat with members of the c
 
 ### Installation
 
-1. Navigate to the `messenger-desktop` directory from your command line.
+1. Navigate to the `messenger-web` directory from your command line.
 2. Execute the command `npm install` to install build tool dependencies.
 3. Execute the command `bower install` to install application dependencies.
 
 ### Instructions
 1. Sign in at [Magnet Sandbox](https://sandbox.magnet.com).
 2. Create an app, and copy the `Client Id` and `Client Secret`.
-3. Place the keys into the `init` function in kitchen-sink/index.html.
+3. Place the keys into the `init` function in messenger-web/app/scripts/config/config.js.
     ```
         Max.init({
             clientId: '<your client id>',
             clientSecret: '<your client secret>'
         });
     ```
-4. Navigate to the `messenger-desktop` directory from your command line.
+4. Navigate to the `messenger-web` directory from your command line.
 5. Execute the command `grunt serve` to start a server to host the app.
 6. Open `http://localhost:9000` in your web browser.
 7. To start sending and receiving messages, register two new users from two different browsers. From the first browser, invite the
 other user. You will now be able to communicate between the users through a chat screen.
 
 
-## [Magnet Messenger - Mobile Web](messenger)
+## [Magnet Messenger - Mobile Web](messenger-mobileweb)
 
 A basic chat app created with Magnet Message on top of the [Ionic](http://ionicframework.com/) framework. Demonstrates
 how to create public and private channels, and invite/chat with members of the channels.
 
-![Magnet Messenger - Mobile Web](/images/messenger.png)
+![Magnet Messenger - Mobile Web](/images/messenger-mobileweb.png)
 
 ### Prerequisites
 
@@ -89,14 +94,14 @@ how to create public and private channels, and invite/chat with members of the c
 ### Instructions
 1. Sign in at [Magnet Sandbox](https://sandbox.magnet.com).
 2. Create an app, and copy the `Client Id` and `Client Secret`.
-3. Place the keys into the `init` function in messenger/www/js/app.js.
+3. Place the keys into the `init` function in messenger-mobileweb/www/js/app.js.
     ```
         Max.init({
             clientId: '<your client id>',
             clientSecret: '<your client secret>'
         });
     ```
-4. Navigate to the `messenger` directory from your command line.
+4. Navigate to the `messenger-mobileweb` directory from your command line.
 5. Execute the command `ionic serve` to start a server to host the app.
 6. Open `http://localhost:8100` in your web browser.
 7. To start sending and receiving messages, register two new users from two different browsers. From the first browser, invite the

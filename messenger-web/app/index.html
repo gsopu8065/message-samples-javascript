@@ -1,0 +1,102 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>Magnet Messenger</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="bower_components/please-wait/build/please-wait.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap-drawer/dist/css/bootstrap-drawer.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  </head>
+  <body ng-app="messengerApp">
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser.
+        Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+    <div id="view-container" ui-view></div>
+
+    <script src="loader/please-wait.min.js"></script>
+    <script type="text/javascript">
+      window.loading_screen = window.pleaseWait({
+        logo: "loader/messenger-icon_gray.png",
+        backgroundColor: '#848484',
+        loadingHtml: '\
+          <div class="loading-screen">\
+              <div>\
+                  <div class="sk-circle">\
+                      <div class="sk-circle1 sk-child"></div>\
+                      <div class="sk-circle2 sk-child"></div>\
+                      <div class="sk-circle3 sk-child"></div>\
+                      <div class="sk-circle4 sk-child"></div>\
+                      <div class="sk-circle5 sk-child"></div>\
+                      <div class="sk-circle6 sk-child"></div>\
+                      <div class="sk-circle7 sk-child"></div>\
+                      <div class="sk-circle8 sk-child"></div>\
+                      <div class="sk-circle9 sk-child"></div>\
+                      <div class="sk-circle10 sk-child"></div>\
+                      <div class="sk-circle11 sk-child"></div>\
+                      <div class="sk-circle12 sk-child"></div>\
+                  </div>\
+              </div>\
+        </div>'
+      });
+    </script>
+
+    <script type="text/javascript">
+      if (typeof require === typeof Function) {
+        window.$ = window.jQuery = require(__dirname + '/scripts/jquery.min.js');
+      }
+    </script>
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/angular-moment/angular-moment.js"></script>
+    <script src="bower_components/ace-builds/src-min-noconflict/ace.js"></script>
+    <script src="bower_components/angular-ui-ace/ui-ace.js"></script>
+    <script src="bower_components/bootstrap-drawer/dist/js/drawer.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <script src="//cdn.magnet.com/downloads/magnet-max-sdk.min.js"></script>
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/plugins/plugins.js"></script>
+    <script src="scripts/config/config.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/login.js"></script>
+    <script src="scripts/controllers/register.js"></script>
+    <script src="scripts/services/services.js"></script>
+    <script src="scripts/controllers/channellist.js"></script>
+    <script src="scripts/services/channelservice.js"></script>
+    <script src="scripts/controllers/chat.js"></script>
+    <script src="scripts/services/alerts.js"></script>
+    <script src="scripts/controllers/userselect.js"></script>
+    <script src="scripts/controllers/channeldetails.js"></script>
+    <script src="scripts/controllers/forumcarousel.js"></script>
+    <script src="scripts/controllers/createsnippet.js"></script>
+    <script src="scripts/controllers/showsnippet.js"></script>
+    <script src="scripts/services/notify.js"></script>
+    <!-- endbuild -->
+</body>
+</html>

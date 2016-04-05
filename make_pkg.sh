@@ -17,18 +17,39 @@ BUILD_NUMBER=$3
 mkdir target
 
 # zip the sample apps
-zip -r target/magnet-getstarted-js.zip getstarted
-zip -r target/magnet-kitchensink-js.zip kitchen-sink
-cd messenger/www
+
+cd getstarted
+zip -r ../target/magnet-getstarted-js.zip .
+
+cd ../kitchen-sink
+zip -r ../target/magnet-kitchensink-js.zip .
+
+cd ../howto
+if [ -f js/libs/magnet-max-sdk.js ] ; then
+	echo "found SDK, importing into howto app"
+	sed -i -- 's/\/\/cdn.magnet.com\/downloads\/magnet-max-sdk.min.js/js\/libs\/magnet-max-sdk.js/g' index.html
+fi
+zip -r ../target/magnet-howto-js.zip .
+
+cd ../messenger-mobileweb/www
 zip -r ../../target/magnet-messenger-mobileweb-js.zip .
 
-# build and zip the messenger desktop app
-cd ../../messenger-desktop
+cd ../../messenger-web
 
 ### sdk location update ##
-#sed -i -- 's/\/\/cdn.magnet.com\/downloads\/magnet-max-sdk.min.js/scripts\/magnet-max-sdk.js/g' app/index.html
+
+if [ -f app/scripts/magnet-max-sdk.js ] ; then
+	echo "found SDK, importing into messenger-web app"
+	sed -i -- 's/\/\/cdn.magnet.com\/downloads\/magnet-max-sdk.min.js/scripts\/magnet-max-sdk.js/g' app/index.html
+fi
+
 npm install
 bower install
 grunt build
 cd dist
-zip -r ../../target/magnet-messenger-desktop-js-build.zip .
+zip -r ../../target/magnet-messenger-web-js-build.zip .
+
+# package messenger desktop
+cp -r . ../../messenger-desktop/app
+cd ../../messenger-desktop
+zip -r ../target/magnet-messenger-desktop-js.zip .
