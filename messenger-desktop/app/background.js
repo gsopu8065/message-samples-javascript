@@ -13,6 +13,7 @@ import env from './env';
 var Menu = require('menu');
 var mainWindow;
 var force_quit = false;
+var quitReady = false;
 
 app.on('ready', function () {
 
@@ -71,6 +72,7 @@ app.on('ready', function () {
             e.preventDefault();
             mainWindow.hide();
         }
+        force_quit = true;
     });
 
     // You can use 'before-quit' instead of (or with) the close event
@@ -80,9 +82,11 @@ app.on('ready', function () {
             e.preventDefault();
             mainWindow.hide();
         }
+        force_quit = true;
     });
 
-    app.on('activate-with-no-open-windows', function(){
+    app.on('activate-with-no-open-windows', function() {
+        force_quit = false;
         mainWindow.show();
     });
 
@@ -92,10 +96,10 @@ app.on('ready', function () {
         mainWindow = null;
     });
 
-    app.on('window-all-closed', function () {
-        if (process.platform != 'darwin')
+    app.on('window-all-closed', function() {
+        if (process.platform != 'darwin') {
             app.quit();
+        }
     });
 
 });
-
