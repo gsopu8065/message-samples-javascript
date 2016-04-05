@@ -19,7 +19,9 @@ app.on('ready', function () {
 
     var mainWindow = createWindow('main', {
         width: 1000,
-        height: 600
+        height: 600,
+        'min-height': 500,
+        'min-width': 333
     });
 
     mainWindow.loadURL('file://' + __dirname + '/index.html');
