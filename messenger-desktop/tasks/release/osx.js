@@ -38,7 +38,8 @@ var packageBuiltApp = function () {
 
     asar.createPackageWithOptions(projectDir.path('build'), finalAppDir.path('Contents/Resources/app.asar'), {
         dot: true,
-        unpackDir: '**/node_modules/node-notifier/vendor/**'
+        unpackDir: '**/node_modules/node-notifier/vendor/**',
+        unpack: '**/images/messenger-icon.png'
     }, function () {
         deferred.resolve();
     });

@@ -11,9 +11,7 @@ import createWindow from './helpers/window';
 import env from './env';
 
 var Menu = require('menu');
-var mainWindow;
 var force_quit = false;
-var quitReady = false;
 
 app.on('ready', function () {
 
@@ -21,7 +19,7 @@ app.on('ready', function () {
         width: 1000,
         height: 600,
         'min-height': 500,
-        'min-width': 333
+        'min-width': 390
     });
 
     mainWindow.loadURL('file://' + __dirname + '/index.html');
