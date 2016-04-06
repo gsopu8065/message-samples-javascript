@@ -174,6 +174,18 @@ angular.module('messengerApp')
   }
 })
 
+.directive('onEnterKeypress', function () {
+    return function (scope, element, attrs) {
+        element.bind('keydown keypress', function (event) {
+            if (event.which === 13) {
+                scope.$apply(function() {
+                    scope.$eval(attrs.onEnterKeypress);
+                });
+                event.preventDefault();
+            }
+        });
+    };
+})
 .directive('autolinker', ['$timeout',
   function($timeout) {
     return {
@@ -227,7 +239,8 @@ var Audio = {
       this.receive.play();
   },
   onSend: function() {
-    if (this.enabled)
+    // too annoying!
+    if (this.enabled && 1 == 2)
       this.send.play();
   }
 };
