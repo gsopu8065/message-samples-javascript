@@ -1,0 +1,55 @@
+{
+  "name": "bootstrap-drawer",
+  "version": "1.0.4",
+  "description": "A Bootstrap add-on to create drawer (off-canvas) styled navigation",
+  "main": "index.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clineamb/bootstrap-drawer.git"
+  },
+  "keywords": [
+    "bootstrap3",
+    "bootstrap-3",
+    "bootstrap",
+    "offcanvas",
+    "off-canvas",
+    "off",
+    "canvas",
+    "navigation",
+    "navs",
+    "nav",
+    "drawer",
+    "menu",
+    "html",
+    "css",
+    "less",
+    "javascript",
+    "js",
+    "jquery"
+  ],
+  "author": "Caroline Amaba <her@carolineamaba.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/clineamb/bootstrap-drawer-menu/issues"
+  },
+  "homepage": "https://github.com/clineamb/bootstrap-drawer-menu",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-less": "^3.0.3",
+    "gulp-markdown": "^1.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.4.1",
+    "gulp-util": "^3.0.6",
+    "nunjucks": "^2.0.0",
+    "through2": "^2.0.0"
+  },
+  "dependencies": {
+    "jquery": "2.x",
+    "bootstrap": "3.x"
+  }
+}
