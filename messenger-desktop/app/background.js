@@ -5,7 +5,6 @@
 
 import { app } from 'electron';
 import createWindow from './helpers/window';
-import defaultMenu from './helpers/default_menu';
 
 // Special module holding environment variables which you declared
 // in config/env_xxx.json file.
