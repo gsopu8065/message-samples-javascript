@@ -53,7 +53,7 @@ angular.module('messengerApp')
     fetchTimeout = setTimeout(function() {
 
       if (!$scope.data.search.trim().length) {
-        query = {firstName: '*'};
+        query = '*';
       } else {
         var nameAry = $scope.data.search.split(' ');
         query = '';
