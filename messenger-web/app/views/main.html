@@ -130,7 +130,7 @@
                       <span>{{channelSummary.chatPhoto.initials}}</span>
                       <img src="images/icon_empty.png" />
                     </div>
-                    <b class="overflowable">{{channelSummary.subscriberNames}}</b>
+                    <b class="overflowable">{{channelSummary.displayName}}</b>
                     <div class="hidden-sm hidden-xs timestamp pull-right" am-time-ago="channelSummary.latestMsgTime"></div>
                     <br />  <span class="last-message overflowable-no-dots">{{channelSummary.latestMessage || 'no messages yet!'}}</span>
                   </a>
@@ -208,8 +208,8 @@
           <option value="false">No</option>
         </select>
       </div>
-      <div ng-if="data.newChannelIsPrivate === 'false'" class="col-sm-6">
-        <label>Channel name</label>
+      <div class="col-sm-6">
+        <label>Channel name <span ng-if="data.newChannelIsPrivate === 'true'">(optional)</span></label>
         <input type="text" ng-model="data.newChannelName"
                class="form-control" placeholder="name of your new channel" />
       </div>

@@ -149,10 +149,9 @@ angular.module('messengerApp')
           return alert('channel name is required');
 
         // no matching channel found, just create a new private channel
-        var channelName = $scope.data.newChannelIsPrivate === 'false' ? $scope.data.newChannelName : new Date().getTime();
         Max.Channel.create({
-          name: channelName,
-          summary: authService.currentUser.userName,
+          name: new Date().getTime(),
+          summary: $scope.data.newChannelName || '',
           isPublic: $scope.data.newChannelIsPrivate === 'false',
           publishPermissions: $scope.data.newChannelIsPrivate === 'false' ? 'anyone' : 'subscribers'
         }).success(function(newChannel) {
