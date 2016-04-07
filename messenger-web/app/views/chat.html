@@ -84,6 +84,16 @@
                        href="{{attachment.downloadUrl}}">Download</a>
                   </div>
 
+                  <form id="membership-checkout-form"
+                        ng-if="message.messageContent.type == 'payment'">
+                       <div id="payment-dropin-container"></div>
+                    <div class="form-group">
+                      <button id="membership-confirm-btn" class="btn btn-primary" type="submit">Confirm</button>
+                    </div>
+                      <button id="membership-checkout-btn" style="display:none" class="btn btn-primary" type="button">Check Out</button>
+                  </form>
+
+
                   <div class="message-detail">
                       <span ng-click="viewProfile(message)"
                           class="bold message-user">{{data.subscribers[message.sender.userId].displayName || message.sender.displayName || message.sender.userName}}</span>,

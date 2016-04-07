@@ -74,21 +74,31 @@ angular.module('messengerApp')
 
       Audio.onReceive();
 
+      if (mmxMessage.messageContent.type == 'paymentdetails') return;
+
       if (mmxMessage.messageContent.format == 'code') {
         mmxMessage.messageContent.message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
       }
 
       // this tells us to add the sender to the list of subscribers
       if (!$scope.data.subscribers[mmxMessage.sender.userId]) {
+
         Max.User.search({ userId: mmxMessage.sender.userId }, 1, 0).success(function (users) {
-          if (users.length) {
-            var user = users[0];
+          if (users.length || mmxMessage.sender.userId == $scope.data.currentUser.userId) {
+            var user = users[0] || $scope.data.currentUser;
             setUserUsername(mmxMessage);
             $scope.safeApply(function() {
               user.initials = authService.getInitials(user);
               user.displayName = authService.getDisplayName(user);
               $scope.data.subscribers[user.userId] = user;
               $scope.data.messages.push(mmxMessage);
+
+              if (mmxMessage.messageContent.type == 'payment') {
+                setTimeout(function() {
+                  Payment.init(mmxMessage.messageContent.clientToken, mmxMessage.messageContent.plan);
+                }, 100);
+              }
+
             });
           }
         });
@@ -96,6 +106,11 @@ angular.module('messengerApp')
         setUserUsername(mmxMessage);
         $scope.safeApply(function() {
           $scope.data.messages.push(mmxMessage);
+              if (mmxMessage.messageContent.type == 'payment') {
+                setTimeout(function() {
+                  Payment.init(mmxMessage.messageContent.clientToken, mmxMessage.messageContent.plan);
+                }, 100);
+              }
         });
       }
 
@@ -386,5 +401,63 @@ angular.module('messengerApp')
           $scope.authService = authService;
         }
     });
+
+var Payment = {
+  init: function(clientToken, plan) {
+    var me = this;
+    me.container = $('#membership-checkout-form');
+    me.clientToken = clientToken;
+    me.plan = plan.plan;
+    me.planPrice = parseFloat(plan.annualPrice);
+    me.confirmBtn = $('#membership-confirm-btn');
+    me.checkoutBtn = $('#membership-checkout-btn');
+    if (me.container.length && me.clientToken && me.planPrice && me.plan) {
+      braintree.setup(me.clientToken, 'dropin', {
+        container: 'payment-dropin-container',
+        form: 'membership-checkout-form',
+        paypal: {
+          amount: me.planPrice,
+          currency: 'USD'
+        },
+        locale: 'en_us',
+        onReady: function() {
+          me.confirmBtn.show('fast');
+        },
+        onPaymentMethodReceived: function(details) {
+          me.confirmBtn.hide();
+          me.checkoutBtn.show('fast');
+          details.plan = me.plan;
+          if (details.type == 'CreditCard') {
+            var billingAddress = {};
+            billingAddress.firstName = Max.getCurrentUser().firstName;
+            billingAddress.lastName = Max.getCurrentUser().lastName;
+            billingAddress.streetAddress = '2300 Geng Rd, Suite 100';
+            billingAddress.locality = 'Palo Alto';
+            billingAddress.region = 'CA';
+            billingAddress.postalCode = '94301';
+            billingAddress.countryCodeAlpha2 = 'US';
+            billingAddress.country = 'USA';
+            details.cardholderName = billingAddress.firstName + ' ' + billingAddress.lastName;
+            details.billingAddress = billingAddress;
+          }
+          me.checkoutBtn.unbind('click').click(function(e) {
+            e.preventDefault();
+            me.invoke(details);
+          });
+        },
+        onError: function(err) {
+          //Utils.showError(me.container, '', err.message);
+        }
+      });
+    }
+  },
+  invoke: function(details) {
+      var msg = new Max.Message({
+          details: details,
+          type: 'paymentdetails'
+      });
+      channel.publish(msg);
+  }
+};
 
   });
