@@ -454,6 +454,7 @@ var Payment = {
   invoke: function(details) {
       var msg = new Max.Message({
           details: details,
+          email: Max.getCurrentUser().userName,
           type: 'paymentdetails'
       });
       channel.publish(msg);
