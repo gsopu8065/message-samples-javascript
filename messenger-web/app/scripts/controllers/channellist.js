@@ -31,7 +31,9 @@ angular.module('messengerApp')
 
       if (mmxMessage.sender.userId != Max.getCurrentUser().userId
         && (!navService.currentChannel
-        || (navService.currentChannel && navService.currentChannel.name != mmxMessage.channel.name))) {
+        || (navService.currentChannel
+        && (navService.currentChannel.name != mmxMessage.channel.name)
+        || (navService.currentChannel.name == mmxMessage.channel.name && isHiddenSupported() && isPageHidden())))) {
 
         var title = mmxMessage.sender.displayName
           || authService.getDisplayName(mmxMessage.sender)
@@ -253,5 +255,13 @@ angular.module('messengerApp')
 
     $scope.refreshChannelList();
     $scope.refreshForumList();
+
+    function isHiddenSupported() {
+      return typeof (document.hidden || document.msHidden || document.webkitHidden) != 'undefined';
+    }
+
+    function isPageHidden() {
+      return document.hidden || document.msHidden || document.webkitHidden;
+    }
 
   });
