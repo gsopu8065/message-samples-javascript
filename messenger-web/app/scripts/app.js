@@ -21,7 +21,7 @@ angular
     'ui.ace'
   ])
 
-  .run(function($location, authService, $rootScope, $state) {
+  .run(function($location, authService, $rootScope, $state, notify) {
 
     // handle not authorized and session expiry errors by redirecting to login page
     Max.on('not-authenticated', function() {
@@ -37,7 +37,8 @@ angular
       authService.initials = authService.getInitials(authService.currentUser);
       authService.userAvatar = (authService.currentUser.extras && authService.currentUser.extras.hasAvatar)
         ? Max.User.getAvatarUrl() : null;
-      bootstrapPublicChannels();
+      notify.reset();
+      //bootstrapPublicChannels();
       setConfigDefaults();
       $state.go('app');
     });

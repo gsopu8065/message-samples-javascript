@@ -9,7 +9,7 @@
  */
 angular.module('messengerApp')
   .controller('ChatCtrl', function ($scope, $rootScope, $state, $stateParams, $timeout,
-                                    $interval, navService, authService, $uibModal, Alerts) {
+                                    $interval, navService, authService, $uibModal, Alerts, notify) {
 
     var footerBar;
     var scroller;
@@ -61,6 +61,8 @@ angular.module('messengerApp')
       name: $stateParams.channelName,
       userId: $stateParams.userId == '*' ? null : $stateParams.userId
     });
+
+    notify.resetChannel(channel);
 
     // fetch initial set of messages. messages received afterwards will be added in real-time with the listener.
     fetchMessages(function() {

@@ -39,7 +39,7 @@ angular.module('messengerApp')
           || authService.getDisplayName(mmxMessage.sender)
           || mmxMessage.sender.userName;
 
-        notify.show(title, getLatestMessage(mmxMessage));
+        notify.show(title, mmxMessage, getLatestMessage(mmxMessage));
       }
 
       var isExistingChannel = false;
@@ -284,6 +284,7 @@ angular.module('messengerApp')
 
     function isDefaultName(summary, ownerUsername) {
       return !summary || (summary && (
+        summary.trim() == '' ||
         endsWith(summary, 'private chat') ||
         summary == '[CHAT KIT]' ||
         summary.toLowerCase() == ownerUsername.toLowerCase()));

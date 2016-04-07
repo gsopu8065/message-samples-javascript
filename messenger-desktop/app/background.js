@@ -3,7 +3,7 @@
 // It doesn't have any windows which you can see on screen, but we can open
 // window from here.
 
-import { app } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import createWindow from './helpers/window';
 
 // Special module holding environment variables which you declared
@@ -123,7 +123,7 @@ function menuTempl() {
     ]
   });
 
-    if (env.name != 'production') {
+    //if (env.name != 'production') {
         menu.push({
             label: 'View',
             submenu: [{
@@ -140,7 +140,7 @@ function menuTempl() {
                 }
             }]
         });
-    }
+    //}
 
   menu.push({
     label: 'Window',
