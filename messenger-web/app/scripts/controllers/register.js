@@ -8,7 +8,7 @@
  * Controller of the messengerApp
  */
 angular.module('messengerApp')
-  .controller('RegisterCtrl', function ($scope) {
+  .controller('RegisterCtrl', function ($scope, authService) {
 
       $scope.data = {
         userName : '',
@@ -28,6 +28,8 @@ angular.module('messengerApp')
 
         // register user by supplying credentials
         Max.User.register($scope.data).success(function() {
+
+          authService.password = $scope.data.password;
 
           // login with the newly registered user
           var username = $scope.data.userName;
