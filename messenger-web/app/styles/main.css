@@ -78,7 +78,8 @@ body,html{height:100%;background:#eee}
 #channel-list{margin-top:70px;overflow-y:auto}
 
 #forum-carousel{position:absolute;bottom:0;left:0;width:100%;height:45%}
-#forum-container{margin-top:30px;overflow-y:auto}
+#forum-carousel .sidebar-title{margin-top:10px}
+#forum-container{margin-top:31px;overflow-y:auto}
 #forum-container .list-group{margin-bottom:0}
 #forum-container img{width:20px;height:20px;margin:5px 11px 5px 27px}
 #forum-container .list-group-item{min-height:0;padding:5px 2px}
@@ -160,11 +161,12 @@ label.action-icon-label input[type="file"]{position:fixed;top:-1000px}
 #add-attachment-btn{cursor:pointer}
 .ace-tm{border:solid 1px #ccc;height:180px}
 .end-of-messages-alert{text-align:center;font-size:25px;color:#ccc;font-weight:800;padding:20px 0}
-.delete-message-btn{display:none;position:absolute;top:30%;border-radius:50%;background:#fff;color:#037dff;padding:6px;cursor:pointer;width:27px;text-align:center;opacity:.8}
-.delete-message-btn:hover{background:#037dff;color:#fff}
-.message-wrapper:hover .delete-message-btn{display:inline-block}
-.chat-bubble.left .delete-message-btn{right:-38px}
-.chat-bubble.right .delete-message-btn{left:-38px}
+.message-btn{display:none;position:absolute;top:30%;border-radius:50%;background:#fff;color:#037dff;padding:6px;cursor:pointer;width:27px;text-align:center;opacity:.8}
+.message-btn:hover{background:#037dff;color:#fff}
+.download-picture-btn{top:60%}
+.message-wrapper:hover .message-btn{display:inline-block}
+.chat-bubble.left .message-btn{right:-38px}
+.chat-bubble.right .message-btn{left:-38px}
 
 /* sign-in */
 .form-signin{max-width:330px;padding:15px;margin:0 auto}
@@ -191,6 +193,16 @@ label.action-icon-label input[type="file"]{position:fixed;top:-1000px}
 .user-list-container .alert div{width:90%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .user-list-container .alert-dismissible .close{top:2px}
 #member-list{max-height:200px}
+
+
+.resizable{position:relative;transition:none!important}
+.rg-right,.rg-left,.rg-top,.rg-bottom{display:block;width:14px;height:14px;line-height:14px;position:absolute;z-index:1;box-sizing:border-box;border:1px solid #ccc}
+.rg-right,.rg-left{border-width:0 1px;top:50%;margin:-10px 0 0 14px;height:20px;width:14px}
+.rg-top,.rg-bottom{border-width:1px 0;left:50%;margin:0;width:20px;height:6px;background:#eee}
+.rg-top{cursor:row-resize;width:100%;top:0;left:0;margin-top:0}
+.rg-right{cursor:col-resize;height:100%;right:0;top:0;margin-right:-14px}
+.rg-bottom{cursor:row-resize;width:100%;bottom:0;left:0;margin-bottom:-14px}
+.rg-left{cursor:col-resize;height:100%;left:0;top:0;margin-left:-14px}
 
 /* loading */
 .loading-screen{z-index:10000;text-align:center;opacity: 0.9;}

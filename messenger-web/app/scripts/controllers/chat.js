@@ -29,7 +29,8 @@ angular.module('messengerApp')
       message: '',
       subscribers: {},
       isLoading: false,
-      messageEndReached: false
+      messageEndReached: false,
+      downloadSupported: ('download' in document.createElement('a'))
     };
 
     $scope.authService = authService;
@@ -101,7 +102,10 @@ angular.module('messengerApp')
         });
       }
 
-      scrollBottom();
+      var msgContainer = document.getElementById('channel-messages');
+      if ((msgContainer.scrollHeight - msgContainer.offsetHeight - msgContainer.scrollTop) < 220) {
+        scrollBottom();
+      }
     });
 
     // register the listener
@@ -339,6 +343,10 @@ angular.module('messengerApp')
         });
 
       });
+    };
+
+    $scope.downloadPicture = function(downloadUrl) {
+
     };
 
     $scope.aceLoaded = function(_editor) {

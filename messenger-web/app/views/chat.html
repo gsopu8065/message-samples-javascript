@@ -39,7 +39,12 @@
 
               <div class="chat-bubble left">
 
-                  <span ng-if="data.isOwner" ng-click="deleteMessage(message, $index)" class="delete-message-btn fa fa-trash"></span>
+                  <span ng-if="data.isOwner" ng-click="deleteMessage(message, $index)" class="message-btn delete-message-btn fa fa-trash"></span>
+
+                  <a ng-if="data.downloadSupported && message.messageContent && message.messageContent.type == 'photo' && message.attachments[0]"
+                     ng-href="{{message.attachments[0].downloadUrl}}" download="{{message.attachments[0].name}}">
+                    <span class="message-btn download-picture-btn fa fa-download"></span>
+                  </a>
 
                   <div class="message"
                        ng-if="message.messageContent
@@ -103,7 +108,12 @@
 
               <div class="chat-bubble right">
 
-                  <span ng-if="data.isOwner" ng-click="deleteMessage(message, $index)" class="delete-message-btn fa fa-trash"></span>
+                  <span ng-if="data.isOwner" ng-click="deleteMessage(message, $index)" class="message-btn delete-message-btn fa fa-trash"></span>
+
+                  <a ng-if="data.downloadSupported && message.messageContent && message.messageContent.type == 'photo' && message.attachments[0]"
+                     ng-href="{{message.attachments[0].downloadUrl}}" download="{{message.attachments[0].name}}">
+                    <span class="message-btn download-picture-btn fa fa-download"></span>
+                  </a>
 
                   <div class="message"
                        ng-if="message.messageContent
