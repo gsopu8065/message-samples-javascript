@@ -27,7 +27,10 @@ angular.module('messengerApp')
 
     // register a listener to listen for messages and update the channel summaries
     var listener = new Max.EventListener('receivedMessageListener', function(mmxMessage) {
-      Audio.onReceive();
+
+      if (mmxMessage.sender.userId != Max.getCurrentUser().userId) {
+       Audio.onReceive();
+      }
 
       if (mmxMessage.sender.userId != Max.getCurrentUser().userId
         && (!navService.currentChannel
@@ -52,12 +55,12 @@ angular.module('messengerApp')
             isExistingChannel = true;
             $scope.$apply(function() {
               $scope.data.channelSummaries[i].latestMsgTime = mmxMessage.timestamp;
+              $scope.data.channelSummaries[i].latestMsgTimestamp = roundToThousand(mmxMessage.timestamp.getTime());
               $scope.data.channelSummaries[i].lastPublishedTime = Max.Utils.dateToISO8601(mmxMessage.timestamp);
               $scope.data.channelSummaries[i].latestMessage = getLatestMessage(mmxMessage);
 
               if (navService.currentChannel && mmxMessage.channel.name == navService.currentChannel.name) {
-                $scope.data.unreads[mmxMessage.channel.name] = mmxMessage.timestamp.getTime();
-                navService.setUnreads($scope.data.unreads);
+                $scope.clearUnread($scope.data.channelSummaries[i]);
               }
 
               sortChannelSummary();
@@ -124,6 +127,7 @@ angular.module('messengerApp')
                 && channelSummaries[i].messages[0].messageContent) {
                 channelSummaries[i].latestMessage = getLatestMessage(channelSummaries[i].messages[0]);
                 channelSummaries[i].latestMsgTime = channelSummaries[i].messages[0].timestamp;
+                channelSummaries[i].latestMsgTimestamp = roundToThousand(channelSummaries[i].messages[0].timestamp.getTime());
               }
 
               if (!chatPhotoUser) {
@@ -254,8 +258,8 @@ angular.module('messengerApp')
     };
 
     $scope.clearUnread = function(channelSummary) {
-      if (channelSummary.latestMsgTime) {
-        $scope.data.unreads[channelSummary.channelName] = channelSummary.latestMsgTime.getTime();
+      if (channelSummary.latestMsgTimestamp) {
+        $scope.data.unreads[channelSummary.channelName] = channelSummary.latestMsgTimestamp;
         navService.setUnreads($scope.data.unreads);
       }
     };
@@ -300,6 +304,10 @@ angular.module('messengerApp')
         if (users[i].userId == id) user = users[i];
       }
       return user;
+    }
+
+    function roundToThousand(num) {
+      return Math.floor(num / 1000) * 1000;
     }
 
   });

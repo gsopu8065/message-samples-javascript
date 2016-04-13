@@ -75,8 +75,6 @@ angular.module('messengerApp')
       // dont take action on messages not sent to the current channel
       if (!mmxMessage.channel || mmxMessage.channel.name != channel.name) return;
 
-      Audio.onReceive();
-
       if (mmxMessage.messageContent.format == 'code') {
         mmxMessage.messageContent.message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
       }

@@ -119,7 +119,7 @@
                      on-hold="leaveConversation(channelSummary)"
                      class="list-group-item"
                      ng-class="{'active': navService.currentChannel.name == channelSummary.channelName}">
-                    <i class="fa fa-circle is-unread" ng-if="data.unreads[channelSummary.channelName] != channelSummary.latestMsgTime.getTime()"></i>
+                    <i class="fa fa-circle is-unread" ng-if="data.unreads[channelSummary.channelName] != channelSummary.latestMsgTimestamp"></i>
                     <i class="fa fa-trash" ng-click="leaveConversation(channelSummary)"></i>
                     <img ng-if="channelSummary.subscribers.length > 2" src="images/user_group.png" />
                     <img ng-if="channelSummary.subscribers.length < 3"
