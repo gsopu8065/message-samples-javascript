@@ -130,6 +130,7 @@ button.ion-android-send{padding-top:2px}
 .chat-bubble.right a.autolinker{color:#fff;font-weight:700}
 .chat-bubble.right .message-user{font-size:12px;color:#fff}
 .chat-bubble.right .message-timestamp{font-size:12px;color:#eaeaea}
+.chat-bubble.right .download-message{color:#fff}
 .chat-bubble.left .message-user{font-size:12px;color:#222}
 .chat-bubble.left .message-timestamp{font-size:12px;color:#777}
 .user-messages-top-icon{font-size:28px;display:inline-block;vertical-align:middle;position:relative;top:-3px;right:5px}
@@ -137,6 +138,7 @@ button.ion-android-send{padding-top:2px}
 .map-message{max-width:300px;width:100%;margin:9px 0;border-radius:12px}
 .image-message{max-width:300px;margin:9px 0;border-radius:12px}
 .download-message{text-decoration:underline}
+.download-message .fa{margin-right:6px}
 input,textarea,.item-input,.item-input-wrapper{background-color:#f4f4f4!important}
 .bold{font-weight:700}
 .cf{clear:both!important}

@@ -360,6 +360,11 @@ angular.module('messengerApp')
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {
+        var open;
+        if (typeof require === typeof Function) {
+          open = require('open');
+        }
+
         $timeout(function() {
           var eleHtml = element.html();
 
@@ -380,7 +385,9 @@ angular.module('messengerApp')
             angular.element(autolinks[i]).bind('click', function(e) {
               var href = e.target.href;
 
-              if (href) {
+              if (href && open) {
+                open(href);
+              } else if (href) {
                 //window.open(href, '_system');
                 window.open(href, '_blank');
               }

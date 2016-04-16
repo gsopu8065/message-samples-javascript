@@ -36,18 +36,18 @@ angular.module('messengerApp')
 
         if (typeof require === typeof Function) {
           // native desktop notification
-          var notifier = require('node-notifier'), path = require('path');
+          var notifier = require('node-notifier');
+          var path = require('path');
+          var imagePath = path.join(__dirname.replace('app.asar', 'app.asar.unpacked'), 'images/messenger-icon.png');
 
           notifier.notify({
             title: title,
             message: message,
-            icon: path.join(__dirname, 'images/messenger-icon.png'),
+            icon: imagePath,
             sound: false,
             wait: false,
             time: 5000
           });
-
-          this.setBadge(this.msgCtr.toString());
 
         } else if (window.Notification || window.mozNotification || window.webkitNotification) {
           // HTML5 notification API
