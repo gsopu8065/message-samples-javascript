@@ -352,8 +352,8 @@ angular.module('messengerApp')
             // otherwise, the poll result counts will become inaccurate.
             poll.updateResults(typedPayload);
           }
-          for (i=0;i<typedPayload.selectedOptions.length;++i) {
-            messages[index].payload.selections.push(typedPayload.selectedOptions[i].text);
+          for (i=0;i<typedPayload.currentSelections.length;++i) {
+            messages[index].payload.selections.push(typedPayload.currentSelections[i].text);
           }
 
           messages[index].payload.selections = messages[index].payload.selections.join(', ');
