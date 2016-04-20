@@ -15,7 +15,7 @@
       <div ng-repeat="message in data.messages" class="message-wrapper"
           on-hold="onMessageHold($event, $index, message)">
 
-          <div ng-if="data.currentUser.userId !== message.sender.userId">
+          <div ng-if="data.currentUser.userId !== message.sender.userId && (!message.payload || message.payload.TYPE == Max.MessageType.POLL_IDENTIFIER)">
 
             <img ng-click="viewProfile(message)" class="profile-pic left"
                  ng-if="data.subscribers[message.sender.userId]
@@ -45,6 +45,18 @@
                      ng-href="{{message.attachments[0].downloadUrl}}" download="{{message.attachments[0].name}}">
                     <span class="message-btn download-picture-btn fa fa-download"></span>
                   </a>
+
+                  <div class="poll" ng-if="message.payload && message.payload.TYPE == Max.MessageType.POLL_IDENTIFIER">
+                    <h5>{{data.polls[message.payload.pollId].name}}: {{data.polls[message.payload.pollId].question}}</h5>
+                    <div class="list-group">
+                      <button type="button" class="list-group-item" ng-class="{'active':option.myVote}"
+                              ng-click="togglePollOption(message.payload.pollId, option)"
+                              ng-repeat="option in data.polls[message.payload.pollId].options">
+                        <span class="badge" ng-if="option.count > 0">{{option.count}}</span>
+                        {{option.text}}
+                      </button>
+                    </div>
+                  </div>
 
                   <div class="message"
                        ng-if="message.messageContent
@@ -98,7 +110,7 @@
               </div>
           </div>
 
-          <div ng-if="data.currentUser.userId === message.sender.userId">
+          <div ng-if="data.currentUser.userId === message.sender.userId && (!message.payload || message.payload.TYPE == Max.MessageType.POLL_IDENTIFIER)">
 
               <img ng-if="authService.userAvatar" ng-src="{{authService.userAvatar}}" class="profile-pic right" />
               <div class="icon-initials profile-pic right" ng-if="!authService.userAvatar">
@@ -114,6 +126,18 @@
                      ng-href="{{message.attachments[0].downloadUrl}}" download="{{message.attachments[0].name}}">
                     <span class="message-btn download-picture-btn fa fa-download"></span>
                   </a>
+
+                  <div class="poll" ng-if="message.payload && message.payload.TYPE == Max.MessageType.POLL_IDENTIFIER">
+                    <h5>{{data.polls[message.payload.pollId].name}}: {{data.polls[message.payload.pollId].question}}</h5>
+                    <div class="list-group">
+                      <button type="button" class="list-group-item" ng-class="{'active':option.myVote}"
+                              ng-click="togglePollOption(message.payload.pollId, option)"
+                              ng-repeat="option in data.polls[message.payload.pollId].options">
+                        <span class="badge" ng-if="option.count > 0">{{option.count}}</span>
+                        {{option.text}}
+                      </button>
+                    </div>
+                  </div>
 
                   <div class="message"
                        ng-if="message.messageContent
@@ -165,6 +189,21 @@
 
               </div>
 
+          </div>
+
+          <div class="poll-notice" ng-if="message.payload && message.payload.TYPE == Max.MessageType.POLL_ANSWER">
+              <span>
+                {{data.subscribers[message.sender.userId].displayName || message.sender.displayName || message.sender.userName}}
+              </span>
+              voted for
+              <span ng-if="message.payload.selections">
+                {{message.payload.selections}}
+              </span>
+              <i ng-if="!message.payload.selections">no options</i>
+              in poll
+              <span>
+                {{message.payload.name}}
+              </span>
           </div>
 
           <div class="cf"></div>
@@ -221,6 +260,13 @@
                 <label class="action-icon-label" ng-click="onCreateCodeSnippet()">
                     <span><i class="fa fa-code"></i></span>
                     Code Snippet
+                </label>
+              </li>
+              <li class="divider"></li>
+              <li role="menuitem">
+                <label class="action-icon-label" ng-click="onCreatePoll()">
+                    <span><i class="fa fa-bar-chart"></i></span>
+                    Poll
                 </label>
               </li>
               <li class="divider"></li>

@@ -202,10 +202,14 @@ angular.module('messengerApp')
     });
 
     function getLatestMessage(mmxMessage) {
-      var msg = (mmxMessage.messageContent.message);
+      var msg;
+      if (mmxMessage.messageContent && mmxMessage.messageContent.message) msg = mmxMessage.messageContent.message;
       if (mmxMessage.attachments && mmxMessage.attachments.length) msg = 'a file was uploaded';
       if (mmxMessage.messageContent.type == 'location') msg = 'a location was posted';
-      return msg
+      if (mmxMessage.payload && mmxMessage.payload.TYPE == Max.MessageType.POLL_IDENTIFIER) msg = 'a poll was created';
+      if (mmxMessage.payload && mmxMessage.payload.TYPE == Max.MessageType.POLL_ANSWER) msg = 'a poll was updated';
+      if (!msg) msg = 'a message was posted';
+      return msg;
     }
 
     $scope.leaveConversation = function(channelSummary) {

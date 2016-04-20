@@ -18,6 +18,7 @@ body,html{height:100%;background:#eee}
 .action-icon-label i{font-size:20px;margin:0 0 0 3px;width:37px;text-align:center}
 .search-error{padding:7px;color:#8B6C6B}
 .light{color:#999;padding:3px}
+.sm-top-margin{margin-top:10px}
 
 .icon-initials{display:inline-block;color:#fff;text-align:center;position:relative}
 .icon-initials span{font-size:17px;z-index:10;position:absolute;top:13px;letter-spacing:2px;font-weight:normal;left:1px;width:100%;display:block;color:#fff !important}
@@ -170,6 +171,13 @@ label.action-icon-label input[type="file"]{position:fixed;top:-1000px}
 .chat-bubble.left .message-btn{right:-38px}
 .chat-bubble.right .message-btn{left:-38px}
 
+.poll .list-group-item{border-radius:4px;margin-bottom:6px;background:#3E9AFC;color:#eee;border:solid 1px #A4C7FC;outline:none;-moz-outline:none}
+.poll .list-group-item:hover, .poll .list-group-item:active, .poll .list-group-item:focus{background:#59A8FC;color:#eee}
+.poll .list-group-item.active{background:#8FBAFA;color:#fff;border:solid 1px #fff}
+.poll .list-group-item .badge{background:#fff;color:#037dff}
+.poll-notice{margin:8px auto;color:#333;min-width:300px;font-size:12px;opacity:.5;text-align:center}
+.poll-notice span{color:#037dff}
+
 /* sign-in */
 .form-signin{max-width:330px;padding:15px;margin:0 auto}
 .form-signin .form-signin-heading,.form-signin .checkbox{margin-bottom:10px}
@@ -196,6 +204,8 @@ label.action-icon-label input[type="file"]{position:fixed;top:-1000px}
 .user-list-container .alert-dismissible .close{top:2px}
 #member-list{max-height:200px}
 
+.poll-option-row{margin:0 14px}
+.poll-option-row .glyphicon{top:23px;right:13px;font-size:13px;cursor:pointer}
 
 .resizable{position:relative;transition:none!important}
 .rg-right,.rg-left,.rg-top,.rg-bottom{display:block;width:14px;height:14px;line-height:14px;position:absolute;z-index:1;box-sizing:border-box;border:1px solid #ccc}
