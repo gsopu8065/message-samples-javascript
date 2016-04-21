@@ -10,7 +10,8 @@ var Channel = {
             name: inputs.name,
             summary: inputs.summary,
             isPublic: inputs.isPublic,
-            publishPermissions: inputs.publishPermissions
+            publishPermissions: inputs.publishPermissions,
+            pushConfigName: inputs.pushConfigName
         }).success(function(myNewChannel) {
 
             renderResults('created new channel "' + myNewChannel.name + '"');
@@ -244,6 +245,22 @@ var Channel = {
             });
         });
 
+    },
+
+    mute: function() {
+        // mute push notifications for the channel
+        Channel.myCurrentChannel.mute().success(function() {
+
+            renderResults('channel muted <br />', null, '#mute-result');
+        });
+    },
+
+    unmute: function() {
+        // unmute push notifications for the channel
+        Channel.myCurrentChannel.unmute().success(function() {
+
+            renderResults('channel unmuted <br />', null, '#mute-result');
+        });
     }
 
 };

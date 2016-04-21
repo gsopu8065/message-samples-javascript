@@ -285,6 +285,12 @@
         </div>
       </div>
       <div class="form-group">
+        <label class="col-sm-3 control-label">Push Config Name</label>
+        <div class="col-sm-9">
+          <input type="text" name="pushConfigName" class="form-control" placeholder="push config name" required>
+        </div>
+      </div>
+      <div class="form-group">
         <label class="col-sm-3 control-label">Public</label>
         <div class="col-sm-9">
           <select name="isPublic" class="form-control">
@@ -411,6 +417,9 @@
       <li role="presentation">
         <a href="#channel-chat-subscribers" aria-controls="channel-chat-subscribers" role="tab" data-toggle="tab">Subscribers</a>
       </li>
+      <li role="presentation">
+        <a href="#channel-chat-mute" aria-controls="channel-chat-mute" role="tab" data-toggle="tab">Mute/Unmute</a>
+      </li>
     </ul>
     <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="channel-chat-messages">
@@ -466,6 +475,24 @@
         <div class="vspacing">
           <label>Results</label>
           <div id="subscriber-list"></div>
+        </div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="channel-chat-mute">
+        <form class="form-horizontal clearfix">
+          <div class="form-group">
+            <div class="col-sm-offset-3">
+              <a class="btn btn-primary" onclick="Channel.mute()">Mute</a>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-3">
+              <a class="btn btn-primary" onclick="Channel.unmute()">Unmute</a>
+            </div>
+          </div>
+        </form>
+        <div class="vspacing">
+          <label>Results</label>
+          <div id="mute-result"></div>
         </div>
       </div>
     </div>
