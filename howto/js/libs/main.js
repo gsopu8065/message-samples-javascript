@@ -28,9 +28,12 @@ $(document).ready(function() {
     });
 });
 
-function renderTmpl(id, extras) {
-    featureTitle.html((id ? id.replace(/-/g, ' ') : '') + (extras ? (' - ' + extras) : ''));
-    featureContainer.html(id ? tmpl(id, Max.getCurrentUser()) : '');
+function renderTmpl(id, title, extras) {
+    extras = extras || {};
+    featureTitle.html((id ? id.replace(/-/g, ' ') : '') + (title ? (' - ' + title) : ''));
+    featureContainer.html(id ? tmpl(id, Max.Utils.mergeObj(extras, {
+        currentUser: Max.getCurrentUser()
+    })) : '');
 }
 
 function handleLogin(enable) {

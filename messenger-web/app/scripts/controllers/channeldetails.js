@@ -19,7 +19,8 @@ angular.module('messengerApp')
   $scope.authService = authService;
   $scope.data = {
     users: [],
-    fetchEndReached: false
+    fetchEndReached: false,
+    isMuted: false
   };
 
   // get current user information
@@ -82,6 +83,10 @@ angular.module('messengerApp')
   $scope.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };
+
+  //Max.Channel.getChannel(navService.currentChannel.name, navService.currentChannel.userId).success(function(channel) {
+  //  $scope.data.isMuted = channel.isMuted;
+  //});
 
   $scope.fetchUsers();
 

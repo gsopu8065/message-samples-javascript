@@ -268,23 +268,48 @@
 <script type="text/ng-template" id="ChannelDetails.html">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
-    <h4 class="modal-title">Members</h4>
+    <h4 class="modal-title">Chat Settings</h4>
   </div>
-  <div class="modal-body user-list-container" direction="down" when-scrolled="onUserScroll(fetchUsers)">
+  <div class="modal-body">
+    <div class="row-fluid clearfix">
+      <div class="col-sm-12">
 
-    <p ng-if="data.users.length === 1">Nobody else is in this chat.</p>
+        <div class="user-list-container" direction="down" when-scrolled="onUserScroll(fetchUsers)">
 
-    <div id="member-list" class="list-group">
-      <a ng-repeat="user in data.users"
-        ng-if="user.userName != authService.currentUser.userName"
-          class="list-group-item">
-        <!--<img src="images/user_bernie.png" class="pull-left" />-->
-        <div>
-          {{user.firstName}} {{user.lastName}}
+          <p ng-if="data.users.length === 1">Nobody else is in this chat.</p>
+
+          <div id="member-list" class="list-group">
+            <a ng-repeat="user in data.users"
+              ng-if="user.userName != authService.currentUser.userName"
+                class="list-group-item">
+              <!--<img src="images/user_bernie.png" class="pull-left" />-->
+              <div>
+                {{user.firstName}} {{user.lastName}}
+              </div>
+            </a>
+          </div>
+
         </div>
-      </a>
-    </div>
 
+      </div>
+
+      <!--<div class="col-sm-4">-->
+        <!--<div>-->
+          <!--<label>Mute Push</label>-->
+          <!--<br />-->
+          <!--<div class="btn-group clearfix">-->
+              <!--<label class="btn btn-default btn-xs"-->
+                     <!--ng-class="{'btn-primary' : data.isMuted == 'true'"-->
+                     <!--ng-model="data.isMuted" uib-btn-radio="true">ON</label>-->
+              <!--<label class="btn btn-default btn-xs"-->
+                     <!--ng-class="{'btn-primary' : data.isMuted == 'false'}"-->
+                     <!--ng-model="data.isMuted" uib-btn-radio="false">OFF</label>-->
+          <!--</div>-->
+          <!--<p class="note">Note: Muting a channel will only disable push notifications to the Messenger mobile app. It is no effect in the web Messenger.</p>-->
+        <!--</div>-->
+      <!--</div>-->
+
+    </div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-default" ng-click="cancel()">Close</button>

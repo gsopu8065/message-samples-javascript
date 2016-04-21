@@ -133,8 +133,11 @@ var Channel = {
 
     goToChannel: function(e, channel) {
         e.preventDefault();
+        console.log(channel);
 
-        renderTmpl('Channel-Chat', channel.name);
+        renderTmpl('Channel-Chat', channel.name, {
+            channel: channel
+        });
 
         Channel.myCurrentChannel = channel;
 
@@ -251,6 +254,11 @@ var Channel = {
         // mute push notifications for the channel
         Channel.myCurrentChannel.mute().success(function() {
 
+            renderTmpl('Channel-Chat', Channel.myCurrentChannel.name, {
+                channel: Channel.myCurrentChannel
+            });
+
+            $('a[href="#channel-chat-mute"]').tab('show');
             renderResults('channel muted <br />', null, '#mute-result');
         });
     },
@@ -259,6 +267,11 @@ var Channel = {
         // unmute push notifications for the channel
         Channel.myCurrentChannel.unmute().success(function() {
 
+            renderTmpl('Channel-Chat', Channel.myCurrentChannel.name, {
+                channel: Channel.myCurrentChannel
+            });
+
+            $('a[href="#channel-chat-mute"]').tab('show');
             renderResults('channel unmuted <br />', null, '#mute-result');
         });
     }

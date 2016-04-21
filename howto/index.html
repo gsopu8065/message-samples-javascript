@@ -135,7 +135,7 @@
         <label class="col-sm-3 control-label">Find By Username</label>
         <div class="col-sm-9">
           <div class="form-inline">
-            <input type="text" name="userName" class="form-control" placeholder="Username" value="{%=o.userName%}">
+            <input type="text" name="userName" class="form-control" placeholder="Username" value="{%=o.currentUser.userName%}">
             <a class="btn btn-primary" onclick="User.getUsersByUserNames()">Search</a>
           </div>
         </div>
@@ -144,7 +144,7 @@
         <label class="col-sm-3 control-label">Find By Id</label>
         <div class="col-sm-9">
           <div class="form-inline">
-            <input type="text" name="userId" class="form-control" placeholder="User Id" value="{%=o.userId%}">
+            <input type="text" name="userId" class="form-control" placeholder="User Id" value="{%=o.currentUser.userId%}">
             <a class="btn btn-primary" onclick="User.getUsersByUserIds()">Search</a>
           </div>
         </div>
@@ -160,13 +160,13 @@
       <div class="form-group">
         <label class="col-sm-3 control-label">First Name</label>
         <div class="col-sm-9">
-          <input type="text" name="firstName" class="form-control" placeholder="First Name" value="{%=o.firstName%}">
+          <input type="text" name="firstName" class="form-control" placeholder="First Name" value="{%=o.currentUser.firstName%}">
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-3 control-label">Last Name</label>
         <div class="col-sm-9">
-          <input type="text" name="lastName" class="form-control" placeholder="Last Name" value="{%=o.lastName%}">
+          <input type="text" name="lastName" class="form-control" placeholder="Last Name" value="{%=o.currentUser.lastName%}">
         </div>
       </div>
       <div class="col-sm-offset-3">
@@ -188,7 +188,7 @@
       <div class="form-group">
         <label class="col-sm-3 control-label">Recipient</label>
         <div class="col-sm-9">
-          <input type="text" name="recipient" class="form-control" placeholder="Recipient" required value="{%=o.userName%}">
+          <input type="text" name="recipient" class="form-control" placeholder="Recipient" required value="{%=o.currentUser.userName%}">
         </div>
       </div>
       <div class="form-group">
@@ -212,7 +212,7 @@
       <div class="form-group">
         <label class="col-sm-3 control-label">Recipient</label>
         <div class="col-sm-9">
-          <input type="text" name="recipient" class="form-control" placeholder="Recipient" required value="{%=o.userName%}">
+          <input type="text" name="recipient" class="form-control" placeholder="Recipient" required value="{%=o.currentUser.userName%}">
         </div>
       </div>
       <div class="form-group">
@@ -250,7 +250,7 @@
       <div class="form-group">
         <label class="col-sm-3 control-label">My Username</label>
         <div class="col-sm-9">
-          <input type="text" name="recipient" class="form-control" placeholder="Recipient" required value="{%=o.userName%}" disabled="disabled">
+          <input type="text" name="recipient" class="form-control" placeholder="Recipient" required value="{%=o.currentUser.userName%}" disabled="disabled">
         </div>
       </div>
       <div class="form-group">
@@ -478,15 +478,16 @@
         </div>
       </div>
       <div role="tabpanel" class="tab-pane" id="channel-chat-mute">
+        <p class="note">When a channel is muted, push notifications will not be sent to mobile devices.
+        Note that this has no effect on web applications.</p>
         <form class="form-horizontal clearfix">
           <div class="form-group">
             <div class="col-sm-offset-3">
-              <a class="btn btn-primary" onclick="Channel.mute()">Mute</a>
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="col-sm-offset-3">
+            {% if (o.channel.isMuted) { %}
               <a class="btn btn-primary" onclick="Channel.unmute()">Unmute</a>
+            {% } else { %}
+              <a class="btn btn-primary" onclick="Channel.mute()">Mute</a>
+            {% } %}
             </div>
           </div>
         </form>
