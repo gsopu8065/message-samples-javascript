@@ -118,6 +118,33 @@ angular.module('messengerApp')
 
           win.setOverlayIcon(img, text);
         }
+      },
+      addVisibilityHandler: function(fired) {
+        var hidden, visibilityChange;
+        if (typeof document.hidden !== 'undefined') {
+          hidden = 'hidden';
+          visibilityChange = 'visibilitychange';
+        } else if (typeof document.mozHidden !== 'undefined') {
+          hidden = 'mozHidden';
+          visibilityChange = 'mozvisibilitychange';
+        } else if (typeof document.msHidden !== 'undefined') {
+          hidden = 'msHidden';
+          visibilityChange = 'msvisibilitychange';
+        } else if (typeof document.webkitHidden !== 'undefined') {
+          hidden = 'webkitHidden';
+          visibilityChange = 'webkitvisibilitychange';
+        }
+
+        this.visibilityHandler = this.visibilityHandler || function() {
+          if (!document[hidden]) fired();
+        };
+
+        if (typeof document.addEventListener === 'undefined' || typeof document[hidden] === 'undefined') {
+          return;
+        } else {
+          document.removeEventListener(visibilityChange, this.visibilityHandler);
+          document.addEventListener(visibilityChange, this.visibilityHandler, false);
+        }
       }
     }
   });

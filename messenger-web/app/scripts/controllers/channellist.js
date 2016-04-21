@@ -25,6 +25,12 @@ angular.module('messengerApp')
       $scope.data.unreads = unreads;
     });
 
+    notify.addVisibilityHandler(function() {
+      if (navService.currentChannel && navService.currentChannel.name) {
+        notify.resetChannel(navService.currentChannel);
+      }
+    });
+
     // register a listener to listen for messages and update the channel summaries
     var listener = new Max.EventListener('receivedMessageListener', function(mmxMessage) {
 
@@ -79,6 +85,8 @@ angular.module('messengerApp')
       // retrieve all channels the current user is subscribed to
       Max.Channel.getAllSubscriptions().success(function(channels) {
         if (!channels.length) return;
+
+        channelService.subscribedChannels = channels;
 
         var supportedChannels = [];
 

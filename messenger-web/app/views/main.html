@@ -272,7 +272,7 @@
   </div>
   <div class="modal-body">
     <div class="row-fluid clearfix">
-      <div class="col-sm-12">
+      <div class="col-sm-8">
 
         <div class="user-list-container" direction="down" when-scrolled="onUserScroll(fetchUsers)">
 
@@ -293,21 +293,24 @@
 
       </div>
 
-      <!--<div class="col-sm-4">-->
-        <!--<div>-->
-          <!--<label>Mute Push</label>-->
-          <!--<br />-->
-          <!--<div class="btn-group clearfix">-->
-              <!--<label class="btn btn-default btn-xs"-->
-                     <!--ng-class="{'btn-primary' : data.isMuted == 'true'"-->
-                     <!--ng-model="data.isMuted" uib-btn-radio="true">ON</label>-->
-              <!--<label class="btn btn-default btn-xs"-->
-                     <!--ng-class="{'btn-primary' : data.isMuted == 'false'}"-->
-                     <!--ng-model="data.isMuted" uib-btn-radio="false">OFF</label>-->
-          <!--</div>-->
-          <!--<p class="note">Note: Muting a channel will only disable push notifications to the Messenger mobile app. It is no effect in the web Messenger.</p>-->
-        <!--</div>-->
-      <!--</div>-->
+      <div class="col-sm-4">
+        <div>
+          <label>Mute Push</label>
+          <br />
+          <div class="btn-group clearfix">
+              <label class="btn btn-default btn-xs"
+                     ng-click="updateMute(true)"
+                     ng-class="{'btn-primary' : data.isMuted === true}"
+                     ng-model="data.isMuted" uib-btn-radio="true">ON</label>
+              <label class="btn btn-default btn-xs"
+                     ng-click="updateMute(false)"
+                     ng-class="{'btn-primary' : data.isMuted == false}"
+                     ng-model="data.isMuted" uib-btn-radio="false">OFF</label>
+          </div>
+          <p class="note">Note: Muting only disable push notifications to the Messenger mobile app.
+            It has no effect on the web Messenger.</p>
+        </div>
+      </div>
 
     </div>
   </div>
