@@ -47,7 +47,12 @@
                   </a>
 
                   <div class="poll" ng-if="message.payload && message.payload.TYPE == Max.MessageType.POLL_IDENTIFIER">
-                    <h5>{{data.polls[message.payload.pollId].name}}: {{data.polls[message.payload.pollId].question}}</h5>
+                    <h5>
+                      {{data.polls[message.payload.pollId].name}}: {{data.polls[message.payload.pollId].question}}
+                      <i ng-if="data.polls[message.payload.pollId].ownerId == data.currentUser.userId
+                       && data.polls[message.payload.pollId].hideResultsFromOthers"
+                      ng-click="refreshPoll(message.payload.pollId)" class="fa fa-refresh" aria-hidden="true"></i>
+                    </h5>
                     <div class="list-group">
                       <button type="button" class="list-group-item" ng-class="{'active':option.myVote}"
                               ng-click="togglePollOption(message.payload.pollId, option)"
@@ -128,7 +133,12 @@
                   </a>
 
                   <div class="poll" ng-if="message.payload && message.payload.TYPE == Max.MessageType.POLL_IDENTIFIER">
-                    <h5>{{data.polls[message.payload.pollId].name}}: {{data.polls[message.payload.pollId].question}}</h5>
+                    <h5>
+                      {{data.polls[message.payload.pollId].name}}: {{data.polls[message.payload.pollId].question}}
+                      <i ng-if="data.polls[message.payload.pollId].ownerId == data.currentUser.userId
+                       && data.polls[message.payload.pollId].hideResultsFromOthers"
+                      ng-click="refreshPoll(message.payload.pollId)" class="fa fa-refresh" aria-hidden="true"></i>
+                    </h5>
                     <div class="list-group">
                       <button type="button" class="list-group-item" ng-class="{'active':option.myVote}"
                               ng-click="togglePollOption(message.payload.pollId, option)"

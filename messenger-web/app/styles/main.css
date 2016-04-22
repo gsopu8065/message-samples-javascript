@@ -148,6 +148,7 @@ a.autolinker{color:#3b88c3;text-decoration:none}
 .custom-item-input{background:#f4f4f4!important;padding:6px 0 5px 16px}
 .pull-left{float:left}
 .info-paragraph{text-align:center;color:#eee;font-size:30px;margin:30px 0;font-weight:500}
+.fa-refresh{cursor:pointer;font-size:16px;color:#0020BE;margin:0 3px}
 
 #chat-footer .dropdown-menu{padding:0}
 #chat-footer .dropdown-menu .divider{margin:0}

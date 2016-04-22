@@ -236,8 +236,24 @@ angular.module('messengerApp')
       // update poll choices for the current user
       poll.choose(selectedOptions).success(function() {
         Audio.onSend();
+        $scope.safeApply(function() {
+          addMyVotes(poll);
+        });
       }).error(function(err) {
         alert(err);
+      });
+    };
+
+    $scope.refreshPoll = function(pollId) {
+      getPoll(pollId, function(poll) {
+        // if results are hidden from other users, the owner must manually refresh the poll to obtain results
+        poll.refreshResults().success(function() {
+
+          $scope.safeApply(function() {
+            $scope.data.polls[pollId] = poll;
+            addMyVotes($scope.data.polls[pollId]);
+          });
+        });
       });
     };
 
