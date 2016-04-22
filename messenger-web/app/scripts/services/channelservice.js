@@ -21,6 +21,13 @@ angular.module('messengerApp')
             channel = this.subscribedChannels[i];
           }
         }
+        if (!channel) {
+          for (var i=0;i<this.forums.length;++i) {
+            if (this.forums[i].name == name) {
+              channel = this.forums[i];
+            }
+          }
+        }
         return channel;
       },
       forums: [],
