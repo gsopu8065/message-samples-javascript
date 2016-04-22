@@ -112,7 +112,8 @@ angular.module('messengerApp')
       }
 
       var msgContainer = document.getElementById('channel-messages');
-      if ((msgContainer.scrollHeight - msgContainer.offsetHeight - msgContainer.scrollTop) < 220) {
+      if ((msgContainer.scrollHeight - msgContainer.offsetHeight - msgContainer.scrollTop) < 220
+      || (mmxMessage.contentType && mmxMessage.contentType.indexOf(Max.MessageType.POLL_IDENTIFIER) != -1)) {
         scrollBottom();
       }
     }
