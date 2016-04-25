@@ -32,6 +32,7 @@
                   <a class="list-group-item" href="" onclick="renderTmpl('User-Search');">Search for Users</a>
                   <a class="list-group-item" href="" onclick="renderTmpl('User-Retrieve');">Retrieve Users (by ID or userName)</a>
                   <a class="list-group-item" href="" onclick="renderTmpl('User-Profile');">Update Profile</a>
+                  <a class="list-group-item" href="" onclick="renderTmpl('User-Blocking');">User Blocking</a>
               </div>
               <a class="list-group-item" data-parent="#feature-list" data-toggle="collapse" href="#chat">Chat</a>
               <div class="collapse" id="chat">
@@ -176,6 +177,26 @@
     <div class="vspacing">
       <label>Results</label>
       <div id="results" class="panel panel-default"></div>
+    </div>
+</script>
+<script type="text/x-tmpl" id="User-Blocking">
+    <form class="form-horizontal clearfix">
+      <div class="form-group">
+        <label class="col-sm-3 control-label">Username To Block</label>
+        <div class="col-sm-9">
+          <div class="form-inline">
+            <input type="text" name="userName" class="form-control" placeholder="Username">
+            <a class="btn btn-primary" onclick="User.blockUsers()">Block User</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-offset-3">
+        <a class="btn btn-primary" onclick="User.getBlockedUsers()">Get Blocked Users</a>
+      </div>
+    </form>
+    <div class="vspacing">
+      <label>Results</label>
+      <div id="results"></div>
     </div>
 </script>
 

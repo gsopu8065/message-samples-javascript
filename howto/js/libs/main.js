@@ -106,7 +106,8 @@ function userDisplayHelper(userOrUsers) {
     }
 
     for (var key in userOrUsers) {
-        html += '<li class="list-group-item"><b>' + userOrUsers[key].userName + '</b> (id: ' + userOrUsers[key].userId + ')' +  '</li>';
+        html += '<li class="list-group-item" did="' + userOrUsers[key].userId + '"><b>'
+            + userOrUsers[key].userName + '</b> (id: ' + userOrUsers[key].userId + ')' +  '</li>';
     }
     return userOrUsers.length ? ('<ul class="list-group">' + html + '</ul>') : '<div class="panel panel-default">no users found</div>';
 }
