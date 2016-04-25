@@ -93,5 +93,58 @@ var User = {
         }).error(function(e) {
             renderResults('ERROR! ' + e);
         });
+    },
+
+    getBlockedUsers: function() {
+        var self = this;
+
+        // get all users blocked by the current user
+        Max.UserPreferences.getBlockedUsers().success(function(users) {
+            renderResults(userDisplayHelper(users));
+
+            $('#results .list-group-item').each(function() {
+                $(this).append(' <button class="btn btn-primary btn-sm">Unblock</button>').click(function() {
+                    self.unblockUsers($(this).attr('did'));
+                });
+            });
+
+        }).error(function(e) {
+            renderResults('ERROR! ' + e);
+        });
+
+    },
+
+    blockUsers: function() {
+        var inputs = collectFormData('feature-container');
+
+        // find recipient using the userName provided
+        var userNameList = [inputs.userName];
+        Max.User.getUsersByUserNames(userNameList).success(function(users) {
+
+            // no users found, dont continue
+            if (!users.length) {
+                renderResults('no users by that userName found');
+                return;
+            }
+
+            // block communication with the specified users
+            Max.UserPreferences.blockUsers(users).success(function(status) {
+                renderResults('<div class="panel panel-default">' + status + '</div>');
+            }).error(function(e) {
+                renderResults('ERROR! ' + e);
+            });
+        });
+
+    },
+
+    unblockUsers: function(userId) {
+
+        // unblock communication with the specified users
+        Max.UserPreferences.unblockUsers(userId).success(function(status) {
+            renderResults('<div class="panel panel-default">' + status + '</div>');
+        }).error(function(e) {
+            renderResults('ERROR! ' + e);
+        });
     }
+
 };
