@@ -51,36 +51,6 @@ angular
       }, 500);
     });
 
-    var bootstrapped = false;
-
-    function bootstrapPublicChannels() {
-      if (bootstrapped) return;
-      bootstrapped = true;
-
-      var publicChannels = ['global_dev_week'];
-      createIfNotExist(publicChannels, 0);
-    }
-
-    // create public channels if they don't already exist
-    function createIfNotExist(channels, index) {
-      if (!channels[index]) return;
-
-      Max.Channel.getPublicChannel(channels[index]).success(function(existingChannel) {
-        existingChannel.subscribe().success(function() {
-          createIfNotExist(channels, ++index);
-        });
-      }).error(function() {
-        Max.Channel.create({
-          name: channels[index],
-          summary: channels[index],
-          isPublic: true,
-          publishPermissions: 'subscribers'
-        }).success(function() {
-          createIfNotExist(channels, ++index);
-        });
-      });
-    }
-
     function setConfigDefaults() {
       if (!authService.currentUser.extras || typeof authService.currentUser.extras.visualNotify === 'undefined') {
 
