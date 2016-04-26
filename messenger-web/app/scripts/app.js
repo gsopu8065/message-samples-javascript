@@ -21,7 +21,7 @@ angular
     'ui.ace'
   ])
 
-  .run(function($location, authService, $rootScope, $state) {
+  .run(function($location, authService, $rootScope, $state, notify) {
 
     // handle not authorized and session expiry errors by redirecting to login page
     Max.on('not-authenticated', function() {
@@ -37,7 +37,8 @@ angular
       authService.initials = authService.getInitials(authService.currentUser);
       authService.userAvatar = (authService.currentUser.extras && authService.currentUser.extras.hasAvatar)
         ? Max.User.getAvatarUrl() : null;
-      bootstrapPublicChannels();
+      notify.reset();
+      //bootstrapPublicChannels();
       setConfigDefaults();
       $state.go('app');
     });
@@ -49,36 +50,6 @@ angular
         loading_screen.finish();
       }, 500);
     });
-
-    var bootstrapped = false;
-
-    function bootstrapPublicChannels() {
-      if (bootstrapped) return;
-      bootstrapped = true;
-
-      var publicChannels = ['global_dev_week'];
-      createIfNotExist(publicChannels, 0);
-    }
-
-    // create public channels if they don't already exist
-    function createIfNotExist(channels, index) {
-      if (!channels[index]) return;
-
-      Max.Channel.getPublicChannel(channels[index]).success(function(existingChannel) {
-        existingChannel.subscribe().success(function() {
-          createIfNotExist(channels, ++index);
-        });
-      }).error(function() {
-        Max.Channel.create({
-          name: channels[index],
-          summary: channels[index],
-          isPublic: true,
-          publishPermissions: 'subscribers'
-        }).success(function() {
-          createIfNotExist(channels, ++index);
-        });
-      });
-    }
 
     function setConfigDefaults() {
       if (!authService.currentUser.extras || typeof authService.currentUser.extras.visualNotify === 'undefined') {
@@ -121,6 +92,17 @@ angular
       }
     });
 
+    if (typeof require === typeof Function) {
+      document.addEventListener('dragover', function (event) {
+        event.preventDefault();
+        return false;
+      }, false);
+
+      document.addEventListener('drop', function (event) {
+        event.preventDefault();
+        return false;
+      }, false);
+    }
   })
 
   .config(function ($stateProvider, $urlRouterProvider) {

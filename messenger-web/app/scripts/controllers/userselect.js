@@ -23,6 +23,8 @@ angular.module('messengerApp')
     users: [],
     selectCount: 0,
     channelState: items,
+    newChannelName: '',
+    newChannelIsPrivate: 'true',
     search: '',
     searchError: null,
     selectedUsers: {},
@@ -51,7 +53,7 @@ angular.module('messengerApp')
     fetchTimeout = setTimeout(function() {
 
       if (!$scope.data.search.trim().length) {
-        query = {firstName: '*'};
+        query = '*';
       } else {
         var nameAry = $scope.data.search.split(' ');
         query = '';
@@ -143,15 +145,19 @@ angular.module('messengerApp')
 
       } else {
 
+        if (!$scope.data.newChannelName.trim().length && $scope.data.newChannelIsPrivate === 'false')
+          return alert('channel name is required');
+
         // no matching channel found, just create a new private channel
-        var channelName = new Date().getTime();
         Max.Channel.create({
-          name: channelName,
-          summary: authService.currentUser.userName,
-          isPublic: false,
-          publishPermissions: 'subscribers'
-        }).success(function(mmxPrivateChannel) {
-          subscribeUsers(mmxPrivateChannel, users, true);
+          name: new Date().getTime(),
+          summary: $scope.data.newChannelName || '',
+          isPublic: $scope.data.newChannelIsPrivate === 'false',
+          publishPermissions: $scope.data.newChannelIsPrivate === 'false' ? 'anyone' : 'subscribers'
+        }).success(function(newChannel) {
+          subscribeUsers(newChannel, users, true);
+        }).error(function(e) {
+          alert(e);
         });
 
       }
@@ -165,6 +171,9 @@ angular.module('messengerApp')
 
       if (isNew) {
         navService.list.refreshChannelList();
+        if (channel.isPublic) {
+          navService.list.refreshForumList();
+        }
       } else if (navService.currentChannel) {
         navService.list.updateSubscribers(navService.currentChannel, users);
       }

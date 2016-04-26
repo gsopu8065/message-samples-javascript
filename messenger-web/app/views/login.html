@@ -1,9 +1,9 @@
   <form class="form-signin">
     <h2 class="form-signin-heading">Please sign in</h2>
     <label class="sr-only">Email address</label>
-    <input type="text" ng-model="data.userName" class="form-control" placeholder="Email address" required autofocus>
+    <input type="text" ng-model="data.userName" on-enter-keypress="doLogin()" class="form-control" placeholder="Email address" required autofocus>
     <label class="sr-only">Password</label>
-    <input type="password" ng-model="data.password" class="form-control" placeholder="Password" required>
+    <input type="password" ng-model="data.password" on-enter-keypress="doLogin()" class="form-control" placeholder="Password" required>
     <div class="checkbox">
       <label>
         <input type="checkbox" ng-model="data.rememberMe"> Remember me

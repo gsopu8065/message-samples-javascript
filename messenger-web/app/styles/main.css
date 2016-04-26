@@ -18,6 +18,8 @@ body,html{height:100%;background:#eee}
 .action-icon-label i{font-size:20px;margin:0 0 0 3px;width:37px;text-align:center}
 .search-error{padding:7px;color:#8B6C6B}
 .light{color:#999;padding:3px}
+.sm-top-margin{margin-top:10px}
+.note{font-size:12px;color:#888;margin:3px 0}
 
 .icon-initials{display:inline-block;color:#fff;text-align:center;position:relative}
 .icon-initials span{font-size:17px;z-index:10;position:absolute;top:13px;letter-spacing:2px;font-weight:normal;left:1px;width:100%;display:block;color:#fff !important}
@@ -49,9 +51,10 @@ body,html{height:100%;background:#eee}
 #profile-drawer .col-sm-12{margin-top:10px}
 #sidebar .action-icon-label{margin-left:45px}
 
+#sidebar-wrapper{margin-top:50px}
 #sidebar .header .action-icon-label, #sidebar .header .action-icon-label img{cursor:default}
-.sidebar-scroll{margin-top:50px;margin-bottom:100px;padding:0;overflow-y:auto}
-.sidebar-title{font-size:16px;color:#aaa;margin:10px 10px 1px 10px}
+.sidebar-scroll{position:absolute;top:0;left:0;padding:0;overflow-y:auto}
+.sidebar-title{font-size:15px;color:#aaa;margin:5px 5px 1px 5px}
 .sidebar-list .list-group-item{padding:7px 2px;background:none;border:none;color:#555;opacity:.9;min-height:51px;overflow:hidden}
 .sidebar-list .list-group-item b{display:block;font-weight:normal;overflow-x:hidden;font-size:14px;position:absolute;top:11px;left:0;width:90%;padding-left:58px;padding-right:65px}
 .sidebar-list .list-group-item .last-message{display:block;position:absolute;top:28px;left:0;padding-left:58px;color:#999;font-size:13px;font-weight:normal !important}
@@ -59,27 +62,35 @@ body,html{height:100%;background:#eee}
 .sidebar-list .list-group-item:hover{background:#fafafa;color:#333}
 .sidebar-list .list-group-item.active{background:#eee}
 .sidebar-list .list-group-item.active b{font-weight:bold;color:#333}
+.sidebar-list img, .sidebar-list .icon-initials{width:30px;height:30px;border-radius:50%;float:left;margin:5px 10px 5px 17px}
+.sidebar-list .icon-initials img{width:100%;margin:0}
+.sidebar-list .icon-initials span{font-size:13px;top:7px}
+.sidebar-list .fa-circle{position:absolute;left:7px;top:17px;color:#999;font-size:.7em}
+.sidebar-list .fa-circle.is-unread{color:#037dff}
+.sidebar-list .fa-trash{position:absolute;bottom:7px;right:7px;color:#037dff;display:none;font-size:1.2em}
+.sidebar-list .list-group-item:hover .fa-trash{display:inline-block}
 
 .flex-input{margin:10px 13px 0;position:relative}
 .flex-input .search{position:absolute;top:-1px;left:2px}
 .flex-input input{width:100%;background:none !important;border:none;outline:none;border-bottom:solid 1px #9ea2a2;text-indent:30px;padding-bottom:6px}
 .flex-input .left{position:absolute;bottom:0;left:0}
 .flex-input .right{position:absolute;bottom:0;right:0}
-#channel-list img, #channel-list .icon-initials{width:30px;height:30px;border-radius:50%;float:left;margin:5px 10px 5px 17px}
-#channel-list .icon-initials img{width:100%;margin:0}
-#channel-list .icon-initials span{font-size:13px;top:7px}
-#channel-list .fa-circle{position:absolute;left:7px;top:17px;color:#999;font-size:.7em}
-#channel-list .fa-circle.is-unread{color:#037dff}
-#channel-list .fa-trash{position:absolute;bottom:7px;right:7px;color:#037dff;display:none;font-size:1.2em}
-#channel-list .list-group-item:hover .fa-trash{display:inline-block}
 
-#forum-carousel{position:absolute;bottom:0;left:0;width:100%;height:100px}
-#forum-container{position:absolute;bottom:0;left:0;width:100%;height:60px}
-#forum-container img{height:60px !important;cursor:pointer}
-#forum-container .carousel-indicators{display:none}
-#forum-container .carousel-control .glyphicon{margin-top:-16px}
-#forum-container .carousel-caption{padding:0;bottom:10px;right:auto;left:90px;cursor:pointer}
-#forum-container .carousel-caption p{font-size:16px;cursor:pointer}
+#private-channels{height:55%;overflow-y:hidden;width:100%}
+#channel-list{margin-top:70px;overflow-y:auto}
+
+#forum-carousel{position:absolute;bottom:0;left:0;width:100%;height:45%}
+#forum-carousel .sidebar-title{margin-top:10px}
+#forum-container{margin-top:31px;overflow-y:auto}
+#forum-container .list-group{margin-bottom:0}
+#forum-container img{width:20px;height:20px;margin:5px 11px 5px 27px}
+#forum-container .list-group-item{min-height:0;padding:5px 2px}
+/*#forum-container .list-group-item b{position:relative;top:0;left:0}*/
+
+/*#forum-container .carousel-indicators{display:none}*/
+/*#forum-container .carousel-control .glyphicon{margin-top:-16px}*/
+/*#forum-container .carousel-caption{padding:0;bottom:10px;right:auto;left:90px;cursor:pointer}*/
+/*#forum-container .carousel-caption p{font-size:16px;cursor:pointer}*/
 
 /* chat */
 .header .members{float:left}
@@ -121,6 +132,7 @@ button.ion-android-send{padding-top:2px}
 .chat-bubble.right a.autolinker{color:#fff;font-weight:700}
 .chat-bubble.right .message-user{font-size:12px;color:#fff}
 .chat-bubble.right .message-timestamp{font-size:12px;color:#eaeaea}
+.chat-bubble.right .download-message{color:#fff}
 .chat-bubble.left .message-user{font-size:12px;color:#222}
 .chat-bubble.left .message-timestamp{font-size:12px;color:#777}
 .user-messages-top-icon{font-size:28px;display:inline-block;vertical-align:middle;position:relative;top:-3px;right:5px}
@@ -128,6 +140,7 @@ button.ion-android-send{padding-top:2px}
 .map-message{max-width:300px;width:100%;margin:9px 0;border-radius:12px}
 .image-message{max-width:300px;margin:9px 0;border-radius:12px}
 .download-message{text-decoration:underline}
+.download-message .fa{margin-right:6px}
 input,textarea,.item-input,.item-input-wrapper{background-color:#f4f4f4!important}
 .bold{font-weight:700}
 .cf{clear:both!important}
@@ -135,6 +148,7 @@ a.autolinker{color:#3b88c3;text-decoration:none}
 .custom-item-input{background:#f4f4f4!important;padding:6px 0 5px 16px}
 .pull-left{float:left}
 .info-paragraph{text-align:center;color:#eee;font-size:30px;margin:30px 0;font-weight:500}
+.fa-refresh{cursor:pointer;font-size:16px;color:#0020BE;margin:0 3px}
 
 #chat-footer .dropdown-menu{padding:0}
 #chat-footer .dropdown-menu .divider{margin:0}
@@ -152,11 +166,19 @@ label.action-icon-label input[type="file"]{position:fixed;top:-1000px}
 #add-attachment-btn{cursor:pointer}
 .ace-tm{border:solid 1px #ccc;height:180px}
 .end-of-messages-alert{text-align:center;font-size:25px;color:#ccc;font-weight:800;padding:20px 0}
-.delete-message-btn{display:none;position:absolute;top:30%;border-radius:50%;background:#fff;color:#037dff;padding:6px;cursor:pointer;width:27px;text-align:center;opacity:.8}
-.delete-message-btn:hover{background:#037dff;color:#fff}
-.message-wrapper:hover .delete-message-btn{display:inline-block}
-.chat-bubble.left .delete-message-btn{right:-38px}
-.chat-bubble.right .delete-message-btn{left:-38px}
+.message-btn{display:none;position:absolute;top:30%;border-radius:50%;background:#fff;color:#037dff;padding:6px;cursor:pointer;width:27px;text-align:center;opacity:.8}
+.message-btn:hover{background:#037dff;color:#fff}
+.download-picture-btn{top:60%}
+.message-wrapper:hover .message-btn{display:inline-block}
+.chat-bubble.left .message-btn{right:-38px}
+.chat-bubble.right .message-btn{left:-38px}
+
+.poll .list-group-item{border-radius:4px;margin-bottom:6px;background:#3E9AFC;color:#eee;border:solid 1px #A4C7FC;outline:none;-moz-outline:none}
+.poll .list-group-item:hover, .poll .list-group-item:active, .poll .list-group-item:focus{background:#59A8FC;color:#eee}
+.poll .list-group-item.active{background:#8FBAFA;color:#fff;border:solid 1px #fff}
+.poll .list-group-item .badge{background:#fff;color:#037dff}
+.poll-notice{margin:8px auto;color:#333;min-width:300px;font-size:12px;opacity:.5;text-align:center}
+.poll-notice span{color:#037dff}
 
 /* sign-in */
 .form-signin{max-width:330px;padding:15px;margin:0 auto}
@@ -168,7 +190,7 @@ label.action-icon-label input[type="file"]{position:fixed;top:-1000px}
 .form-signin input[type="password"]{margin-bottom:10px;border-top-left-radius:0;border-top-right-radius:0}
 
 /* modals */
-.user-list-container{overflow-y:scroll;max-height:300px}
+.user-list-container{overflow-y:scroll;max-height:395px}
 .user-list-container img{width:30px;margin-right:6px}
 .user-list-container .list-group{margin-bottom:0;height:100%}
 .user-list-container .list-group-item{padding:2px;border-radius:0;border:0}
@@ -183,6 +205,18 @@ label.action-icon-label input[type="file"]{position:fixed;top:-1000px}
 .user-list-container .alert div{width:90%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .user-list-container .alert-dismissible .close{top:2px}
 #member-list{max-height:200px}
+
+.poll-option-row{margin:0 14px}
+.poll-option-row .glyphicon{top:23px;right:13px;font-size:13px;cursor:pointer}
+
+.resizable{position:relative;transition:none!important}
+.rg-right,.rg-left,.rg-top,.rg-bottom{display:block;width:14px;height:14px;line-height:14px;position:absolute;z-index:1;box-sizing:border-box;border:1px solid #ccc}
+.rg-right,.rg-left{border-width:0 1px;top:50%;margin:-10px 0 0 14px;height:20px;width:14px}
+.rg-top,.rg-bottom{border-width:1px 0;left:50%;margin:0;width:20px;height:6px;background:#eee}
+.rg-top{cursor:row-resize;width:100%;top:0;left:0;margin-top:0}
+.rg-right{cursor:col-resize;height:100%;right:0;top:0;margin-right:-14px}
+.rg-bottom{cursor:row-resize;width:100%;bottom:0;left:0;margin-bottom:-14px}
+.rg-left{cursor:col-resize;height:100%;left:0;top:0;margin-left:-14px}
 
 /* loading */
 .loading-screen{z-index:10000;text-align:center;opacity: 0.9;}
@@ -236,7 +270,7 @@ label.action-icon-label input[type="file"]{position:fixed;top:-1000px}
   #inactive-bgk{display:none}
   #inactive-bgk.shown{display:block;position:absolute;top:0;left:0;width:100%;height:100%;z-index:50;background:#000;opacity:.6}
   #message-list-open-btn{display:none}
-  #message-list-open-btn.shown{display:block;position:absolute;top:7px;left:56px;width:32px;z-index:1500;cursor:pointer;color:#037dff;background:#fff}
+  #message-list-open-btn.shown{display:block;position:absolute;top:7px;left:56px;width:32px;z-index:1000;cursor:pointer;color:#037dff;background:#fff}
   #message-list-close-btn{display:none}
   #message-list-close-btn.shown{display:block;position:absolute;top:10px;left:295px;width:32px;z-index:1500;cursor:pointer;color:#fff}
   #profile-drawer.open{min-width:280px}

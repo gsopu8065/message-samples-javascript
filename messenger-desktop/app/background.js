@@ -3,7 +3,7 @@
 // It doesn't have any windows which you can see on screen, but we can open
 // window from here.
 
-import { app } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import createWindow from './helpers/window';
 
 // Special module holding environment variables which you declared
@@ -24,45 +24,10 @@ app.on('ready', function () {
 
     mainWindow.loadURL('file://' + __dirname + '/index.html');
 
-    if (env.name == 'production') {
-        var menu = Menu.buildFromTemplate([{
-            label: 'Magnet Messenger',
-            submenu: [{
-                label: 'Quit',
-                accelerator: 'CmdOrCtrl+Q',
-                click: function() {
-                    force_quit = true;
-                    app.quit();
-                }
-            }]
-        }]);
-        Menu.setApplicationMenu(menu);
-    } else {
-        var devMenu = Menu.buildFromTemplate([{
-            label: 'Development',
-            submenu: [{
-                label: 'Reload',
-                accelerator: 'CmdOrCtrl+R',
-                click: function() {
-                    BrowserWindow.getFocusedWindow().webContents.reloadIgnoringCache();
-                }
-            },{
-                label: 'Toggle DevTools',
-                accelerator: 'Alt+CmdOrCtrl+I',
-                click: function() {
-                    BrowserWindow.getFocusedWindow().toggleDevTools();
-                }
-            },{
-                label: 'Quit',
-                accelerator: 'CmdOrCtrl+Q',
-                click: function() {
-                    force_quit = true;
-                    app.quit();
-                }
-            }]
-        }]);
-        Menu.setApplicationMenu(devMenu);
+    const menu = Menu.buildFromTemplate(menuTempl());
+    Menu.setApplicationMenu(menu);
 
+    if (env.name != 'production') {
         mainWindow.openDevTools();
     }
 
@@ -103,3 +68,107 @@ app.on('ready', function () {
     });
 
 });
+
+function menuTempl() {
+  const menu = [];
+
+    menu.push({
+        label: 'Magnet Messenger',
+        submenu: [{
+            label: 'Quit',
+            accelerator: 'CmdOrCtrl+Q',
+            click: function() {
+                force_quit = true;
+                app.quit();
+            }
+        }]
+    });
+
+  menu.push({
+    label: 'Edit',
+    submenu: [
+      {
+        label: 'Undo',
+        accelerator: 'CmdOrCtrl+Z',
+        selector: 'undo:'
+      },
+      {
+        label: 'Redo',
+        accelerator: 'Shift+CmdOrCtrl+Z',
+        selector: 'redo:'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Cut',
+        accelerator: 'CmdOrCtrl+X',
+        selector: 'cut:'
+      },
+      {
+        label: 'Copy',
+        accelerator: 'CmdOrCtrl+C',
+        selector: 'copy:'
+      },
+      {
+        label: 'Paste',
+        accelerator: 'CmdOrCtrl+V',
+        selector: 'paste:'
+      },
+      {
+        label: 'Select All',
+        accelerator: 'CmdOrCtrl+A',
+        selector: 'selectAll:'
+      }
+    ]
+  });
+
+    //if (env.name != 'production') {
+        menu.push({
+            label: 'View',
+            submenu: [{
+                label: 'Reload',
+                accelerator: 'CmdOrCtrl+R',
+                click: function() {
+                    BrowserWindow.getFocusedWindow().webContents.reloadIgnoringCache();
+                }
+            },{
+                label: 'Toggle DevTools',
+                accelerator: 'Alt+CmdOrCtrl+I',
+                click: function() {
+                    BrowserWindow.getFocusedWindow().toggleDevTools();
+                }
+            }]
+        });
+    //}
+
+  menu.push({
+    label: 'Window',
+    submenu: [
+      {
+        label: 'Minimize',
+        accelerator: 'CmdOrCtrl+M',
+        selector: 'performMiniaturize:'
+      },
+      {
+        label: 'Close',
+        accelerator: 'CmdOrCtrl+W',
+        selector: 'performClose:'
+      },
+      {
+        label: 'Hide',
+        accelerator: 'CmdOrCtrl+H',
+        selector: 'performClose:'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Bring to Front',
+        selector: 'arrangeInFront:'
+      }
+    ]
+  });
+
+  return menu;
+}

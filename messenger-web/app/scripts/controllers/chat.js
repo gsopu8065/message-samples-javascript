@@ -9,7 +9,7 @@
  */
 angular.module('messengerApp')
   .controller('ChatCtrl', function ($scope, $rootScope, $state, $stateParams, $timeout,
-                                    $interval, navService, authService, $uibModal, Alerts) {
+                                    $interval, navService, authService, $uibModal, Alerts, notify) {
 
     var footerBar;
     var scroller;
@@ -29,7 +29,12 @@ angular.module('messengerApp')
       message: '',
       subscribers: {},
       isLoading: false,
-      messageEndReached: false
+      messageEndReached: false,
+      downloadSupported: ('download' in document.createElement('a'))
+    };
+
+    $scope.Max = {
+      MessageType: Max.MessageType
     };
 
     $scope.authService = authService;
@@ -46,8 +51,9 @@ angular.module('messengerApp')
     // get current user information
     $scope.data.currentUser = Max.getCurrentUser();
 
-    var i;
+    var i, j;
     $scope.data.messages = [];
+    $scope.data.polls = {};
     $scope.data.message = '';
     $scope.data.subscribers = {};
     $scope.data.isOwner = $scope.data.currentUser.userId === $stateParams.userId;
@@ -62,6 +68,8 @@ angular.module('messengerApp')
       userId: $stateParams.userId == '*' ? null : $stateParams.userId
     });
 
+    notify.resetChannel(channel);
+
     // fetch initial set of messages. messages received afterwards will be added in real-time with the listener.
     fetchMessages(function() {
         scrollBottom();
@@ -72,12 +80,16 @@ angular.module('messengerApp')
       // dont take action on messages not sent to the current channel
       if (!mmxMessage.channel || mmxMessage.channel.name != channel.name) return;
 
-      Audio.onReceive();
-
       if (mmxMessage.messageContent.format == 'code') {
         mmxMessage.messageContent.message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
       }
 
+      handleMessages([mmxMessage], 0, function() {
+        addMessage(mmxMessage);
+      });
+    });
+
+    function addMessage(mmxMessage) {
       // this tells us to add the sender to the list of subscribers
       if (!$scope.data.subscribers[mmxMessage.sender.userId]) {
         Max.User.search({ userId: mmxMessage.sender.userId }, 1, 0).success(function (users) {
@@ -99,8 +111,12 @@ angular.module('messengerApp')
         });
       }
 
-      scrollBottom();
-    });
+      var msgContainer = document.getElementById('channel-messages');
+      if ((msgContainer.scrollHeight - msgContainer.offsetHeight - msgContainer.scrollTop) < 220
+      || (mmxMessage.contentType && mmxMessage.contentType.indexOf(Max.MessageType.POLL_IDENTIFIER) != -1)) {
+        scrollBottom();
+      }
+    }
 
     // register the listener
     Max.registerListener(listener);
@@ -154,25 +170,25 @@ angular.module('messengerApp')
     $scope.onLocationSend = function() {
       var err = 'unable to obtain your location.';
       if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(pos) {
-            showLoading();
+        navigator.geolocation.getCurrentPosition(function(pos) {
+          showLoading();
 
-            // send location to the channel
-            var msg = new Max.Message({
-              type: 'location',
-              latitude: pos.coords.latitude.toString(),
-              longitude: pos.coords.longitude.toString()
-            });
-            channel.publish(msg).success(function() {
-              Audio.onSend();
-            }).error(function(err) {
-              alert(err);
-            }).always(function() {
-              hideLoading();
-            });
-          }, function() {
-            alert(err);
+          // send location to the channel
+          var msg = new Max.Message({
+            type: 'location',
+            latitude: pos.coords.latitude.toString(),
+            longitude: pos.coords.longitude.toString()
           });
+          channel.publish(msg).success(function() {
+            Audio.onSend();
+          }).error(function(err) {
+            alert(err);
+          }).always(function() {
+            hideLoading();
+          });
+        }, function() {
+          alert(err);
+        });
       } else {
         alert(err);
       }
@@ -187,6 +203,58 @@ angular.module('messengerApp')
 
       modalInstance.result.then(function(codeObj) {
         $scope.sendCodeSnippet(codeObj);
+      });
+    };
+
+    $scope.onCreatePoll = function() {
+      var modalInstance = $uibModal.open({
+        animation: $scope.animationsEnabled,
+        templateUrl: 'CreatePoll.html',
+        controller: 'CreatepollCtrl',
+        resolve: {
+          channel: function() {
+            return channel;
+          }
+        }
+      });
+    };
+
+    $scope.togglePollOption = function(pollId, option) {
+      var selectedOptions = [];
+      var poll = $scope.data.polls[pollId];
+
+      for (i=0;i<poll.options.length;++i) {
+        if (!poll.allowMultiChoice && poll.options[i].optionId !== option.optionId) {
+          poll.options[i].myVote = false;
+        }
+        if (poll.options[i].optionId === option.optionId) {
+          poll.options[i].myVote = !option.myVote;
+        }
+        if (poll.options[i].myVote) {
+          selectedOptions.push(poll.options[i]);
+        }
+      }
+      // update poll choices for the current user
+      poll.choose(selectedOptions).success(function() {
+        Audio.onSend();
+        $scope.safeApply(function() {
+          addMyVotes(poll);
+        });
+      }).error(function(err) {
+        alert(err);
+      });
+    };
+
+    $scope.refreshPoll = function(pollId) {
+      getPoll(pollId, function(poll) {
+        // if results are hidden from other users, the owner must manually refresh the poll to obtain results
+        poll.refreshResults().success(function() {
+
+          $scope.safeApply(function() {
+            $scope.data.polls[pollId] = poll;
+            addMyVotes($scope.data.polls[pollId]);
+          });
+        });
       });
     };
 
@@ -249,7 +317,6 @@ angular.module('messengerApp')
           if (messageOffset > 0) messages[i].scrolled = true;
         }
 
-
         // get users given user ids who sent messages within the result set
         Max.User.getUsersByUserIds(uids).success(function(users) {
 
@@ -263,17 +330,84 @@ angular.module('messengerApp')
             setUserUsername(messages[i]);
           }
 
-          $scope.safeApply(function() {
-            // append messages to message history
-            $scope.data.messages = messages.concat($scope.data.messages);
-            setTimeout(function() {
-              (cb || angular.noop)(messages.length);
-            }, 20);
-          });
+          handleMessages(messages, 0, function() {
+            $scope.safeApply(function() {
+              // append messages to message history
+              $scope.data.messages = messages.concat($scope.data.messages);
+              setTimeout(function() {
+                (cb || angular.noop)(messages.length);
+              }, 20);
+            });
+          }, true);
 
         });
 
       });
+    }
+
+    function handleMessages(messages, index, done, isFetchedMessage) {
+      if (!messages[index]) return done();
+
+      var typedPayload = messages[index].payload;
+
+      // if incoming message contains a poll identifier, get the poll object and display it
+      if (messages[index].contentType && messages[index].contentType.indexOf(Max.MessageType.POLL_IDENTIFIER) != -1) {
+        var pollId = typedPayload.pollId;
+
+        getPoll(pollId, function(poll) {
+          handleMessages(messages, ++index, done, isFetchedMessage);
+        });
+      } else if (messages[index].contentType
+        && messages[index].contentType.indexOf(Max.MessageType.POLL_ANSWER) != -1) {
+        // incoming message contained a poll answer, so we should populate the displayed poll UI
+        getPoll(typedPayload.pollId, function(poll) {
+
+          messages[index].payload.selections = [];
+
+          if (!isFetchedMessage) {
+            // only update the poll with poll answers if the message was received from the message listener.
+            // otherwise, the poll result counts will become inaccurate.
+            poll.updateResults(typedPayload);
+          }
+          for (i=0;i<typedPayload.currentSelection.length;++i) {
+            messages[index].payload.selections.push(typedPayload.currentSelection[i].text);
+          }
+
+          messages[index].payload.selections = messages[index].payload.selections.join(', ');
+
+          handleMessages(messages, ++index, done, isFetchedMessage);
+        });
+      } else {
+        handleMessages(messages, ++index, done, isFetchedMessage);
+      }
+    }
+
+    function getPoll(pollId, cb) {
+      if ($scope.data.polls[pollId]) {
+        addMyVotes($scope.data.polls[pollId]);
+        return cb($scope.data.polls[pollId]);
+      }
+      // get poll object using pollId
+      Max.Poll.get(pollId).success(function(poll) {
+        $scope.data.polls[pollId] = poll;
+        addMyVotes($scope.data.polls[pollId]);
+        cb($scope.data.polls[pollId]);
+      }).error(function(err) {
+        alert(err);
+      });
+    }
+
+    function addMyVotes(poll) {
+      if (poll.myVotes) {
+        for (var i=0;i<poll.options.length;++i) {
+          poll.options[i].myVote = poll.options[i].myVote === true;
+          for (var j=0;j<poll.myVotes.length;++j) {
+            if (poll.options[i].optionId === poll.myVotes[j].optionId) {
+              poll.options[i].myVote = true;
+            }
+          }
+        }
+      }
     }
 
     function showLoading() {

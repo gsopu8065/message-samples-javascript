@@ -16,7 +16,7 @@
 (function () {
     'use strict';
 
-    var shell = require('electron').shell;
+    var open = require('open');
 
     var supportExternalLinks = function (e) {
         var href;
@@ -30,15 +30,15 @@
                 isExternal = true;
             }
             if (href && isExternal) {
-                shell.openExternal(href);
                 e.preventDefault();
+                open(href);
             } else if (element.parentElement) {
                 checkDomElement(element.parentElement);
             }
-        }
+        };
 
         checkDomElement(e.target);
-    }
+    };
 
     document.addEventListener('click', supportExternalLinks, false);
 }());

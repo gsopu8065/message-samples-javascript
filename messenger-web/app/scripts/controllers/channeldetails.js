@@ -8,7 +8,7 @@
  * Controller of the messengerApp
  */
 angular.module('messengerApp')
-  .controller('ChanneldetailsCtrl', function ($scope, authService, navService, $state, $uibModalInstance) {
+  .controller('ChanneldetailsCtrl', function ($scope, authService, navService, $state, $uibModalInstance, channelService) {
 
   if (!authService.isAuthenticated) return $state.go('login');
 
@@ -19,17 +19,24 @@ angular.module('messengerApp')
   $scope.authService = authService;
   $scope.data = {
     users: [],
-    fetchEndReached: false
+    fetchEndReached: false,
+    isMuted: false
   };
 
   // get current user information
   $scope.data.currentUser = Max.getCurrentUser();
 
   // create an instance of channel given channel name and userId (if exists)
-  channel = new Max.Channel({
-    name: navService.currentChannel.name,
-    userId: navService.currentChannel.userId
-  });
+  channel = channelService.getChannel(navService.currentChannel.name, navService.currentChannel.userId);
+  $scope.data.isMuted = channel.isMuted;
+
+  $scope.updateMute = function(isMuted) {
+    if (isMuted) {
+      channel.mute();
+    } else {
+      channel.unmute();
+    }
+  };
 
   $scope.fetchUsers = function(offset, cb) {
 

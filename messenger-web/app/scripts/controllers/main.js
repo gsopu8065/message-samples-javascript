@@ -172,7 +172,7 @@ angular.module('messengerApp')
       // get avatar from url, appending timestamp to bust browser cache
       if (isAvatarUpdate) {
         authService.userAvatar = (authService.currentUser.extras && authService.currentUser.extras.hasAvatar)
-          ? Max.User.getAvatarUrl() : null;
+          ? (Max.User.getAvatarUrl() + '&t=' + new Date().getTime()) : null;
       }
 
       $scope.safeApply(function() {
