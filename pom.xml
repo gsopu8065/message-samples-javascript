@@ -46,7 +46,7 @@
                                     <arg value="-r" />
                                     <arg value="-y" />
                                     <arg value="${basedir}/target/js-samples/messenger-desktop-js.zip" />
-                                    <arg value="messenger-desktop" />
+                                    <arg value="messenger-web" />
                                 </exec>
                                 
                                 
