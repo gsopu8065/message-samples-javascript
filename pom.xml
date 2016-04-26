@@ -45,8 +45,8 @@
                                 <exec executable="zip" dir="${basedir}">
                                     <arg value="-r" />
                                     <arg value="-y" />
-                                    <arg value="${basedir}/target/js-samples/messenger-desktop-js.zip" />
-                                    <arg value="messenger-web" />
+                                    <arg value="${basedir}/target/js-samples/messenger-web-js.zip" />
+                                    <arg value="messenger-desktop" />
                                 </exec>
                                 
                                 
