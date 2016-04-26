@@ -9,7 +9,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <sample.version>2.6.0</sample.version>
+        <sample.version>2.7.0</sample.version>
     </properties>
 
     <dependencies>
@@ -45,8 +45,8 @@
                                 <exec executable="zip" dir="${basedir}">
                                     <arg value="-r" />
                                     <arg value="-y" />
-                                    <arg value="${basedir}/target/js-samples/messenger-desktop-js.zip" />
-                                    <arg value="messenger-desktop" />
+                                    <arg value="${basedir}/target/js-samples/messenger-web-js.zip" />
+                                    <arg value="messenger-web" />
                                 </exec>
                                 
                                 
