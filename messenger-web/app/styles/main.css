@@ -270,7 +270,7 @@ label.action-icon-label input[type="file"]{position:fixed;top:-1000px}
   #inactive-bgk{display:none}
   #inactive-bgk.shown{display:block;position:absolute;top:0;left:0;width:100%;height:100%;z-index:50;background:#000;opacity:.6}
   #message-list-open-btn{display:none}
-  #message-list-open-btn.shown{display:block;position:absolute;top:7px;left:56px;width:32px;z-index:1500;cursor:pointer;color:#037dff;background:#fff}
+  #message-list-open-btn.shown{display:block;position:absolute;top:7px;left:56px;width:32px;z-index:1000;cursor:pointer;color:#037dff;background:#fff}
   #message-list-close-btn{display:none}
   #message-list-close-btn.shown{display:block;position:absolute;top:10px;left:295px;width:32px;z-index:1500;cursor:pointer;color:#fff}
   #profile-drawer.open{min-width:280px}
