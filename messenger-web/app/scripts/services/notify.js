@@ -25,7 +25,7 @@ angular.module('messengerApp')
         this.channelBadges[channel.name] = 0;
         this.setBadge(this.msgCtr.toString());
       },
-      show: function (title, mmxMessage, message) {
+      show: function (title, mmxMessage, message, onClick) {
         if (!this.enabled) return;
 
         this.channelBadges[mmxMessage.channel.name] = this.channelBadges[mmxMessage.channel.name] || 0;
@@ -45,8 +45,12 @@ angular.module('messengerApp')
             message: message,
             icon: imagePath,
             sound: false,
-            wait: false,
-            time: 5000
+            wait: true,
+            time: 6000
+          });
+
+          notifier.on('click', function (notifierObject, options) {
+            onClick(mmxMessage.channel);
           });
 
         } else if (window.Notification || window.mozNotification || window.webkitNotification) {
@@ -65,10 +69,11 @@ angular.module('messengerApp')
 
             setTimeout(function() {
               notify.close();
-            }, 5000);
+            }, 6000);
 
             notify.onclick = function(e) {
-              console.log('notification.Click', e);
+              notify.close();
+              onClick(mmxMessage.channel);
             }
           });
 
