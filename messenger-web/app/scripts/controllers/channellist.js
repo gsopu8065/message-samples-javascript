@@ -50,7 +50,12 @@ angular.module('messengerApp')
           || authService.getDisplayName(mmxMessage.sender)
           || mmxMessage.sender.userName;
 
-        notify.show(title, mmxMessage, getLatestMessage(mmxMessage));
+        notify.show(title, mmxMessage, getLatestMessage(mmxMessage), function(channel) {
+          $state.go('app.chat', {
+            channelName: channel.name,
+            userId: channel.userId
+          });
+        });
       }
 
       if (mmxMessage.sender.userId != Max.getCurrentUser().userId
