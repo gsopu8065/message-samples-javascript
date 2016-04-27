@@ -219,7 +219,12 @@ angular.module('messengerApp')
       });
     };
 
+    $scope.isUpdatingPoll = false;
+
     $scope.togglePollOption = function(pollId, option) {
+      if ($scope.isUpdatingPoll) return;
+      $scope.isUpdatingPoll = true;
+
       var selectedOptions = [];
       var poll = $scope.data.polls[pollId];
 
@@ -242,6 +247,8 @@ angular.module('messengerApp')
         });
       }).error(function(err) {
         alert(err);
+      }).always(function() {
+        $scope.isUpdatingPoll = false;
       });
     };
 
