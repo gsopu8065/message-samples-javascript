@@ -39,6 +39,8 @@ angular.module('messengerApp')
       }
 
       if (mmxMessage.sender.userId != Max.getCurrentUser().userId
+        && mmxMessage.channel
+        && mmxMessage.channel.name != 'askMagnet'
         && (!navService.currentChannel
         || (navService.currentChannel
         && (navService.currentChannel.name != mmxMessage.channel.name)
@@ -53,7 +55,6 @@ angular.module('messengerApp')
 
       var isExistingChannel = false;
       if (mmxMessage.channel
-        && mmxMessage.channel.name
         && mmxMessage.channel.name != 'askMagnet'
         && !mmxMessage.channel.isPublic) {
         for (var i=0;i<$scope.data.channelSummaries.length;++i) {
