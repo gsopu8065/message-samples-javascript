@@ -154,7 +154,7 @@ angular.module('messengerApp')
   };
 })
 
-.directive('resizable', function() {
+.directive('resizable', function($window) {
     var toCall;
     function throttle(fun) {
         if (toCall === undefined) {
@@ -178,6 +178,7 @@ angular.module('messengerApp')
             rWidth: '=',
             rHeight: '=',
             rFlex: '=',
+            rMetric: '=',
             rGrabber: '@',
             rDisabled: '@'
         },
@@ -210,7 +211,9 @@ angular.module('messengerApp')
                 info = {},
                 affectedSibling,
                 parentElement,
-                setValue;
+                setValue,
+                elPercentage,
+                affectedPercentage;
 
             if (scope.rAffectedSibling) {
               parentElement = element[0].parentElement;
@@ -237,9 +240,11 @@ angular.module('messengerApp')
                           return;
                         }
                         prop = scope.rFlex ? flexBasis : 'height';
-                        element[0].style[prop] = setValue + 'px';
+                        var elPercentage = Math.ceil((setValue / parentElement.clientHeight) * 100) + '%';
+                        element[0].style[prop] = scope.rMetric == '%' ? elPercentage : (setValue + 'px');
                         if (scope.rAffectedSibling) {
-                          affectedSibling.style[prop] = parentElement.clientHeight - setValue + 'px';
+                          affectedPercentage = Math.floor(((parentElement.clientHeight - setValue) / parentElement.clientHeight) * 100) + '%';
+                          affectedSibling.style[prop] = scope.rMetric == '%' ? affectedPercentage : (parentElement.clientHeight - setValue + 'px');
                         }
                         break;
                     case 'bottom':
