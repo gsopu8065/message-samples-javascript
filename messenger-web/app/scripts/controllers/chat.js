@@ -463,20 +463,13 @@ angular.module('messengerApp')
     };
 
     $scope.deleteMessage = function(message, index) {
-      Alerts.Confirm({
-          title       : 'Delete This Message?',
-          description : 'Are you sure you wish to delete this message?'
-      }, function() {
-
-        // delete message. only available if current user is channel owner or message creator.
-        channel.deleteMessage(message.messageID).success(function(e) {
-          $scope.safeApply(function() {
-            $scope.data.messages.splice(index, 1);
-          });
-        }).error(function(e) {
-          console.log(e);
+      // delete message. only available if current user is channel owner or message creator.
+      channel.deleteMessage(message.messageID).success(function(e) {
+        $scope.safeApply(function() {
+          $scope.data.messages.splice(index, 1);
         });
-
+      }).error(function(e) {
+        console.log(e);
       });
     };
 
