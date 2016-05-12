@@ -8,7 +8,7 @@
  * Controller of the messengerApp
  */
 angular.module('messengerApp')
-  .controller('ChatCtrl', function ($scope, $rootScope, $state, $stateParams, $timeout,
+  .controller('ChatCtrl', function ($scope, $rootScope, $state, $stateParams, $timeout, productService,
                                     $interval, navService, authService, $uibModal, Alerts, notify) {
 
     var footerBar;
@@ -46,7 +46,7 @@ angular.module('messengerApp')
       userId: $stateParams.userId == '*' ? null : $stateParams.userId
     };
 
-    $scope.data.channelTitle = $stateParams.userId == '*' ? $stateParams.channelName : 'Private Chat';
+    $scope.data.channelTitle = $stateParams.channelName == 'sapdemo_announcements' ? 'Broadcast to all users' : ('Chat with customer');
 
     // get current user information
     $scope.data.currentUser = Max.getCurrentUser();
@@ -219,6 +219,52 @@ angular.module('messengerApp')
       });
     };
 
+    $scope.onCreateRating = function() {
+      var poll = new Max.Poll({
+        name: 'rating',
+        question: 'Please select a rating',
+        options: [
+          new Max.PollOption(1),
+          new Max.PollOption(2),
+          new Max.PollOption(3),
+          new Max.PollOption(4),
+          new Max.PollOption(5)
+        ],
+        allowMultiChoice: false,
+        hideResultsFromOthers: false
+      });
+
+      poll.publish(channel).success(function() {
+
+      }).error(function(e) {
+        alert(e);
+      });
+    };
+
+    $scope.setRating = function(pollId, rating) {
+      var poll = $scope.data.polls[pollId];
+      var sel;
+
+      for (var i=0;i<poll.options.length;++i) {
+        if (parseInt(poll.options[i].text) == rating) {
+          sel = poll.options[i];
+        }
+      }
+
+      if (!sel) return;
+
+      poll.choose(sel).success(function() {
+        Audio.onSend();
+        $scope.safeApply(function() {
+          addMyVotes(poll);
+        });
+      }).error(function(err) {
+        alert(err);
+      }).always(function() {
+        $scope.isUpdatingPoll = false;
+      });
+    };
+
     $scope.isUpdatingPoll = false;
 
     $scope.togglePollOption = function(pollId, option) {
@@ -375,6 +421,13 @@ angular.module('messengerApp')
             // only update the poll with poll answers if the message was received from the message listener.
             // otherwise, the poll result counts will become inaccurate.
             poll.updateResults(typedPayload);
+            if (poll.name == 'rating') {
+              for (var j=0;j<poll.options.length;++j) {
+                if (poll.options[j].count > 0) {
+                  poll.ratingCount = parseInt(poll.options[j].text);
+                }
+              }
+            }
           }
           for (i=0;i<typedPayload.currentSelection.length;++i) {
             messages[index].payload.selections.push(typedPayload.currentSelection[i].text);
@@ -397,6 +450,13 @@ angular.module('messengerApp')
       // get poll object using pollId
       Max.Poll.get(pollId).success(function(poll) {
         $scope.data.polls[pollId] = poll;
+        if (poll.name == 'rating') {
+          for (var j=0;j<poll.options.length;++j) {
+            if (poll.options[j].count > 0) {
+              poll.ratingCount = parseInt(poll.options[j].text);
+            }
+          }
+        }
         addMyVotes($scope.data.polls[pollId]);
         cb($scope.data.polls[pollId]);
       }).error(function(err) {
@@ -463,13 +523,20 @@ angular.module('messengerApp')
     };
 
     $scope.deleteMessage = function(message, index) {
-      // delete message. only available if current user is channel owner or message creator.
-      channel.deleteMessage(message.messageID).success(function(e) {
-        $scope.safeApply(function() {
-          $scope.data.messages.splice(index, 1);
+      Alerts.Confirm({
+          title       : 'Delete This Message?',
+          description : 'Are you sure you wish to delete this message?'
+      }, function() {
+
+        // delete message. only available if current user is channel owner or message creator.
+        channel.deleteMessage(message.messageID).success(function(e) {
+          $scope.safeApply(function() {
+            $scope.data.messages.splice(index, 1);
+          });
+        }).error(function(e) {
+          console.log(e);
         });
-      }).error(function(e) {
-        console.log(e);
+
       });
     };
 
@@ -497,6 +564,10 @@ angular.module('messengerApp')
           }
         }
       });
+    };
+
+    $scope.selectProductOption = function(productId) {
+      productService.selectProduct(productId);
     };
 
     $scope.$on('taResize', function(e, ta) {
