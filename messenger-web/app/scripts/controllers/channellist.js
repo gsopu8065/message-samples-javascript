@@ -13,12 +13,19 @@ angular.module('messengerApp')
     if (!authService.isAuthenticated) return $state.go('login');
     channelService.reset();
 
+    var fetchingActive = false;
+    var recordOffset = 0;
+    var fetchTimeout = null;
+
     $scope.data = {};
     $scope.data.developerWeekChannel = null;
-    $scope.data.channelSummaries = channelService.channelSummaries;
+    $scope.data.channelSummaries = [];
     $scope.data.forums = channelService.forums;
     $scope.data.unreads = {};
     $scope.data.searchFilter = '';
+    $scope.data.fetchEndReached = false;
+    $scope.data.isLoadingPrivate = true;
+    $scope.data.isLoadingPublic = true;
     navService.list = $scope;
 
     navService.getUnreads(function(unreads) {
@@ -58,18 +65,8 @@ angular.module('messengerApp')
         });
       }
 
-      if (mmxMessage.sender.userId != Max.getCurrentUser().userId
-        && (!navService.currentChannel
-        || (navService.currentChannel && navService.currentChannel.name != mmxMessage.channel.name))) {
-
-        var title = mmxMessage.sender.displayName
-          || authService.getDisplayName(mmxMessage.sender)
-          || mmxMessage.sender.userName;
-
-        notify.show(title, getLatestMessage(mmxMessage));
-      }
-
       var isExistingChannel = false;
+      var cachedChannel;
       if (mmxMessage.channel
         && mmxMessage.channel.name != 'askMagnet'
         && !mmxMessage.channel.isPublic) {
@@ -91,7 +88,20 @@ angular.module('messengerApp')
           }
         }
         if (!isExistingChannel) {
-          $scope.refreshChannelList();
+          cachedChannel = false;
+          for (var i=0;i<$scope.data.channels.length;++i) {
+            if ($scope.data.channels[i].channelId === mmxMessage.channel.channelId) {
+              var channel = $scope.data.channels[i];
+              $scope.data.channels.splice(i, 1);
+              $scope.data.channels.unshift(channel);
+              $scope.fetchChannel([channel]);
+              cachedChannel = true;
+            }
+          }
+          if (!cachedChannel) {
+            $scope.data.channels.unshift(mmxMessage.channel);
+            $scope.fetchChannel([mmxMessage.channel]);
+          }
         }
       }
     });
@@ -103,84 +113,155 @@ angular.module('messengerApp')
       Max.Channel.getAllSubscriptions().success(function(channels) {
         if (!channels.length) return;
 
-        channelService.subscribedChannels = channels;
+        channelService.subscribedChannels = [];
 
         var supportedChannels = [];
 
         for (var i=0;i<channels.length;++i) {
-          if (channels[i].name != 'askMagnet' && !channels[i].isPublic) {
-            supportedChannels.push(channels[i]);
+          if (channels[i].name != 'askMagnet') {
+            channelService.subscribedChannels.push(channels[i]);
+            if (!channels[i].isPublic) {
+              supportedChannels.push(channels[i]);
+            }
           }
         }
 
+        supportedChannels.sort(function(a, b) {
+          return b.lastPubTime - a.lastPubTime;
+        });
         $scope.data.channels = supportedChannels;
 
-        // retrieve detailed channel information, including subscribers and past messages
-        Max.Channel.getChannelSummary(supportedChannels, 10, 1).success(function(channelSummaries) {
+        $scope.fetchChannels(0, function() {
+          $scope.data.isLoadingPrivate = false;
+        });
+      });
+    };
 
-          var ownerIds = [];
-          for(var i = 0; i < channelSummaries.length; ++i) {
-            ownerIds.push(channelSummaries[i].owner.userId);
-          }
+    $scope.fetchChannels = function(offset, cb) {
 
-          Max.User.getUsersByUserIds(ownerIds).success(function(owners) {
+      if (!offset) {
+        $scope.data.channelSummaries = [];
+        $scope.data.fetchEndReached = false;
+        recordOffset = 0;
+        offset = 0;
+      }
 
-            for(var i = 0; i < channelSummaries.length; ++i) {
-              var subscriberNames = [];
-              var chatPhotoUser = null;
+      clearTimeout(fetchTimeout);
 
-              for (var j = 0; j < channelSummaries[i].subscribers.length; ++j) {
-                if (channelSummaries[i].subscribers[j].userId != Max.getCurrentUser().userId) {
-                  subscriberNames.push(authService.getDisplayName(channelSummaries[i].subscribers[j]));
-                  chatPhotoUser = channelSummaries[i].subscribers[j];
-                }
+      fetchTimeout = setTimeout(function() {
+        var pageChannels = $scope.getPageChannels(offset);
+        if (!pageChannels.length) {
+          // no more channels, set flag
+          $scope.safeApply(function() {
+            $scope.data.fetchEndReached = true;
+            fetchingActive = false;
+          });
+          return;
+        }
+        $scope.fetchChannel(pageChannels, function() {
+          (cb || angular.noop)();
+        });
+      }, offset === 0 ? 500 : 0);
+
+    };
+
+    $scope.getPageChannels = function(start) {
+      var page = [];
+      for (var i=start;i<(start + 10);++i) {
+        if ($scope.data.channels[i]) {
+          page.push($scope.data.channels[i]);
+        }
+      }
+      return page;
+    };
+
+    $scope.fetchChannel = function(interestedChannels, cb) {
+      // retrieve detailed channel information, including subscribers and past messages
+      Max.Channel.getChannelSummary(interestedChannels, 10, 1).success(function(channelSummaries) {
+
+        var ownerIds = [];
+        for (var i = 0; i < channelSummaries.length; ++i) {
+          ownerIds.push(channelSummaries[i].owner.userId);
+        }
+
+        Max.User.getUsersByUserIds(ownerIds).success(function (owners) {
+
+          for (var i = 0; i < channelSummaries.length; ++i) {
+            var subscriberNames = [];
+            var chatPhotoUser = null;
+
+            for (var j = 0; j < channelSummaries[i].subscribers.length; ++j) {
+              if (channelSummaries[i].subscribers[j].userId != Max.getCurrentUser().userId) {
+                subscriberNames.push(authService.getDisplayName(channelSummaries[i].subscribers[j]));
+                chatPhotoUser = channelSummaries[i].subscribers[j];
               }
-              channelSummaries[i].subscriberNames = subscriberNames.length === 0
-                ? authService.getDisplayName(Max.getCurrentUser()) : subscriberNames.join(', ');
+            }
+            channelSummaries[i].subscriberNames = subscriberNames.length === 0
+              ? authService.getDisplayName(Max.getCurrentUser()) : subscriberNames.join(', ');
 
-              channelSummaries[i].owner = getUserById(owners, channelSummaries[i].owner.userId);
-              channelSummaries[i].ownerId = channelSummaries[i].owner.userId;
+            channelSummaries[i].owner = getUserById(owners, channelSummaries[i].owner.userId);
+            channelSummaries[i].ownerId = channelSummaries[i].owner.userId;
 
-              if (isDefaultName(channelSummaries[i].channel.summary, channelSummaries[i].owner.userName)) {
-                channelSummaries[i].displayName = channelSummaries[i].subscriberNames;
-              } else {
-                channelSummaries[i].displayName = channelSummaries[i].channel.summary;
-              }
-
-              if (channelSummaries[i].messages
-                && channelSummaries[i].messages[0]
-                && channelSummaries[i].messages[0].messageContent) {
-                channelSummaries[i].latestMessage = getLatestMessage(channelSummaries[i].messages[0]);
-                channelSummaries[i].latestMsgTime = channelSummaries[i].messages[0].timestamp;
-                channelSummaries[i].latestMsgTimestamp = roundToThousand(channelSummaries[i].messages[0].timestamp.getTime());
-              }
-
-              if (!chatPhotoUser) {
-                chatPhotoUser = Max.getCurrentUser();
-              }
-              channelSummaries[i].chatPhoto = {
-                url: chatPhotoUser.getAvatarUrl(),
-                initials: authService.getInitials(chatPhotoUser)
-              };
-
-              channelService.channelSummaries.push(channelSummaries[i]);
+            if (isDefaultName(channelSummaries[i].channel.summary, channelSummaries[i].owner.userName)) {
+              channelSummaries[i].displayName = channelSummaries[i].subscriberNames;
+            } else {
+              channelSummaries[i].displayName = channelSummaries[i].channel.summary;
             }
 
-            $scope.$apply(function() {
-              $scope.data.channelSummaries = channelSummaries;
-              sortChannelSummary();
-            });
+            if (channelSummaries[i].messages
+              && channelSummaries[i].messages[0]
+              && channelSummaries[i].messages[0].messageContent) {
+              channelSummaries[i].latestMessage = getLatestMessage(channelSummaries[i].messages[0]);
+              channelSummaries[i].latestMsgTime = channelSummaries[i].messages[0].timestamp;
+              channelSummaries[i].latestMsgTimestamp = roundToThousand(channelSummaries[i].messages[0].timestamp.getTime());
+            }
 
+            if (!chatPhotoUser) {
+              chatPhotoUser = Max.getCurrentUser();
+            }
+            channelSummaries[i].chatPhoto = {
+              url: chatPhotoUser.getAvatarUrl(),
+              initials: authService.getInitials(chatPhotoUser)
+            };
+          }
+
+          $scope.$apply(function () {
+            $scope.data.channelSummaries = $scope.data.channelSummaries.concat(channelSummaries);
+            channelService.channelSummaries = $scope.data.channelSummaries;
+            sortChannelSummary();
           });
 
+          (cb || angular.noop)();
         });
+      });
+    };
+
+    $scope.onChannelScroll = function() {
+      // if there are no more records to fetch, stop fetching upon scroll
+      if ($scope.data.fetchEndReached || !$scope.data.channelSummaries.length) return;
+
+      // don't check for records if records are currently being fetched
+      if (fetchingActive) return;
+
+      // infinite scroll of messages
+      fetchingActive = true;
+
+      var lastScrollHeight = document.getElementById('channel-list-group').scrollHeight;
+      recordOffset += 10;
+
+      $scope.fetchChannels(recordOffset, function() {
+        var viewScroll = document.getElementById('channel-list-group');
+        var currentScrollHeight = document.getElementById('channel-list-group').scrollHeight;
+        viewScroll.scrollTop = currentScrollHeight - lastScrollHeight;
+        fetchingActive = false;
       });
     };
 
     $scope.refreshForumList = function() {
       // get all the public channels
       Max.Channel.findPublicChannels(null, 1000).success(function(channels) {
-          channelService.forums = channels;
+        channelService.forums = channels;
+        $scope.data.isLoadingPublic = false;
       });
     };
 
@@ -195,14 +276,6 @@ angular.module('messengerApp')
         channel.subscribe();
       }
     };
-
-    $scope.$watch(function() {
-      return channelService.channelSummaries
-    }, function(newVal) {
-        if (typeof newVal !== 'undefined') {
-            $scope.data.channelSummaries = channelService.channelSummaries;
-        }
-    });
 
     $scope.$watch(function() {
       return channelService.forums

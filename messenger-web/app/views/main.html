@@ -97,7 +97,7 @@
 
           <div id="sidebar-wrapper" class="fullpos">
 
-            <div id="private-channels" ng-controller="ChannellistCtrl" class="sidebar-scroll">
+            <div id="private-channels" class="sidebar-scroll">
 
               <div class="flex-input">
                 <img class="search" src="images/search_icon.png" />
@@ -110,8 +110,27 @@
                 Messages
               </div>
 
-              <div id="channel-list" class="sidebar-list fullpos">
-                <div class="list-group">
+              <div class="channels-loading-screen" ng-if="data.isLoadingPrivate">
+                <div>
+                  <div class="sk-circle gray">
+                    <div class="sk-circle1 sk-child"></div>
+                    <div class="sk-circle2 sk-child"></div>
+                    <div class="sk-circle3 sk-child"></div>
+                    <div class="sk-circle4 sk-child"></div>
+                    <div class="sk-circle5 sk-child"></div>
+                    <div class="sk-circle6 sk-child"></div>
+                    <div class="sk-circle7 sk-child"></div>
+                    <div class="sk-circle8 sk-child"></div>
+                    <div class="sk-circle9 sk-child"></div>
+                    <div class="sk-circle10 sk-child"></div>
+                    <div class="sk-circle11 sk-child"></div>
+                    <div class="sk-circle12 sk-child"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="channel-list" class="sidebar-list fullpos" direction="down" when-scrolled="onChannelScroll(fetchChannels)">
+                <div id="channel-list-group" class="list-group">
                   <a ng-if="channelSummary.latestMessage"
                      ng-repeat="channelSummary in data.channelSummaries | orderBy:lastPublishedTime:true | filter:userFilter"
                      href="#/chat/{{channelSummary.channelName}}/{{channelSummary.ownerId}}"
@@ -139,10 +158,29 @@
 
             </div>
 
-            <div id="forum-carousel" resizable r-directions="['top']" r-affected-sibling="'private-channels'" r-min-height="66">
+            <div id="forum-carousel" resizable r-metric="'%'" r-directions="['top']" r-affected-sibling="'private-channels'" r-min-height="66">
 
               <div class="sidebar-title">
                 Public Forums
+              </div>
+
+              <div class="channels-loading-screen" ng-if="data.isLoadingPublic">
+                <div>
+                  <div class="sk-circle gray">
+                    <div class="sk-circle1 sk-child"></div>
+                    <div class="sk-circle2 sk-child"></div>
+                    <div class="sk-circle3 sk-child"></div>
+                    <div class="sk-circle4 sk-child"></div>
+                    <div class="sk-circle5 sk-child"></div>
+                    <div class="sk-circle6 sk-child"></div>
+                    <div class="sk-circle7 sk-child"></div>
+                    <div class="sk-circle8 sk-child"></div>
+                    <div class="sk-circle9 sk-child"></div>
+                    <div class="sk-circle10 sk-child"></div>
+                    <div class="sk-circle11 sk-child"></div>
+                    <div class="sk-circle12 sk-child"></div>
+                  </div>
+                </div>
               </div>
 
               <div id="forum-container" class="sidebar-list fullpos">
