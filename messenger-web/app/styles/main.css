@@ -69,6 +69,7 @@ body,html{height:100%;background:#eee}
 .sidebar-list .fa-circle.is-unread{color:#037dff}
 .sidebar-list .fa-trash{position:absolute;bottom:7px;right:7px;color:#037dff;display:none;font-size:1.2em}
 .sidebar-list .list-group-item:hover .fa-trash{display:inline-block}
+.channels-loading-screen{position:absolute;top:80px;width:100%;left:0}
 
 .flex-input{margin:10px 13px 0;position:relative}
 .flex-input .search{position:absolute;top:-1px;left:2px}
@@ -81,6 +82,7 @@ body,html{height:100%;background:#eee}
 
 #forum-carousel{position:absolute;bottom:0;left:0;width:100%;height:45%}
 #forum-carousel .sidebar-title{margin-top:10px}
+#forum-carousel .channels-loading-screen{top:50px}
 #forum-container{margin-top:31px;overflow-y:auto}
 #forum-container .list-group{margin-bottom:0}
 #forum-container img{width:20px;height:20px;margin:5px 11px 5px 27px}
@@ -229,6 +231,7 @@ label.action-icon-label input[type="file"]{position:fixed;top:-1000px}
 .sk-circle{margin:10px auto;width:100px;height:100px;position:relative}
 .sk-circle .sk-child{width:100%;height:100%;position:absolute;left:0;top:0}
 .sk-circle .sk-child:before{content:'';display:block;margin:0 auto;width:15%;height:15%;background-color:#fff;border-radius:100%;-webkit-animation:sk-circleBounceDelay 1.2s infinite ease-in-out both;animation:sk-circleBounceDelay 1.2s infinite ease-in-out both}
+.sk-circle.gray .sk-child:before{background-color:#ededed}
 .sk-circle .sk-circle2{-webkit-transform:rotate(30deg);-ms-transform:rotate(30deg);transform:rotate(30deg)}
 .sk-circle .sk-circle3{-webkit-transform:rotate(60deg);-ms-transform:rotate(60deg);transform:rotate(60deg)}
 .sk-circle .sk-circle4{-webkit-transform:rotate(90deg);-ms-transform:rotate(90deg);transform:rotate(90deg)}
